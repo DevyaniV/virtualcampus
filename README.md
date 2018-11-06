@@ -1,2 +1,2 @@
 # comp_sys
-Project work for computing systems 1 UC3M
+This is for the project of computing systems 1 in UC3M. 
