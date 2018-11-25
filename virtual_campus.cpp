@@ -1,6 +1,7 @@
 #include <iostream>
 #include "virtual_campus.h"
-#include <iostream>
+#include <fstream>
+#include <string>
 
 using namespace std;
 
@@ -225,42 +226,49 @@ Seminars::~Seminars(){
     delete[] list_students_s;
 }
 
+void Seminars::display() {
+	cout << "Status:" << status << ". ID: " << id[7] << ". Coordinator: " << coordinator << ". Speaker: " << speaker << ". Date: " << date << "Maximum number of seats: " << max_seats << " And the size is: " << size << "." << endl;
+	cout << "A list of students is: " << list_students_s << endl;
+}
 
 
 ////////////////////////////////////
 //
 ////////////////////////////////////
 
-string Project::gettutor() {
+string Projects::gettutor() {
     return tutor;
 }
 
 
-bool Project::getco_tutor_presence() {
+bool Projects::getco_tutor_presence() {
     return co_tutor_presence;
 }
 
-string Project::getco_tutor() {
+string Projects::getco_tutor() {
     return co_tutor;
 }
 
 
-void Project::settutor(string new_tutor) {
+void Projects::settutor(string new_tutor) {
     tutor = new_tutor;
 }
 
 
-void Project::setco_tutor_presence(bool new_co_tutor_presence) {
+void Projects::setco_tutor_presence(bool new_co_tutor_presence) {
     co_tutor_presence = new_co_tutor_presence;
 }
 
-void Project::setco_tutor(string new_co_tutor){
-    co_tutor = new_co_tutor;
-}
+void Projects::setco_tutor(string new_co_tutor){
+	if (co_tutor_presence == 1 | co_tutor_presence == true) {
+		co_tutor = new_co_tutor;
+	}
+	else { cout << "This is not possible" << endl; }
+}	
 
 
 /* Default constructor*/
-Project::Project(){
+Projects::Projects(){
     tutor = "no tutor";
     co_tutor_presence = 0;
     co_tutor = "no co-tutor";
@@ -270,7 +278,7 @@ Project::Project(){
 
 /* Parametrized constructor*/
 
-Project::Project(string _tutor, bool _co_tutor_presence, string _co_tutor){
+Projects::Projects(string _tutor, bool _co_tutor_presence, string _co_tutor){
     tutor = _tutor;
     co_tutor_presence = _co_tutor_presence;
     co_tutor = _co_tutor;
@@ -278,7 +286,7 @@ Project::Project(string _tutor, bool _co_tutor_presence, string _co_tutor){
 
 /* Copy constructor*/
 
-Project::Project(const Project & P){
+Projects::Projects(const Project & P){
     tutor = P.tutor;
     co_tutor_presence = P.co_tutor_presence;
     co_tutor = P.co_tutor;
@@ -286,7 +294,14 @@ Project::Project(const Project & P){
 
 /* Destructor */
 
-Project::~Project(){
+Projects::~Projects(){
+}
+
+void Projects::display() {
+	cout << "Status:" << status << ". ID: " << id[7] << ". Tutor: " << tutor;
+	if (co_tutor_presence == 1 | co_tutor_presence == true) {
+		cout << ". Co_tutor: " << co_tutor << "." << endl;
+	}
 }
 
 
@@ -353,11 +368,6 @@ void Courses::setlist_marks(float* new_list_marks, int new_size_marks) {
 
     delete[] new_list_marks;
 }
-
-
-
-
-
 
 
 /* Default constructor*/
@@ -430,6 +440,15 @@ Courses::~Courses(){
     delete[] list_marks;
 }
 
+void Courses::display() {
+	cout << "Status:" << status << ". ID: " << id[7] << ". And the number of credits: " << credits << "." << endl;
+	cout << "A list of students is: " << list_students << endl;
+	cout << "A list of marks is: " << list_marks << endl;
+	cout << "The size of list of students is: " << size_students << endl;
+	cout << "The size of list of marks is: " << size_marks << endl;
+}
+
+
 ////////////////////////////////////
 //
 ////////////////////////////////////
@@ -465,6 +484,7 @@ Degree::Degree(const Degree & D){
 
 Degree::~Degree(){
 }
+
 
 
 
@@ -602,6 +622,92 @@ void Admin::displayc(Courses _course){
 
 }
 
+void Admin::createu(Users _user) {
+	fstream data("data.txt");
+	if (data.is_open()) {
+		data.clear();
+		data.seekg(0, ios::eof);
+		string newuser;
+		string identity;
+		cout << endl << "Please fill in a new user." << endl;
+		cin >> newuser;
+		cout << endl << "Please fill in his/her identity." << endl;
+		cin >> identity;
+		Users newuser;
+		newuser.setname(newuser);
+		data << newuser << "	" << identity << endl;
+		data.close();
+	}
+	else { cout << "Sorry the Virtual Campus was unable to add data. Please start the program again in order to try again." << endl; }
+}
+
+
+void Admin::modifyu(Users _user){
+	fstream data("data.txt");
+	fstream temp("temp.txt");
+	if (data.is_open()) {
+		if (temp.is_open()) {
+			size_t pos;
+			string moduser;
+			string moduser2;
+			string tempuser;
+			cout << endl << "Please give the name of the user you want to modify."
+			cin >> moduser;
+			while (data >> tempuser) {
+				pos = line.find(moduser);
+				if (tempuser == moduser) {
+					cout << "We found the name of this person. To what name do you want to change it?" << endl;
+					cin >> moduser2;
+					// NOT DONE YET
+					
+			//		data << moduser << endl;
+			//		data << moduser2 << endl;
+					data.close();
+					Users moduser;
+					moduser.setname(moduser);
+				}
+				else {
+					cout << "Sorry this name is not in our list." << endl;
+					break;
+				}
+			}
+		}
+		else { cout << "Sorry the Virtual Campus was unable to modify data. Please start the program again in order to try again." << endl; }
+	}
+	else { cout << "Sorry the Virtual Campus was unable to modify data. Please start the program again in order to try again." << endl; }
+}
+
+
+void Admin::deleteu(Users _user) {
+	fstream data("data.txt");
+	if (data.is_open()) {
+		size_t pos;
+		string deluser;
+		cout << endl << "Please give the name of the user you want to delete."
+			while (getline(data, line)) {
+			// NOT DONE YET
+				
+	//			pos = line.find(deluser);
+	//			if (pos != string::npos) {
+	//				data << moduser << endl;
+	//				data << "" << endl;
+	//				cout << "This user has been deleted." << endl;
+					data.close();
+
+				}
+				else {
+					cout << "Sorry this name is not in our list." << endl;
+					break;
+				}
+			}
+	}
+	else { cout << "Sorry the Virtual Campus was unable to delete data. Please start the program again in order to try again." << endl; }
+}
+
+void Admin::display() {
+	cout << "Name:" << name << ". And PID: " << pid[7] << "." << endl;
+}
+
 
 ////////////////////////////////////
 //
@@ -654,6 +760,10 @@ Professor::Professor(const Professor & Pr){
 /* Destructor */
 
 Professor::~Professor(){
+}
+
+void Professor::display() {
+	cout << "Name:" << name << ". And PID: " << pid[7] << "." << endl;
 }
 
 ////////////////////////////////////
@@ -851,6 +961,17 @@ Student::~Student(){
     delete[] list_project;
 }
 
+void Student::display() {
+	cout << "Name:" << name << ". SIN: " << sin[7] << ".  <<"." << endl;
+	cout << "A list of courses is: " << list_courses << endl;
+	cout << "A list of seminars is: " << list_sem << endl;
+	cout << "A list of projects is: " << list_project << endl;
+	cout << "The size of list of courses is: " << size_courses << endl;
+	cout << "The size of list of seminars is: " << size_sems << endl;
+	cout << "The size of list of projects is: " << size_projects << endl;
+
+}
+
 
 ////////////////////////////////////
 //
@@ -864,12 +985,83 @@ void VirtualCampus::setnameofcampus(string new_nameofcampus) {
     nameofcampus = new_nameofcampus;
 }
 
-
+//Starting the application by logging in.
 void VirtualCampus::start(){
+	
+	int switched;
+	cout << "Welcome to the Virtual Campus of UC3M. Please log in in order to start." << endl;
+	fstream data("data.txt");
+	if (data.is_open()) {
+		bool login = false;
+		while (login == false) {
+			data.clear();
+			data.seekg(0, ios::beg);
+			string loginname;
+			string loginpassword;
+			string foundname;
+			string line;
+			string search1 = "Administrator";
+			string search2 = "Professor";
+			string search3 = "Student";
 
 
-    Admin a;
-
+			cout << endl << "Please fill in your name (Use officialadmin as default version)" << endl;
+			cin >> loginname;
+			cout << endl << "Please fill in your password (Use password as default version)" << endl;
+			cin >> loginpassword;
+			size_t pos;
+			while(getline(data,line)){
+				pos = line.find(loginname);
+				if (pos != string::npos) {
+					size_t pos2;
+					pos2 = line.find(loginpassword);
+					if (pos2 != string::npos) {
+						size_t pos3;
+						size_t pos4;
+						size_t pos5;
+						cout << "Welcome, you are logged in." << endl;
+						pos3 = line.find(search1);
+						pos4 = line.find(search2);
+						pos5 = line.find(search3);
+						if (pos3 != string::npos) { cout << "You are identified as an administrator." << endl; switched = 1; }
+						if (pos4 != string::npos) { cout << "You are identified as a professor." << endl; switched=2; }
+						if (pos5 != string::npos) { cout << "You are identified as a student." << endl; switched=3; }
+	//					else { cout << "Your identity couldn't be determined, so it is assumed you are a student." << endl; activities_start3 = true; }
+						login = true;
+						cout << "Do you want to change your password? y/n." << endl;
+						cin >> ans;
+						if (ans == 'y' | ans == 'Y') {
+							cout << "Fill in your new password." << endl;
+							string newpassword;
+							cin >> newpassword;
+							//Update password here
+							data.close();
+							VirtualCampus.StartActivities();
+						}
+						else {
+							cout >> "Okay sure, you can now start any activity." << endl;
+							data.close();
+							VirtualCampus.StartActivities();
+						}
+					}
+					else { 
+						cout << "Sorry, wrong password" << endl;
+						break;
+					}
+				}
+				else { 
+					cout << "Sorry this name is not in our list" << endl;
+					break;
+				}
+			}
+		}
+	}
+	else { cout << "Sorry the Virtual Campus was unable to get the data. Please start the program again in order to log in." << endl; }
+	
+	return switched;
+	
+	
+	Admin a;
 
     string *array1 = new string[2]{"bas", "devyani"};
     float *array2 = new float[2]{0, 0};
@@ -884,12 +1076,6 @@ void VirtualCampus::start(){
 
     Courses hindi;
     a.displayc(hindi);
-
-
-
-
-
-
 }
 
 
@@ -918,5 +1104,212 @@ VirtualCampus::~VirtualCampus(){
 }
 
 
+virtualCampus::StartActivities(){
+		int choice;
+		int choice2;
+		switch (switched) {
+
+		// Admin's choices
+		case 1: cout << endl << "What do you want to do ? " << endl << endl << "1. Create, modify or delete users." << endl << "2. Create, modify or delete resources." << endl << "3. Show information of users." << endl << "4. Show information of resources." << endl;
+			cin >> choice;
+			switch (choice) {
+			case 1: cout << endl << "What do you want to do ? " << endl << endl << "1. Create users." << endl << "2. Modify users." << endl << "3. Delete users." << endl;
+				cin >> choice2;
+				switch (choice2) {
+				case 1: cout << "Here you can create users" << endl;
+					Admin::createu();
+					break;
+				case 2: cout << "Here you can modify users" << endl;
+					Admin::modifyu();
+					break;
+				case 3: cout << "Here you can delete users" << endl;
+					Admin::deleteu();
+					break;
+				}
+				break;
+			case 2: cout << endl << "What do you want to do ? " << endl << endl << "1. Create resources." << endl << "2. Modify resources." << endl << "3. Delete resources." << endl;
+				cin >> choice2;
+				switch (choice2) {
+				case 1: cout << "Here you can create resources" << endl;
+					//initialize function
+					break;
+				case 2: cout << "Here you can modify resources" << endl;
+					//initialize function
+					break;
+				case 3: cout << "Here you can delete resources" << endl;
+					//initialize function
+					break;
+				}
+				break;
+			case 3: cout << endl << "What do you want to do ? " << endl << endl << "1. Show information of an administrator." << endl << "2.Show information of a professor." << endl << "3. Show information of a student." << endl;
+				cin >> choice2;
+				switch (choice2) {
+				case 1: cout << "Here you can see information of administrators" << endl;
+					VirtualCampus::BeginAction(Admin);
+					break;
+				case 2: cout << "Here you can see information of professors" << endl;
+					VirtualCampus::BeginAction(Professor);
+					break;
+				case 3: cout << "Here you can see information of students" << endl;
+					VirtualCampus::BeginAction(Student);
+					break;
+				}
+				break;
+			case 4: cout << endl << "What do you want to do ? " << endl << endl << "1. Show information of a course." << endl << "2.Show information of a project." << endl << "3. Show information of a seminar." << endl;
+				cin >> choice2;
+				switch (choice2) {
+				case 1: cout << "Here you can see information of a course" << endl;
+					VirtualCampus::BeginAction(Courses);
+					break;
+				case 2: cout << "Here you can see information of a project" << endl;
+					VirtualCampus::BeginAction(Projects);
+					break;
+				case 3: cout << "Here you can see information of a seminar" << endl;
+					VirtualCampus::BeginAction(Seminars);
+					break;
+				}
+				break;
+			}
+			break;
 
 
+		//Professor's choices
+		case 2: cout << endl << "What do you want to do ? " << endl << endl << "1. Modify your own resources." << endl << "2. Grade students." << endl << "3. Show information of users." << endl << "4. Show information of resources." << endl;
+			cin >> choice;
+			switch (choice) {
+			case 1: cout << endl << "What do you want to do ? " << endl << endl << "1. Modify courses." << endl << "2. Modify projects." << endl << "3. Modify seminars." << endl;
+				cin >> choice2;
+				switch (choice2) {
+				case 1: cout << "Here you can modify courses" << endl;
+					//initialize function
+					break;
+				case 2: cout << "Here you can modify projects" << endl;
+					//initialize function
+					break;
+				case 3: cout << "Here you can modify seminars" << endl;
+					//initialize function
+					break;
+				}
+				break;
+			case 2: cout << endl << "Here you can set grades. " << endl;
+				// initialize function
+				break;
+
+			case 3: cout << endl << "What do you want to do ? " << endl << endl << "1. Show information of an administrator." << endl << "2.Show information of a professor." << endl << "3. Show information of a student." << endl;
+				cin >> choice2;
+				switch (choice2) {
+				case 1: cout << "Here you can see information of administrators" << endl;
+					VirtualCampus::BeginAction(Admin);
+					break;
+				case 2: cout << "Here you can see information of professors" << endl;
+					VirtualCampus::BeginAction(Professor);
+					break;
+				case 3: cout << "Here you can see information of students" << endl;
+					VirtualCampus::BeginAction(Student);
+					break;
+				}
+				break;
+			case 4: cout << endl << "What do you want to do ? " << endl << endl << "1. Show information of a course." << endl << "2.Show information of a project." << endl << "3. Show information of a seminar." << endl;
+				cin >> choice2;
+				switch (choice2) {
+				case 1: cout << "Here you can see information of a course" << endl;
+					VirtualCampus::BeginAction(Courses);
+					break;
+				case 2: cout << "Here you can see information of a project" << endl;
+					VirtualCampus::BeginAction(Projects);
+					break;
+				case 3: cout << "Here you can see information of a seminar" << endl;
+					VirtualCampus::BeginAction(Seminars);
+					break;
+				}
+				break;
+			}
+			break;
+
+
+		//Student's choices
+		case 3: cout << endl << "What do you want to do ? " << endl << endl << "1. Enroll and drop resources." << endl << "2. Show information of users." << endl << "3. Show information of resources." << endl;
+			cin >> choice;
+			switch (choice) {
+			case 1: cout << endl << "What do you want to do ? " << endl << endl << "1. Enroll for a course." << endl << "2. Drop a course." << endl;
+				cin >> choice2;
+				switch (choice2) {
+				case 1: cout << "Here you can enroll for a course" << endl;
+					VirtualCampus::Studentactions();
+					break;
+				case 2: cout << "Here you can drop a course" << endl;
+					VirtualCampus::Studentactions();
+					break;
+				}
+				break;
+			case 2: cout << endl << "What do you want to do ? " << endl << endl << "1. Show information of an administrator." << endl << "2.Show information of a professor." << endl << "3. Show information of a student." << endl;
+				cin >> choice2;
+				switch (choice2) {
+				case 1: cout << "Here you can see information of administrators" << endl;
+					VirtualCampus::BeginAction(Admin);
+					break;
+				case 2: cout << "Here you can see information of professors" << endl;
+					VirtualCampus::BeginAction(Professor);
+					break;
+				case 3: cout << "Here you can see information of students" << endl;
+					VirtualCampus::BeginAction(Student);
+					break;
+				}
+				break;
+			case 3: cout << endl << "What do you want to do ? " << endl << endl << "1. Show information of a course." << endl << "2.Show information of a project." << endl << "3. Show information of a seminar." << endl;
+				cin >> choice2;
+				switch (choice2) {
+				case 1: cout << "Here you can see information of a course" << endl;
+					VirtualCampus::BeginAction(Courses);
+					break;
+				case 2: cout << "Here you can see information of a project" << endl;
+					VirtualCampus::BeginAction(Projects);
+					break;
+				case 3: cout << "Here you can see information of a seminar" << endl;
+					VirtualCampus::BeginAction(Seminars);
+					break;
+				}
+				break;
+			}
+			break;
+		}
+}
+
+
+VirtualCampus::BeginAction(object){
+	cout << "What is the name of the user or resource you are looking for?" << endl;
+	string searchobj;
+	cin >> searchobj;
+	if (searchobj == "all") {
+		//show all of the objects in this particular class
+	}	
+	object.display(searchobj);
+	
+	
+	//int *len = new int[]
+	//object list [len] = {}
+	//object * 
+}
+
+VirtualCampus::Studentactions() {
+	cout << "What do you want to do? Enroll=1, Drop=2." << endl;
+	int enrollordrop;
+	cin >> enrollordrop;
+	if (enrollordrop == 1) {
+		cout << "What course do you want to enroll to?"
+		string seekcourse;
+		cin >> seekcourse;
+		if (//seekcourse is in the list of objects of courses){
+			list_courses.append(seekcourse);
+		}
+	}
+	if (enrollordrop == 2) {
+		cout << "Which course do you want to drop?" << endl;
+		string dropcourse;
+		cin	>> dropcourse;
+		if (//dropcourse is in the list of oject of courses){
+			list_courses.remove(dropcourse);
+		}
+	}
+	else {cout << "This is not a valid input." }
+}
