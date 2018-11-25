@@ -25,6 +25,7 @@ void Resources::setstatus(string new_status) {
     }
 
 }
+
 void Resources::setid(char new_id[7]) {
 
     if( ((new_id[0] && new_id[1] && new_id[2]) == 'a' || 'b' || 'c' || 'd' || 'e' || 'f' || 'g' || 'h' || 'i' || 'j' || 'k' ||
@@ -260,7 +261,7 @@ void Projects::setco_tutor_presence(bool new_co_tutor_presence) {
 }
 
 void Projects::setco_tutor(string new_co_tutor){
-	if (co_tutor_presence == 1 | co_tutor_presence == true) {
+	if (co_tutor_presence == 1 || co_tutor_presence == true) {
 		co_tutor = new_co_tutor;
 	}
 	else { cout << "This is not possible" << endl; }
@@ -299,7 +300,7 @@ Projects::~Projects(){
 
 void Projects::display() {
 	cout << "Status:" << status << ". ID: " << id[7] << ". Tutor: " << tutor;
-	if (co_tutor_presence == 1 | co_tutor_presence == true) {
+	if (co_tutor_presence == 1 || co_tutor_presence == true) {
 		cout << ". Co_tutor: " << co_tutor << "." << endl;
 	}
 }
@@ -580,6 +581,7 @@ Admin::Admin(const Admin & A){
 /* Destructor */
 
 Admin::~Admin(){
+	delete[] deluser;
 }
 
 
@@ -625,7 +627,7 @@ void Admin::displayc(Courses _course){
 void Admin::createu(Users _user) {
 	fstream data("data.txt");
 	if (data.is_open()) {
-		data.clear();
+//		data.clear();
 		data.seekg(0, ios::eof);
 		string newuser;
 		string identity;
@@ -633,10 +635,35 @@ void Admin::createu(Users _user) {
 		cin >> newuser;
 		cout << endl << "Please fill in his/her identity." << endl;
 		cin >> identity;
-		Users newuser;
-		newuser.setname(newuser);
 		data << newuser << "	" << identity << endl;
 		data.close();
+		if (identity == "Administrator") {
+			Admin *newuser = new Admin;
+			newuser->setname(newuser);
+			cout << "Give the PID of this person." << endl;
+			char newpid[7];
+			cin >> newpid;
+			newuser->setpid(newpid);
+			//plus add new object to list of objects
+		}
+		if (identity == "Professor") {
+			Professor *newuser = new Professor;
+			newuser->setname(newuser);
+			cout << "Give the PID of this person." << endl;
+			char new2pid[7];
+			cin >> new2pid;
+			newuser->setpid(new2pid);
+			//plus change object in list of objects
+		}
+		else {
+			Student *newuser = new Student;
+			newuser->setname(newuser);
+			cout << "Give the SIN of this person." << endl;
+			char newsin[7];
+			cin >> newsin;
+			newuser->setsin(newsin);
+			//plus delete object of list of objects
+		}
 	}
 	else { cout << "Sorry the Virtual Campus was unable to add data. Please start the program again in order to try again." << endl; }
 }
@@ -659,12 +686,11 @@ void Admin::modifyu(Users _user){
 					cout << "We found the name of this person. To what name do you want to change it?" << endl;
 					cin >> moduser2;
 					// NOT DONE YET
-					
+					// https://www.quora.com/How-can-I-replace-modify-a-particular-string-in-a-file-using-c++
 			//		data << moduser << endl;
 			//		data << moduser2 << endl;
 					data.close();
-					Users moduser;
-					moduser.setname(moduser);
+					moduser.setname(moduser2);
 				}
 				else {
 					cout << "Sorry this name is not in our list." << endl;
@@ -684,7 +710,9 @@ void Admin::deleteu(Users _user) {
 		size_t pos;
 		string deluser;
 		cout << endl << "Please give the name of the user you want to delete."
-			while (getline(data, line)) {
+		string deluser;
+		cin >> deluser;
+		while (getline(data, line)) {
 			// NOT DONE YET
 				
 	//			pos = line.find(deluser);
@@ -693,7 +721,7 @@ void Admin::deleteu(Users _user) {
 	//				data << "" << endl;
 	//				cout << "This user has been deleted." << endl;
 					data.close();
-
+					delete deluser;
 				}
 				else {
 					cout << "Sorry this name is not in our list." << endl;
@@ -972,6 +1000,30 @@ void Student::display() {
 
 }
 
+//Options for students to enroll or drop courses
+void Student::Studentactions() {
+	cout << "What do you want to do? Enroll=1, Drop=2." << endl;
+	int enrollordrop;
+	cin >> enrollordrop;
+	if (enrollordrop == 1) {
+		cout << "What course do you want to enroll to?"
+			string seekcourse;
+		cin >> seekcourse;
+		if (//seekcourse is in the list of objects of courses){
+			list_courses.append(seekcourse);
+		}
+	}
+	if (enrollordrop == 2) {
+		cout << "Which course do you want to drop?" << endl;
+		string dropcourse;
+		cin >> dropcourse;
+		if (//dropcourse is in the list of oject of courses){
+			list_courses.remove(dropcourse);
+		}
+	}
+	else { cout << "This is not a valid input." }
+}
+
 
 ////////////////////////////////////
 //
@@ -986,7 +1038,7 @@ void VirtualCampus::setnameofcampus(string new_nameofcampus) {
 }
 
 //Starting the application by logging in.
-void VirtualCampus::start(){
+int VirtualCampus::start(){
 	
 	int switched;
 	cout << "Welcome to the Virtual Campus of UC3M. Please log in in order to start." << endl;
@@ -994,7 +1046,7 @@ void VirtualCampus::start(){
 	if (data.is_open()) {
 		bool login = false;
 		while (login == false) {
-			data.clear();
+//			data.clear();
 			data.seekg(0, ios::beg);
 			string loginname;
 			string loginpassword;
@@ -1030,18 +1082,18 @@ void VirtualCampus::start(){
 						login = true;
 						cout << "Do you want to change your password? y/n." << endl;
 						cin >> ans;
-						if (ans == 'y' | ans == 'Y') {
+						if (ans == 'y' || ans == 'Y') {
 							cout << "Fill in your new password." << endl;
 							string newpassword;
 							cin >> newpassword;
 							//Update password here
 							data.close();
-							VirtualCampus.StartActivities();
+							VirtualCampus::StartActivities();
 						}
 						else {
 							cout >> "Okay sure, you can now start any activity." << endl;
 							data.close();
-							VirtualCampus.StartActivities();
+							VirtualCampus::StartActivities();
 						}
 					}
 					else { 
@@ -1058,7 +1110,7 @@ void VirtualCampus::start(){
 	}
 	else { cout << "Sorry the Virtual Campus was unable to get the data. Please start the program again in order to log in." << endl; }
 	
-	return switched;
+	return { loginname, switched };
 	
 	
 	Admin a;
@@ -1104,7 +1156,8 @@ VirtualCampus::~VirtualCampus(){
 }
 
 
-virtualCampus::StartActivities(){
+//Give the user the available options he is allowed to do
+void virtualCampus::StartActivities(){
 		int choice;
 		int choice2;
 		switch (switched) {
@@ -1117,7 +1170,7 @@ virtualCampus::StartActivities(){
 				cin >> choice2;
 				switch (choice2) {
 				case 1: cout << "Here you can create users" << endl;
-					Admin::createu();
+					Admi::createu();
 					break;
 				case 2: cout << "Here you can modify users" << endl;
 					Admin::modifyu();
@@ -1235,10 +1288,10 @@ virtualCampus::StartActivities(){
 				cin >> choice2;
 				switch (choice2) {
 				case 1: cout << "Here you can enroll for a course" << endl;
-					VirtualCampus::Studentactions();
+					Student::Studentactions();
 					break;
 				case 2: cout << "Here you can drop a course" << endl;
-					VirtualCampus::Studentactions();
+					Student::Studentactions();
 					break;
 				}
 				break;
@@ -1276,40 +1329,18 @@ virtualCampus::StartActivities(){
 }
 
 
-VirtualCampus::BeginAction(object){
+//start displaying the users or resources
+void VirtualCampus::BeginAction(object){
 	cout << "What is the name of the user or resource you are looking for?" << endl;
 	string searchobj;
 	cin >> searchobj;
 	if (searchobj == "all") {
 		//show all of the objects in this particular class
 	}	
-	object.display(searchobj);
+	else { searchobject.display(); }
 	
 	
 	//int *len = new int[]
 	//object list [len] = {}
 	//object * 
-}
-
-VirtualCampus::Studentactions() {
-	cout << "What do you want to do? Enroll=1, Drop=2." << endl;
-	int enrollordrop;
-	cin >> enrollordrop;
-	if (enrollordrop == 1) {
-		cout << "What course do you want to enroll to?"
-		string seekcourse;
-		cin >> seekcourse;
-		if (//seekcourse is in the list of objects of courses){
-			list_courses.append(seekcourse);
-		}
-	}
-	if (enrollordrop == 2) {
-		cout << "Which course do you want to drop?" << endl;
-		string dropcourse;
-		cin	>> dropcourse;
-		if (//dropcourse is in the list of oject of courses){
-			list_courses.remove(dropcourse);
-		}
-	}
-	else {cout << "This is not a valid input." }
 }

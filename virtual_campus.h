@@ -246,7 +246,7 @@ class Admin : public Users {
 
 		char* getpid();
 		void setpid(char new_pid[7]);
-		void display();hb
+		void display();
 
 		//HERE WE HAVE TO ADD THAT USERS IS A COMPOSITION FROM VIRTUALCAMPUS
 
@@ -316,6 +316,7 @@ class Student : public Users{
 		void setlist_sem(string* new_list_sem, int size_sems);
 		void setlist_project(string* new_list_project, int size_projects);
 		void display();
+		void Studentactions();
 
 		//HERE WE HAVE TO ADD THAT STUDENTS IS A COMPOSITION FROM DEGREE
 
@@ -352,7 +353,6 @@ class VirtualCampus{
 		void start();
 		void StartActivities();
 		void BeginAction();
-		void Studentactions();
 		void setnameofcampus(string new_nameofcampus);
 
 	private:
