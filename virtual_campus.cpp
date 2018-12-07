@@ -373,7 +373,7 @@ void Project::setdegree(string new_degree){
 
 /* Default constructor*/
 
-Project::Project() {
+Project::Project() : Resources() {
     Professor p,b;
     Student s;
     tutor = &p;
@@ -416,21 +416,21 @@ int Courses::getcredits() {
     return credits;
 }
 
-string* Courses::getlist_students() {
+vector<Student> Courses::getlist_students() {
     return list_students;
 }
 
-float* Courses::getlist_marks() {
+vector<float> Courses::getlist_marks() {
     return list_marks;
 }
 
-int Courses::getsize_students(){
-    return size_students;
+Professor* Courses::getprofessors(){
+    return professors;
 }
 
 
-int Courses::getsize_marks(){
-    return size_marks;
+string Courses::getdegree(){
+    return degree;
 }
 
 
@@ -438,113 +438,72 @@ void Courses::setcredits(int new_credits) {
     credits = new_credits;
 }
 
-void Courses::setsize_students(int new_size_students){
-    size_students = new_size_students;
-}
-
-void Courses::setsize_marks(int new_size_marks){
-    size_marks = new_size_marks;
-}
-
 /* Here new_list_students is a dynamic array of length "new_size_students" */
 
-void Courses::setlist_students(string* new_list_students, int new_size_students) {
-    size_students = new_size_students;
-    list_students = new string[size_students];
-    for (int i = 0; i < size_students; i++) {
-        *(list_students + i) = new_list_students[i];
-    }
-
-    delete[] new_list_students;
+void Courses::setlist_students(vector<Student> new_list_students) {
+    list_students = new_list_students;
 
 }
 
 /* Here new_list_marks is a dynamic array of length "new_size_marks" */
 
-void Courses::setlist_marks(float* new_list_marks, int new_size_marks) {
-    size_marks = new_size_marks;
-    list_marks = new float[size_marks];
-    for (int i = 0; i < size_marks; i++) {
-        *(list_marks + i) = new_list_marks[i];
-    }
+void Courses::setlist_marks(vector<float> new_list_marks) {
+    list_marks = new_list_marks;
 
-    delete[] new_list_marks;
 }
 
 
-
-
-
-
+void Courses::setprofessors(Professor *new_professors){
+    *professors = *new_professors;
+    *(professors + 1) = *(new_professors + 1);
+}
 
 /* Default constructor*/
-Courses::Courses(){
+Courses::Courses():Resources(){
     credits = 0;
-    size_marks = 1;
-    size_students = 1;
-    list_students = new string[size_students];
-    list_students[0] = "no student";
-    list_marks = new float[size_marks];
-    list_marks[0] = -1;
-    *resource = Resources();
+    Professor a,b;
+    *professors = a;
+    *(professors + 1) = b;
+    degree = "not assigned" ;
+
 }
 
 /* Parametrized constructor*/
 
-Courses::Courses(int _credits, string* _list_students, float* _list_marks, int _size_students, int _size_marks, Resources* _resource){
+Courses::Courses(string _status, char _id[7], int _credits, vector < Student > _list_students, vector < float > _list_marks, string _degree, Professor* _professors) : Resources(_status, _id) {
     credits = _credits;
-    size_students = _size_students;
-    size_marks = _size_marks;
-    resource->status = _resource->status;
-    for(int i = 0; i < 7; i++){
-        resource->id[i] = _resource->id[i];
 
-    }
+    list_students = _list_students;
+    list_marks = _list_marks;
+    degree = _degree;
+    *professors = *_professors;
+    *(professors + 1) = *(_professors + 1);
 
-
-    list_students = new string[size_students];
-
-    for (int i = 0; i < size_students; i++) {
-        *(list_students + i) = _list_students[i];
-    }
-
-    delete[] _list_students;
-
-    list_marks = new float[size_marks];
-
-    for (int i = 0; i < size_marks; i++) {
-        *(list_marks + i) = _list_marks[i];
-    }
-
-    delete[] _list_marks;
 }
 
 /* Copy constructor*/
 
-Courses::Courses(const Courses & C){
-    credits = C.credits;
-    size_students = C.size_students;
-    list_students = new string[size_students];
-    list_students = C.list_students;
-    size_marks = C.size_marks;
-    list_marks = new float[size_marks];
-    list_marks = C.list_marks;
-    for(int i = 0; i < 7; i++){
-        resource->id[i] = C.resource->id[i];
+//Courses::Courses(const Courses & C){
+//    credits = C.credits;
+//    size_students = C.size_students;
+//    list_students = new string[size_students];
+//    list_students = C.list_students;
+//    size_marks = C.size_marks;
+//    list_marks = new float[size_marks];
+//    list_marks = C.list_marks;
+//    for(int i = 0; i < 7; i++){
+//        resource->id[i] = C.resource->id[i];
 
-    }
+//    }
 
-    resource->status = C.resource->status;
+//    resource->status = C.resource->status;
 
-}
+//}
 
 /* Destructor */
 
 Courses::~Courses(){
 
-//    Resources::~Resources();
-    delete[] list_students;
-    delete[] list_marks;
 }
 
 ////////////////////////////////////

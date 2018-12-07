@@ -174,16 +174,17 @@ public:
     ~Courses();
 
     int getcredits();
-    string* getlist_students();
-    float* getlist_marks();
-    int getsize_students();
-    int getsize_marks();
+    vector < Student > getlist_students();
+    vector < float > getlist_marks();
+    Professor* getprofessors();
+    string getdegree();
+    
 
     void setcredits(int new_credits);
-    void setlist_students(string* new_list_students, int new_size_students);
-    void setlist_marks(float* new_list_marks, int new_size_marks);
-    void setsize_students(int new_size_students);
-    void setsize_marks(int new_size_marks);
+    void setlist_students(vector < Student > new_list_students);
+    void setlist_marks(vector < float > new_list_marks);
+    void setprofessors(Professor* new_professors);
+    void setdegree(string new_degree);
 
     friend class Admin;
 
