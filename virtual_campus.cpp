@@ -1,8 +1,145 @@
 #include <iostream>
 #include "virtual_campus.h"
-#include <iostream>
+
 
 using namespace std;
+
+
+//void VirtualCampus::start(){
+
+
+//    //first load info from all files here
+
+
+//    //incase no file : initialize stuff here
+//    Admin a;
+
+
+//    string *array1 = new string[2]{"bas", "devyani"};
+//    float *array2 = new float[2]{0, 0};
+
+////    Courses english(6, array1, array2, 2, 2 );
+
+////    float *array3 = new float[2]{10, 19};
+
+
+////    a.createc(english, 2, array1, array3, 2, 2);
+////    a.displayc(english);
+
+//    Courses hindi;
+
+//    //show start up menu
+
+//    char a;
+
+
+//    cout << "Welcome to virtual campus" << endl;
+//    cout << "Please enter your identity alphabet (S - student, P - professor, A - Admin" << endl;
+//    cin >> a;
+
+
+//    while(a=! 'S'| a=! 's'| a=! 'A'| a=! 'a'| a=! 'P'| a=! 'p');
+
+//    if(a == 'S'|a == 's'){
+//        char sin[7];
+//        cout << "Please enter your SIN" << endl;
+//        cin << sin;
+//        //authentication process
+
+//        int b;
+
+//        cout << "Please press the number for the desired task" << endl;
+//        cout << "1. Add course" << endl;
+//        cout << "2. Drop course" << endl;
+//        cout << "3. Add seminar" << endl;
+//        cout << "4. Drop seminar" << endl;
+//        cout << "5. Add final degree project" << endl;
+//        cout << "6. Drop final degree project" << endl;
+//        cin >> b;
+//        while(b=! 1 | b=! 2| b=! 3| b=! 4| b=! 5| b=! 6);
+
+
+
+
+//    }
+
+
+
+//    if(a == 'P'|a == 'p'){
+//        char pic[7];
+//        cout << "Please enter your PIC" << endl;
+//        cin << pic;
+//        //authentication process
+
+//        int b;
+
+//        cout << "Please press the number for the desired task" << endl;
+//        cout << "1. Modify a course" << endl;
+//        cout << "2. Modify a seminar" << endl;
+//        cout << "3. Modify a project" << endl;
+//        cout << "4. Set marks for a course" << endl;
+
+//        cin >> b;
+//        while(b=! 1 | b=! 2| b=! 3| b=! 4);
+
+//    }
+
+
+
+//    if(a == 'A'|a == 'a'){
+//        char pic[7];
+//        cout << "Please enter your PIC" << endl;
+//        cin << pic;
+//        //authentication process
+
+//        int b;
+
+//        cout << "Please press the number for the desired task" << endl;
+//        cout << "1. Add course" << endl;
+//        cout << "2. Modify course" << endl;
+//        cout << "3. Delete courser" << endl;
+//        cout << "4. Add seminar" << endl;
+//        cout << "5. Modify seminar" << endl;
+//        cout << "6. Delete seminar" << endl;
+//        cout << "7. Add final degree project" << endl;
+//        cout << "8. Modify final degree project" << endl;
+//        cout << "9. Delete final degree project" << endl;
+//        cout << "10. Add student" << endl;
+//        cout << "11. Modify student" << endl;
+//        cout << "12. Delete student" << endl;
+//        cout << "13. Add professor" << endl;
+//        cout << "14. Modify professor" << endl;
+//        cout << "15. Delete professor" << endl;
+//        cout << "16. Add admin" << endl;
+//        cout << "17. Modify admin" << endl;
+//        cout << "18. Delete admin" << endl;
+//        cin >> b;
+//        while(b=! 1 || b=! 2 || b=! 3 || b=! 4 || b=! 5 || b=! 6 || b=! 7 || b=! 8| b=! 9| b=! 10| b=! 11| b=! 12| b=! 13 | b=! 14| b=! 15| b=! 16| b=! 17| b=! 18);
+
+//    }
+
+
+
+//}
+
+
+
+/* Default constructor*/
+VirtualCampus::VirtualCampus(){
+
+}
+
+
+/* Destructor */
+
+VirtualCampus::~VirtualCampus(){
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 
 string Resources::getstatus() {
@@ -15,7 +152,7 @@ char* Resources::getid() {
 }
 
 void Resources::setstatus(string new_status) {
-    if(new_status == "created" || "in progress" || "completed"){
+    if(new_status == "created" || new_status == "in progress" || new_status == "completed"){
         status = new_status;
 
     }
@@ -26,18 +163,15 @@ void Resources::setstatus(string new_status) {
 }
 void Resources::setid(char new_id[7]) {
 
-    if( ((new_id[0] && new_id[1] && new_id[2]) == 'a' || 'b' || 'c' || 'd' || 'e' || 'f' || 'g' || 'h' || 'i' || 'j' || 'k' ||
-             'l' || 'm' || 'n' || 'o' || 'p' || 'q' || 'r' || 's' || 't' || 'u' || 'v' || 'w' || 'x' || 'y' || 'z' || 'A' || 'B' || 'C' || 'D' ||
-             'E' || 'F' || 'G' || 'H' || 'I' || 'J' || 'K' || 'L' || 'M' || 'N' || 'O' || 'P' || 'Q' || 'R' || 'S' || 'T' || 'U' || 'V' || 'W' || 'X' ||
-             'Y' || 'Z') && ((new_id[3] && new_id[4] && new_id[5] && new_id[6]) == '0' || '1' || '2' || '3' || '4' || '5' || '6' || '7' || '8' || '9') ){
 
+    if(isalpha(new_id[0]) && isalpha(new_id[1]) && isalpha(new_id[2]) && isdigit(new_id[3]) && isdigit(new_id[4]) && isdigit(new_id[5]) && isdigit(new_id[6])){
         for(int i = 0; i < 7; i++){
             id[i] = new_id[i];
 
         }
 
-
     }
+
     else{
         cout << "wrong format for id" << endl;
     }
@@ -46,7 +180,7 @@ void Resources::setid(char new_id[7]) {
 
 /* Default constructor*/
 Resources::Resources(){
-    status = "no status";
+    status = "created";
     id[0] = 'a';
     id[1] = 'a';
     id[2] = 'a';
@@ -71,10 +205,7 @@ Resources::Resources(string _status, char _id[7]){
     }
 
 
-    if( ((_id[0] && _id[1] && _id[2]) == 'a' || 'b' || 'c' || 'd' || 'e' || 'f' || 'g' || 'h' || 'i' || 'j' || 'k' ||
-             'l' || 'm' || 'n' || 'o' || 'p' || 'q' || 'r' || 's' || 't' || 'u' || 'v' || 'w' || 'x' || 'y' || 'z' || 'A' || 'B' || 'C' || 'D' ||
-             'E' || 'F' || 'G' || 'H' || 'I' || 'J' || 'K' || 'L' || 'M' || 'N' || 'O' || 'P' || 'Q' || 'R' || 'S' || 'T' || 'U' || 'V' || 'W' || 'X' ||
-             'Y' || 'Z') && ((_id[3] && _id[4] && _id[5] && _id[6]) == '0' || '1' || '2' || '3' || '4' || '5' || '6' || '7' || '8' || '9') ){
+    if(isalpha(_id[0]) && isalpha(_id[1]) && isalpha(_id[2]) && isdigit(_id[3]) && isdigit(_id[4]) && isdigit(_id[5]) && isdigit(_id[6])){
 
         for(int i = 0; i < 7; i++){
             id[i] = _id[i];
@@ -89,15 +220,15 @@ Resources::Resources(string _status, char _id[7]){
 
 }
 
-/* Copy constructor*/
+///* Copy constructor*/
 
-Resources::Resources(const Resources & R){
-    status = R.status;
-    for(int i = 0; i < 7; i++){
-        id[i] = R.id[i];
+//Resources::Resources(const Resources & R){
+//    status = R.status;
+//    for(int i = 0; i < 7; i++){
+//        id[i] = R.id[i];
 
-    }
-}
+//    }
+//}
 
 /* Destructor */
 
@@ -111,13 +242,12 @@ Resources::~Resources(){
 ////////////////////////////////////
 
 
-
-string Seminars::getcoordinator() {
+Professor* Seminars::getcoordinator() {
     return coordinator;
 }
 
 
-string Seminars::getspeaker() {
+Professor *Seminars::getspeaker() {
     return speaker;
 }
 
@@ -129,20 +259,17 @@ int Seminars::getmax_seats() {
     return max_seats;
 }
 
-string* Seminars::getlist_students_s() {
-    return list_students_s;
+vector < Student > Seminars::getlist_students() {
+    return list_students;
 }
 
-int Seminars::getsize(){
-    return size;
-}
 
-void Seminars::setcoordinator(string new_coordinator) {
+void Seminars::setcoordinator(Professor* new_coordinator) {
     coordinator = new_coordinator;
 }
 
 
-void Seminars::setspeaker(string new_speaker) {
+void Seminars::setspeaker(Professor *new_speaker) {
     speaker = new_speaker;
 }
 
@@ -154,35 +281,23 @@ void Seminars::setmax_seats(int new_max_seats) {
     max_seats = new_max_seats;
 }
 
-/* Here new_list_students_s is a dynamic array of length "new_size" */
 
-void Seminars::setsize(int new_size){
-    size = new_size;
-}
+void Seminars::setlist_students(vector<Student> new_list_students) {
+    list_students = new_list_students;
 
-void Seminars::setlist_students_s(string* new_list_students_s, int new_size) {
-
-    size = new_size;
-    list_students_s = new string[size];
-    for (int i = 0; i < size; i++) {
-        *(list_students_s + i) = new_list_students_s[i];
-    }
-
-    delete[] new_list_students_s;
 
 }
 
 
 
 /* Default constructor*/
-Seminars::Seminars(){
-    coordinator = "no coordinator";
-    speaker = "no speaker";
+Seminars::Seminars():Resources(){
+    Professor a,b;
+    //Student s;
+    *coordinator = a;
+    *speaker = b;
     date = "no date";
     max_seats = -1;
-    size = 1;
-    list_students_s = new string[size];
-    list_students_s[0] = "no student";
 }
 
 /* -1 is a dummy number of max_seats */
@@ -192,37 +307,31 @@ Seminars::Seminars(){
 /* Here _list_students_s is a dynamic array of length "_size" */
 
 
-Seminars::Seminars(string _coordinator, string _speaker, string _date, int _max_seats, string* _list_students_s, int _size){
+Seminars::Seminars(string _status, char _id[7], Professor* _coordinator, Professor* _speaker, string _date, int _max_seats, vector < Student > _list_students) : Resources(_status, _id){
     coordinator = _coordinator;
     speaker = _speaker;
     date = _date;
     max_seats = _max_seats;
-    size = _size;
-    list_students_s = new string[size];
+    list_students = _list_students;
 
-    for (int i = 0; i < size; i++) {
-        *(list_students_s + i) = _list_students_s[i];
-    }
-
-    delete[] _list_students_s;
 }
 
 /* Copy constructor*/
 
-Seminars::Seminars(const Seminars & S){
-    coordinator = S.coordinator;
-    speaker = S.speaker;
-    date = S.date;
-    max_seats = S.max_seats;
-    size = S.size;
-    list_students_s = new string[size];
-    list_students_s = S.list_students_s;
-}
+//Seminars::Seminars(const Seminars & S){
+//    coordinator = S.coordinator;
+//    speaker = S.speaker;
+//    date = S.date;
+//    max_seats = S.max_seats;
+//    size = S.size;
+//    list_students_s = new string[size];
+//    list_students_s = S.list_students_s;
+//}
 
 /* Destructor */
 
 Seminars::~Seminars(){
-    delete[] list_students_s;
+
 }
 
 
@@ -231,58 +340,66 @@ Seminars::~Seminars(){
 //
 ////////////////////////////////////
 
-string Project::gettutor() {
+Professor *Project::gettutor() {
     return tutor;
 }
 
 
-bool Project::getco_tutor_presence() {
-    return co_tutor_presence;
-}
-
-string Project::getco_tutor() {
+Professor *Project::getco_tutor() {
     return co_tutor;
 }
 
+Student *Project::getstudent() {
+    return student;
+}
 
-void Project::settutor(string new_tutor) {
+string Project::getdegree() {
+    return degree;
+}
+
+void Project::settutor(Professor *new_tutor) {
     tutor = new_tutor;
 }
 
 
-void Project::setco_tutor_presence(bool new_co_tutor_presence) {
-    co_tutor_presence = new_co_tutor_presence;
+void Project::setstudent(Student* new_student) {
+    student = new_student;
 }
 
-void Project::setco_tutor(string new_co_tutor){
-    co_tutor = new_co_tutor;
+void Project::setdegree(string new_degree){
+    degree = new_degree;
 }
 
 
 /* Default constructor*/
-Project::Project(){
-    tutor = "no tutor";
-    co_tutor_presence = 0;
-    co_tutor = "no co-tutor";
+
+Project::Project() {
+    Professor p,b;
+    Student s;
+    tutor = &p;
+    student = &s ;
+    co_tutor = &b ;
+    degree = "not assigned";
 }
 
 
 
 /* Parametrized constructor*/
 
-Project::Project(string _tutor, bool _co_tutor_presence, string _co_tutor){
+Project::Project(string _status, char _id[7], Professor* _tutor, Professor* _co_tutor, Student* _student, string _degree) : Resources(_status, _id){
     tutor = _tutor;
-    co_tutor_presence = _co_tutor_presence;
+    student = _student;
     co_tutor = _co_tutor;
+    degree = _degree;
 }
 
 /* Copy constructor*/
 
-Project::Project(const Project & P){
-    tutor = P.tutor;
-    co_tutor_presence = P.co_tutor_presence;
-    co_tutor = P.co_tutor;
-}
+//Project::Project(const Project & P){
+//    tutor = P.tutor;
+//    co_tutor_presence = P.co_tutor_presence;
+//    co_tutor = P.co_tutor;
+//}
 
 /* Destructor */
 
@@ -855,68 +972,3 @@ Student::~Student(){
 ////////////////////////////////////
 //
 ////////////////////////////////////
-
-string VirtualCampus::getnameofcampus() {
-    return nameofcampus;
-}
-
-void VirtualCampus::setnameofcampus(string new_nameofcampus) {
-    nameofcampus = new_nameofcampus;
-}
-
-
-void VirtualCampus::start(){
-
-
-    Admin a;
-
-
-    string *array1 = new string[2]{"bas", "devyani"};
-    float *array2 = new float[2]{0, 0};
-
-//    Courses english(6, array1, array2, 2, 2 );
-
-//    float *array3 = new float[2]{10, 19};
-
-
-//    a.createc(english, 2, array1, array3, 2, 2);
-//    a.displayc(english);
-
-    Courses hindi;
-    a.displayc(hindi);
-
-
-
-
-
-
-}
-
-
-
-/* Default constructor*/
-VirtualCampus::VirtualCampus(){
-    nameofcampus = "no name";
-}
-
-/* Parametrized constructor*/
-
-VirtualCampus::VirtualCampus(string _nameofcampus){
-    nameofcampus = _nameofcampus;
-}
-
-/* Copy constructor*/
-
-VirtualCampus::VirtualCampus(const VirtualCampus & V){
-    nameofcampus = V.nameofcampus;
-
-}
-
-/* Destructor */
-
-VirtualCampus::~VirtualCampus(){
-}
-
-
-
-

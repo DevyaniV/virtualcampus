@@ -5,8 +5,8 @@ using namespace std;
 
 int main()
 {
-    VirtualCampus vc("UC3M");
-    vc.start();
+    VirtualCampus vc();
+//    vc.start();
 
     return 0;
 }
