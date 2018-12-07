@@ -297,6 +297,7 @@ class Professor : public Users{
 		char* getpid();
 		void setpid(char new_pid[7]);
 		void display();
+		void setmarks();
 
 
 	private:
