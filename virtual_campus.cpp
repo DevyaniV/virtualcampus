@@ -1,4 +1,5 @@
 #include <iostream>
+# include <fstream>
 #include "virtual_campus.h"
 
 
@@ -260,13 +261,13 @@ void VirtualCampus::StartActivities(switched) {
 			cin >> choice2;
 			switch (choice2) {
 			case 1: cout << "Here you can create resources" << endl;
-				//initialize function
+				//initialize function Admin.creater();
 				break;
 			case 2: cout << "Here you can modify resources" << endl;
-				//initialize function
+				//initialize function Admin.modifyr();
 				break;
 			case 3: cout << "Here you can delete resources" << endl;
-				//initialize function
+				//initialize function Admin.deleter();
 				break;
 			}
 			break;
@@ -274,13 +275,13 @@ void VirtualCampus::StartActivities(switched) {
 			cin >> choice2;
 			switch (choice2) {
 			case 1: cout << "Here you can see information of administrators" << endl;
-				VirtualCampus::BeginAction(Admin);
+				VirtualCampus.BeginAction(Admin);
 				break;
 			case 2: cout << "Here you can see information of professors" << endl;
-				VirtualCampus::BeginAction(Professor);
+				VirtualCampus.BeginAction(Professor);
 				break;
 			case 3: cout << "Here you can see information of students" << endl;
-				VirtualCampus::BeginAction(Student);
+				VirtualCampus.BeginAction(Student);
 				break;
 			}
 			break;
@@ -288,13 +289,13 @@ void VirtualCampus::StartActivities(switched) {
 			cin >> choice2;
 			switch (choice2) {
 			case 1: cout << "Here you can see information of a course" << endl;
-				VirtualCampus::BeginAction(Courses);
+				VirtualCampus.BeginAction(Courses);
 				break;
 			case 2: cout << "Here you can see information of a project" << endl;
-				VirtualCampus::BeginAction(Projects);
+				VirtualCampus.BeginAction(Project);
 				break;
 			case 3: cout << "Here you can see information of a seminar" << endl;
-				VirtualCampus::BeginAction(Seminars);
+				VirtualCampus.BeginAction(Seminars);
 				break;
 			}
 			break;
@@ -324,20 +325,20 @@ void VirtualCampus::StartActivities(switched) {
 			}
 			break;
 		case 2: cout << endl << "Here you can set grades. " << endl;
-			// initialize function
+			Professor.setmarks();
 			break;
 
 		case 3: cout << endl << "What do you want to do ? " << endl << endl << "1. Show information of an administrator." << endl << "2.Show information of a professor." << endl << "3. Show information of a student." << endl;
 			cin >> choice2;
 			switch (choice2) {
 			case 1: cout << "Here you can see information of administrators" << endl;
-				VirtualCampus::BeginAction(Admin);
+				VirtualCampus.BeginAction(Admin);
 				break;
 			case 2: cout << "Here you can see information of professors" << endl;
-				VirtualCampus::BeginAction(Professor);
+				VirtualCampus.BeginAction(Professor);
 				break;
 			case 3: cout << "Here you can see information of students" << endl;
-				VirtualCampus::BeginAction(Student);
+				VirtualCampus.BeginAction(Student);
 				break;
 			}
 			break;
@@ -345,13 +346,13 @@ void VirtualCampus::StartActivities(switched) {
 			cin >> choice2;
 			switch (choice2) {
 			case 1: cout << "Here you can see information of a course" << endl;
-				VirtualCampus::BeginAction(Courses);
+				VirtualCampus.BeginAction(Courses);
 				break;
 			case 2: cout << "Here you can see information of a project" << endl;
-				VirtualCampus::BeginAction(Projects);
+				VirtualCampus.BeginAction(Project);
 				break;
 			case 3: cout << "Here you can see information of a seminar" << endl;
-				VirtualCampus::BeginAction(Seminars);
+				VirtualCampus.BeginAction(Seminars);
 				break;
 			}
 			break;
@@ -366,26 +367,17 @@ void VirtualCampus::StartActivities(switched) {
 	case 3: cout << endl << "What do you want to do ? " << endl << endl << "1. Enroll and drop resources." << endl << "2. Show information of users." << endl << "3. Show information of resources." << endl << "4. Close the program." << endl;
 		cin >> choice;
 		switch (choice) {
-		case 1: cout << endl << "What do you want to do ? " << endl << endl << "1. Enroll for a course." << endl << "2. Drop a course." << endl << "3. Enroll for a seminar." << endl << "4. Drop a seminar" << endl << "5. Enroll for a final degree project" << endl << "6. Drop a final degree project" << endl;
+		case 1: cout << endl << "What do you want to do ? " << endl << endl << "1. Enroll or drop a course." << endl << "2. Enroll or drop a seminar." << endl << "3. Enroll or drop a final degree project" << endl;
 			cin >> choice2;
 			switch (choice2) {
-			case 1: cout << "Here you can enroll for a course" << endl;
-				Student::Studentactionsc();
+			case 1: cout << "Here you can enroll or drop a course" << endl;
+				Student.Studentactionsc();
 				break;
-			case 2: cout << "Here you can drop a course" << endl;
-				Student::Studentactionsc();
+			case 2: cout << "Here you can enroll or drop a seminar" << endl;
+				Student.Studentactionss();
 				break;
-			case 3: cout << "Here you can enroll for a seminar" << endl;
-				Student::Studentactionss();
-				break;
-			case 4: cout << "Here you can drop a seminar" << endl;
-				Student::Studentactionss();
-				break;
-			case 5: cout << "Here you can enroll for a final degree project" << endl;
-				Student::Studentactionsp();
-				break;
-			case 6: cout << "Here you can drop a final degree project" << endl;
-				Student::Studentactionsp();
+			case 3: cout << "Here you can enroll or drop a final degree project" << endl;
+				Student.Studentactionsp();
 				break;
 			}
 			break;
@@ -393,13 +385,13 @@ void VirtualCampus::StartActivities(switched) {
 			cin >> choice2;
 			switch (choice2) {
 			case 1: cout << "Here you can see information of administrators" << endl;
-				VirtualCampus::BeginAction(Admin);
+				VirtualCampus.BeginAction(Admin);
 				break;
 			case 2: cout << "Here you can see information of professors" << endl;
-				VirtualCampus::BeginAction(Professor);
+				VirtualCampus.BeginAction(Professor);
 				break;
 			case 3: cout << "Here you can see information of students" << endl;
-				VirtualCampus::BeginAction(Student);
+				VirtualCampus.BeginAction(Student);
 				break;
 			}
 			break;
@@ -407,13 +399,13 @@ void VirtualCampus::StartActivities(switched) {
 			cin >> choice2;
 			switch (choice2) {
 			case 1: cout << "Here you can see information of a course" << endl;
-				VirtualCampus::BeginAction(Courses);
+				VirtualCampus.BeginAction(Courses);
 				break;
 			case 2: cout << "Here you can see information of a project" << endl;
-				VirtualCampus::BeginAction(Projects);
+				VirtualCampus.BeginAction(Project);
 				break;
 			case 3: cout << "Here you can see information of a seminar" << endl;
-				VirtualCampus::BeginAction(Seminars);
+				VirtualCampus.BeginAction(Seminars);
 				break;
 			}
 			break;
@@ -738,7 +730,9 @@ vector<Student> Courses::getlist_students() {
 }
 
 vector<float> Courses::getlist_marks() {
-	return list_marks;
+	for (int i = 0; i < list_marks.getsize(); ++i) {
+		return list_marks[i];
+	}
 }
 
 Professor* Courses::getprofessors() {
@@ -828,6 +822,12 @@ void Courses::display() {
 	cout << "A list of marks is: " << list_marks << endl;
 	cout << "The degree it belongs to is: " << degree << endl;
 	cout << "The professor(s) that give(s) this course are/is: " << professors << endl;
+	if (list_students.getsize() == list_marks.getsize()) {
+		for (int i = 0; i < list_students.getsize(); ++i) {
+			cout << "The name of student number " << i << "is: " list_students[i] << "And the corresponding mark is: " << list_marks[i] << endl;
+		}
+	else cout << "The number of students did not match with the number of marks."
+	}
 }
 
 
@@ -989,32 +989,7 @@ void Admin::createc(Courses& _course, int _credits, string* _list_students, floa
 
 }
 
-void Admin::displayc(Courses _course){
 
-    int credit = _course.getcredits();
-    string* list_of_students = _course.getlist_students();
-    float* list_of_marks = _course.getlist_marks();
-    char id[7];
-    string status = _course.resource->status ;
-
-    for(int i = 0 ; i < 7 ; i++){
-        id[i] = _course.resource->id[i];
-
-    }
-
-    cout << "The course ID is " << id << endl;
-    cout << "The course is" << status << endl;
-    cout << "This course has " << credit << " number of credits." << endl;
-
-    cout << "This course has these students along with their marks: " << endl;
-
-    for(int i = 0 ; i < _course.size_students ; i++){
-        cout << i+1 << ". " << list_of_students[i] << " with " << list_of_marks[i] << " marks"<< endl;
-
-    }
-
-
-}
 
 void Admin::createu() {
 	fstream data("data.txt", ios::app);
@@ -1196,6 +1171,26 @@ void Professor::display() {
 	cout << "Name:" << name << ". And PID: " << pid[7] << "." << endl;
 }
 
+void Professor::setmarks() {
+	string courseid;
+	cout << "For which course do you want to add grades?, please give the course id " << endl;
+	cin >> courseid;
+	//look for courseid in courses.txt file
+	Courses course;
+	courseid.getlist_students
+	string courseproff = OBJECT OF COURSE.getprofessors();
+	string coursproff2 = OBJECT OF PROFESSOR.getname();
+	if (courseproff == courseproff) {
+		cout << "For which student do you want to set a grade?" << endl;
+		string searchstudent;
+		cin >> searchstudent;
+		for (int i=0;i<)
+	}
+	vector < owncourse > = 
+
+}
+
+
 ////////////////////////////////////
 //
 ////////////////////////////////////
@@ -1341,16 +1336,23 @@ void Student::Studentactionsc() {
 		string seekcourse;
 		cin >> seekcourse;
 		if (/*seekcourse is in the list of objects of courses*/) {
-			list_courses.append(seekcourse);
+			if (seekcourse.getdegree == /*object of a student*/.getdegree) {
+				OBJECT OF STUDENT.list_courses.append(seekcourse);
+				//Plus add name to vector of names list_students from particular course
+			}
+			else cout << "This course doesn't belong to the degree you are following." << endl;
 		}
+		else cout << "This course cannot be found in the course list." << endl;
 	}
 	if (enrollordrop == 2) {
 		cout << "Which course do you want to drop?" << endl;
 		string dropcourse;
 		cin >> dropcourse;
-		if (/*dropcourse is in the list of oject of courses*/) {
-			list_courses.remove(dropcourse);
+		if (/*dropcourse is in the list of ojects of courses*/) {
+			OBJECT OF STUDENT.list_courses.erase(dropcourse);
+			//Plus delete name out of vector of names list_students from particular course
 		}
+		else cout << "This course cannot be found in your list of courses." << endl;
 	}
 	else { cout << "This is not a valid input." << endl; }
 }
@@ -1362,18 +1364,27 @@ void Student::Studentactionss() {
 	cin >> enrollordrop;
 	if (enrollordrop == 1) {
 		cout << "What seminar do you want to enroll to?" << endl;
-		string seekcourse;
-		cin >> seekcourse;
-		if (/*seekcourse is in the list of objects of courses*/) {
-			list_courses.append(seekcourse);
+		string seekseminar;
+		cin >> seekseminar;
+		if (/*seekseminar is in the list of objects of seminars*/) {
+			int max = seekseminar.getmax_seats();
+			vector < semstud > = getlist_students();
+			int num = semstud.getsize();
+			if ( num < max) {
+				OBJECT OF STUDENT.list_sem.append(seekseminar);
+				//Plus add name to vector of names list_students from particular seminar 
+			}
+			else cout << "Sorry there are no free spots available anymore."
 		}
+		else << cout "This seminar cannot be found." << endl;
 	}
 	if (enrollordrop == 2) {
 		cout << "Which seminar do you want to drop?" << endl;
-		string dropcourse;
-		cin >> dropcourse;
-		if (/*dropcourse is in the list of oject of courses*/) {
-			list_courses.remove(dropcourse);
+		string dropseminar;
+		cin >> dropseminar;
+		if (/*dropseminar is in the list of objects of seminars*/) {
+			OBJECT OF STUDENT.list_sem.erase(dropseminar);
+			//Plus delete name out of vector of names list_students from particular seminar
 		}
 	}
 	else { cout << "This is not a valid input." << endl; }
@@ -1386,18 +1397,22 @@ void Student::Studentactionsp() {
 	cin >> enrollordrop;
 	if (enrollordrop == 1) {
 		cout << "What project do you want to enroll to?" << endl;
-		string seekcourse;
-		cin >> seekcourse;
-		if (/*seekcourse is in the list of objects of courses*/) {
-			list_courses.append(seekcourse);
+		string seekproject;
+		cin >> seekproject;
+		if (/*seekproject is in the list of objects of projects*/) {
+			string proj = OBJECT OF STUDENT.getproject();
+			string proj2 = seekproject.gestudnt();
+			if (proj == NULL && proj2 == NULL ) {
+				OBJECT OF STUDENT.setproject(seekproject);
+				//Plus add name to student of particular project
+			}
 		}
+		else cout << "This project cannot be found" << endl;
 	}
 	if (enrollordrop == 2) {
-		cout << "Which cours do you want to drop?" << endl;
-		string dropcourse;
-		cin >> dropcourse;
-		if (/*dropcourse is in the list of oject of courses*/) {
-			list_courses.remove(dropcourse);
+		cout << "Okay, we deleted this project." << endl;
+		OBJECT OF STUDENT.project = NULL;
+		//Plus delete name of student of particular project
 		}
 	}
 	else { cout << "This is not a valid input." << endl; }
