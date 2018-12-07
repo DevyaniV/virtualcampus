@@ -510,37 +510,37 @@ Courses::~Courses(){
 //
 ////////////////////////////////////
 
-string Degree::getdegree() {
-    return degree;
-}
+//string Degree::getdegree() {
+//    return degree;
+//}
 
-void Degree::setdegree(string new_degree) {
-    degree = new_degree;
-}
+//void Degree::setdegree(string new_degree) {
+//    degree = new_degree;
+//}
 
 
-/* Default constructor*/
-Degree::Degree(){
-    degree = "no degree";
-}
+///* Default constructor*/
+//Degree::Degree(){
+//    degree = "no degree";
+//}
 
-/* Parametrized constructor*/
+///* Parametrized constructor*/
 
-Degree::Degree(string _degree){
-    degree = _degree;
-}
+//Degree::Degree(string _degree){
+//    degree = _degree;
+//}
 
-/* Copy constructor*/
+///* Copy constructor*/
 
-Degree::Degree(const Degree & D){
-    degree = D.degree;
+//Degree::Degree(const Degree & D){
+//    degree = D.degree;
 
-}
+//}
 
-/* Destructor */
+///* Destructor */
 
-Degree::~Degree(){
-}
+//Degree::~Degree(){
+//}
 
 
 
@@ -551,29 +551,42 @@ string Users::getname() {
     return name;
 }
 
+string Users::gettype(){
+    return type;
+}
+
 
 void Users::setname(string new_name) {
     name = new_name;
 }
 
 
+void Users::settype(string new_type){
+    if(new_type == "student" || new_type == "professor" || new_type == "admin" ){
+        type = new_type;
+    }
+    else cout << "wrong type format" << endl;
+}
+
 /* Default constructor*/
 Users::Users(){
     name = "no name";
+    type = "no type";
 }
 
 
 /* Parametrized constructor*/
 
-Users::Users(string _name){
+Users::Users(string _name, string _type){
     name = _name;
+    type = _type;
 }
 
 /* Copy constructor*/
 
-Users::Users(const Users & U){
-    name = U.name;
-}
+//Users::Users(const Users & U){
+//    name = U.name;
+//}
 
 /* Destructor */
 
@@ -600,7 +613,7 @@ void Admin::setpid(char new_pid[7]) {
 
 
 /* Default constructor*/
-Admin::Admin(){
+Admin::Admin(): Users(){
     pid[0] = 'a';
     pid[1] = 'a';
     pid[2] = 'a';
@@ -617,21 +630,26 @@ Admin::Admin(){
 
 /* Parametrized constructor*/
 
-Admin::Admin(char _pid[7]){
-    for(int i = 0; i < 7; i++){
-        pid[i] = _pid[i];
+Admin::Admin(string _name, string _type, char _pid[7]):Users(_name, _type){
+    if(_type == "admin"){
+        for(int i = 0; i < 7; i++){
+            pid[i] = _pid[i];
+
+        }
 
     }
+
+    else cout << "wrong type specified" <<  endl;
 }
 
 /* Copy constructor*/
 
-Admin::Admin(const Admin & A){
-    for(int i = 0; i < 7; i++){
-        pid[i] = A.pid[i];
+//Admin::Admin(const Admin & A){
+//    for(int i = 0; i < 7; i++){
+//        pid[i] = A.pid[i];
 
-    }
-}
+//    }
+//}
 
 /* Destructor */
 
@@ -639,44 +657,44 @@ Admin::~Admin(){
 }
 
 
-void Admin::createc(Courses& _course, int _credits, string* _list_students, float* _list_marks, int _size_students, int _size_marks, char new_id[7], string new_status ){
+//void Admin::createc(Courses& _course, int _credits, string* _list_students, float* _list_marks, int _size_students, int _size_marks, char new_id[7], string new_status ){
 
-   _course.setcredits(_credits);
-   _course.setsize_students(_size_students);
-   _course.setsize_marks(_size_marks);
-   _course.setlist_students(_list_students, _size_students);
-   _course.setlist_marks(_list_marks, _size_marks);
-   _course.resource->setid(new_id);
-   _course.resource->setstatus(new_status);
+//   _course.setcredits(_credits);
+//   _course.setsize_students(_size_students);
+//   _course.setsize_marks(_size_marks);
+//   _course.setlist_students(_list_students, _size_students);
+//   _course.setlist_marks(_list_marks, _size_marks);
+//   _course.resource->setid(new_id);
+//   _course.resource->setstatus(new_status);
 
-}
+//}
 
-void Admin::displayc(Courses _course){
+//void Admin::displayc(Courses _course){
 
-    int credit = _course.getcredits();
-    string* list_of_students = _course.getlist_students();
-    float* list_of_marks = _course.getlist_marks();
-    char id[7];
-    string status = _course.resource->status ;
+//    int credit = _course.getcredits();
+//    string* list_of_students = _course.getlist_students();
+//    float* list_of_marks = _course.getlist_marks();
+//    char id[7];
+//    string status = _course.resource->status ;
 
-    for(int i = 0 ; i < 7 ; i++){
-        id[i] = _course.resource->id[i];
+//    for(int i = 0 ; i < 7 ; i++){
+//        id[i] = _course.resource->id[i];
 
-    }
+//    }
 
-    cout << "The course ID is " << id << endl;
-    cout << "The course is" << status << endl;
-    cout << "This course has " << credit << " number of credits." << endl;
+//    cout << "The course ID is " << id << endl;
+//    cout << "The course is" << status << endl;
+//    cout << "This course has " << credit << " number of credits." << endl;
 
-    cout << "This course has these students along with their marks: " << endl;
+//    cout << "This course has these students along with their marks: " << endl;
 
-    for(int i = 0 ; i < _course.size_students ; i++){
-        cout << i+1 << ". " << list_of_students[i] << " with " << list_of_marks[i] << " marks"<< endl;
+//    for(int i = 0 ; i < _course.size_students ; i++){
+//        cout << i+1 << ". " << list_of_students[i] << " with " << list_of_marks[i] << " marks"<< endl;
 
-    }
+//    }
 
 
-}
+//}
 
 
 ////////////////////////////////////
@@ -696,7 +714,7 @@ void Professor::setpid(char new_pid[7]) {
 
 
 /* Default constructor*/
-Professor::Professor(){
+Professor::Professor():Users(){
     pid[0] = 'a';
     pid[1] = 'a';
     pid[2] = 'a';
@@ -711,21 +729,26 @@ Professor::Professor(){
 
 /* Parametrized constructor*/
 
-Professor::Professor(char _pid[7]){
-    for(int i = 0; i < 7; i++){
-        pid[i] = _pid[i];
+Professor::Professor(string _name, string _type, char _pid[7]) : Users(_name, _type){
+    if(_type == "professor"){
+        for(int i = 0; i < 7; i++){
+            pid[i] = _pid[i];
+
+        }
 
     }
+    else cout << "wrong specified type" << endl;
+
 }
 
 /* Copy constructor*/
 
-Professor::Professor(const Professor & Pr){
-    for(int i = 0; i < 7; i++){
-        pid[i] = Pr.pid[i];
+//Professor::Professor(const Professor & Pr){
+//    for(int i = 0; i < 7; i++){
+//        pid[i] = Pr.pid[i];
 
-    }
-}
+//    }
+//}
 
 /* Destructor */
 

@@ -241,20 +241,23 @@ public:
     Users();
     /* Parameterized constructor
         */
-    Users(string _name);
+    Users(string _name, string _type);
     /* Copy constructor
         */
-    Users(const Users & U);
+   // Users(const Users & U);
     ~Users();
 
     string getname();
+    string gettype();
 
     void setname(string new_name);
+    void settype(string new_type);
 
 
 
 private :
     string name;
+    string type;
 
 };
 
@@ -267,10 +270,10 @@ public:
     Admin();
     /* Parameterized constructor
             */
-    Admin(string _name, char _pid[7]);
+    Admin(string _name, string _type, char _pid[7]);
     /* Copy constructor
             */
-    Admin(const Admin & A);
+  //  Admin(const Admin & A);
     ~Admin();
 
     char* getpid();
@@ -279,12 +282,12 @@ public:
 
 
 //    /* create, modify, delete resources */
-    void createc(Courses& _course, int _credits, string* _list_students, float* _list_marks, int _size_students, int _size_marks, char new_id[7], string new_status);
+//    void createc(Courses& _course, int _credits, string* _list_students, float* _list_marks, int _size_students, int _size_marks, char new_id[7], string new_status);
 
 //    void creates(string _coordinator, string _speaker, string _date, int _max_seats, string _list_students[]);
 //    void createp(Courses _course, Seminars _seminar, Project _project);
 
-    void displayc(Courses _course);
+//    void displayc(Courses _course);
 
 private:
 
@@ -301,10 +304,10 @@ public:
     Professor();
     /* Parameterized constructor
         */
-    Professor(string _name, char _pid[7]);
+    Professor(string _name, string _type, char _pid[7]);
     /* Copy constructor
         */
-    Professor(const Professor & Pr);
+//    Professor(const Professor & Pr);
     ~Professor();
 
 
