@@ -843,21 +843,24 @@ Student::Student():Users(){
 /* Parametrized constructor*/
 
 Student::Student(string _name, string _type, char _sin[7], string _degree, vector <Courses> _list_courses, vector <Seminars> _list_sem, Project _project):Users(_name, _type){
+    if(_type == "student"){
+        if(isdigit(_sin[0]) && isdigit(_sin[1]) && isdigit(_sin[2]) && isdigit(_sin[3]) && isdigit(_sin[4]) && isdigit(_sin[5]) && isdigit(_sin[6])){
+            for(int i = 0; i < 7; i++){
+                sin[i] = _sin[i];
 
-
-    if(isdigit(_sin[0]) && isdigit(_sin[1]) && isdigit(_sin[2]) && isdigit(_sin[3]) && isdigit(_sin[4]) && isdigit(_sin[5]) && isdigit(_sin[6])){
-        for(int i = 0; i < 7; i++){
-            sin[i] = _sin[i];
+            }
 
         }
+        else cout << "wrong sin format" <<  endl;
+
+        list_courses = _list_courses;
+        list_sem = _list_sem;
+        degree = _degree;
+        project = _project;
 
     }
-    else cout << "wrong sin format" <<  endl;
 
-    list_courses = _list_courses;
-    list_sem = _list_sem;
-    degree = _degree;
-    project = _project;
+
 
 
 }
