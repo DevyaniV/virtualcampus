@@ -859,6 +859,7 @@ Student::Student(string _name, string _type, char _sin[7], string _degree, vecto
         project = _project;
 
     }
+    else cout << "wrong specified type" << endl;
 
 
 
