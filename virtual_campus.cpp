@@ -759,100 +759,69 @@ Professor::~Professor(){
 //
 ////////////////////////////////////
 
-int* Student::getsin() {
+char *Student::getsin() {
     return sin;
 }
 
-
-int Student::getsize_courses(){
-    return size_courses;
+string Student::getdegree(){
+    return degree;
 }
 
-int Student::getsize_sems(){
-    return size_sems;
-}
-
-int Student::getsize_projects(){
-    return size_projects;
-}
-
-string* Student::getlist_courses() {
+vector<Courses> Student::getlist_courses() {
     return list_courses;
 }
 
-string* Student::getlist_sem() {
+vector <Seminars> Student::getlist_sem() {
     return list_sem;
 }
 
-string* Student::getlist_project() {
-    return list_project;
+Project Student::getproject() {
+    return project;
 }
 
-void Student::setsin(int new_sin[7]) {
-    for(int i = 0; i < 7; i++){
-        sin[i] = new_sin[i];
+void Student::setsin(char new_sin[7]) {
+    if(isdigit(new_sin[0]) && isdigit(new_sin[1]) && isdigit(new_sin[2]) && isdigit(new_sin[3]) && isdigit(new_sin[4]) && isdigit(new_sin[5]) && isdigit(new_sin[6])){
+        for(int i = 0; i < 7; i++){
+            sin[i] = new_sin[i];
+
+        }
 
     }
+    else cout << "wrong sin format" <<  endl;
+
 }
 
 
 /* Here new_list_courses is a dynamic array of length "new_size_courses" */
 
-void Student::setsize_courses(int new_size_courses){
-    size_courses = new_size_courses;
-}
 
-void Student::setlist_courses(string* new_list_courses, int new_size_courses) {
+void Student::setlist_courses(vector <Courses> new_list_courses) {
 
-    size_courses = new_size_courses;
-    list_courses = new string[size_courses];
-    for (int i = 0; i < size_courses; i++) {
-        *(list_courses + i) = new_list_courses[i];
-    }
-
-    delete[] new_list_courses;
-
+    list_courses = new_list_courses;
 }
 
 /* Here new_list_sem is a dynamic array of length "new_size_sems" */
 
-void Student::setsize_sems(int new_size_sems){
-    size_sems = new_size_sems;
-}
 
-void Student::setlist_sem(string* new_list_sem, int new_size_sems) {
+void Student::setlist_sem(vector <Seminars> new_list_sem) {
 
-    size_sems = new_size_sems;
-    list_sem = new string[size_sems];
-    for (int i = 0; i < size_sems; i++) {
-        *(list_sem + i) = new_list_sem[i];
-    }
-
-    delete[] new_list_sem;
+    list_sem = new_list_sem;
 
 }
 
 /* Here new_list_project is a dynamic array of length "new_size_projects" */
 
-void Student::setsize_projects(int new_size_projects){
-    size_projects = new_size_projects;
+void Student::setproject(Project new_project) {
+    project = new_project;
 }
 
-void Student::setlist_project(string* new_list_project, int new_size_projects) {
-
-    size_projects = new_size_projects;
-    list_project = new string[size_projects];
-    for (int i = 0; i < size_projects; i++) {
-        *(list_project + i) = new_list_project[i];
-    }
-
-    delete[] new_list_project;
-
+void Student::setdegree(string new_degree){
+    degree = new_degree;
 }
 
 
 /* Default constructor*/
-Student::Student(){
+Student::Student():Users(){
 
     sin[0] = '0';
     sin[1] = '0';
@@ -862,19 +831,10 @@ Student::Student(){
     sin[5] = '0';
     sin[6] = '0';
     sin[7] = '\0';
+    Project p;
+    project = p;
+    degree = "not assigned";
 
-
-    size_courses = 1;
-    list_courses = new string[size_courses];
-    list_courses[0] = "no courses";
-
-    size_sems = 1;
-    list_sem = new string[size_sems];
-    list_sem[0] = "no seminar";
-
-    size_projects = 1;
-    list_project = new string[size_projects];
-    list_project[0] = "no project";
 
     /* Here it is assumed that the default value of pid is "0000000" */
 
@@ -882,72 +842,51 @@ Student::Student(){
 
 /* Parametrized constructor*/
 
-Student::Student(int _sin[7], string* _list_courses, string* _list_sem, string* _list_project, int _size_courses, int _size_sems, int _size_projects){
-    for(int i = 0; i < 7; i++){
-        sin[i] = _sin[i];
+Student::Student(string _name, string _type, char _sin[7], string _degree, vector <Courses> _list_courses, vector <Seminars> _list_sem, Project _project):Users(_name, _type){
+
+
+    if(isdigit(_sin[0]) && isdigit(_sin[1]) && isdigit(_sin[2]) && isdigit(_sin[3]) && isdigit(_sin[4]) && isdigit(_sin[5]) && isdigit(_sin[6])){
+        for(int i = 0; i < 7; i++){
+            sin[i] = _sin[i];
+
+        }
 
     }
+    else cout << "wrong sin format" <<  endl;
 
-    size_courses = _size_courses;
-    list_courses = new string[size_courses];
-
-    for (int i = 0; i < size_courses; i++) {
-        *(list_courses + i) = _list_courses[i];
-    }
-
-    delete[] _list_courses;
-
-
-    size_sems = _size_sems;
-    list_sem = new string[size_sems];
-
-    for (int i = 0; i < size_sems; i++) {
-        *(list_sem + i) = _list_sem[i];
-    }
-
-    delete[] _list_sem;
-
-
-    size_projects = _size_projects;
-    list_project = new string[size_projects];
-
-    for (int i = 0; i < size_projects; i++) {
-        *(list_project + i) = _list_project[i];
-    }
-
-    delete[] _list_project;
+    list_courses = _list_courses;
+    list_sem = _list_sem;
+    degree = _degree;
+    project = _project;
 
 
 }
 
 /* Copy constructor*/
 
-Student::Student(const Student & S){
+//Student::Student(const Student & S){
 
-    for(int i = 0; i < 7; i++){
-        sin[i] = S.sin[i];
+//    for(int i = 0; i < 7; i++){
+//        sin[i] = S.sin[i];
 
-    }
+//    }
 
-    size_courses = S.size_courses;
-    list_courses = new string[size_courses];
-    list_courses = S.list_courses;
-    size_sems = S.size_sems;
-    list_sem = new string[size_sems];
-    list_sem = S.list_sem;
-    size_projects = S.size_projects;
-    list_project = new string[size_projects];
-    list_project = S.list_project;
+//    size_courses = S.size_courses;
+//    list_courses = new string[size_courses];
+//    list_courses = S.list_courses;
+//    size_sems = S.size_sems;
+//    list_sem = new string[size_sems];
+//    list_sem = S.list_sem;
+//    size_projects = S.size_projects;
+//    list_project = new string[size_projects];
+//    list_project = S.list_project;
 
-}
+//}
 
 /* Destructor */
 
 Student::~Student(){
 
-    delete[] list_courses;
-    delete[] list_sem;
-    delete[] list_project;
 }
 
 

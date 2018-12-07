@@ -331,38 +331,32 @@ public:
     Student();
     /* Parameterized constructor
         */
-    Student(int _sin[7], string* _list_courses, string* _list_sem, string* _list_project, int _size_courses, int _size_sems, int _size_projects);
+    Student(string _name, string _type, char _sin[7], string _degree, vector <Courses> _list_courses, vector <Seminars> _list_sem, Project _project);
     /* Copy constructor
         */
-    Student(const Student & St);
+//    Student(const Student & St);
     ~Student();
 
-    int* getsin();
-    int getsize_courses();
-    int getsize_sems();
-    int getsize_projects();
-    string* getlist_courses();
-    string* getlist_sem();
-    string* getlist_project();
+    char* getsin();
+    string getdegree();
+    vector <Courses> getlist_courses();
+    vector <Seminars> getlist_sem();
+    Project getproject();
 
 
-    void setsin(int new_sin[7]);
-    void setsize_courses(int new_size_courses);
-    void setsize_sems(int new_size_sems);
-    void setsize_projects(int new_size_projects);
-    void setlist_courses(string* new_list_courses, int size_courses);
-    void setlist_sem(string* new_list_sem, int size_sems);
-    void setlist_project(string* new_list_project, int size_projects);
+    void setsin(char new_sin[7]);
+    void setdegree(string new_degree);
+    void setlist_courses(vector<Courses> new_list_courses);
+    void setlist_sem(vector<Seminars> new_list_sem);
+    void setproject(Project new_project);
 
 
 private:
-    int sin[7];
-    int size_courses;
-    int size_sems;
-    int size_projects;
-    string* list_courses;
-    string* list_sem;
-    string* list_project;
+    char sin[7];
+    string degree;
+    vector <Courses> list_courses;
+    vector <Seminars> list_sem;
+    Project project;
 
 };
 
