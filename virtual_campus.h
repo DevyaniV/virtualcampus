@@ -27,8 +27,8 @@ public:
     ~VirtualCampus();
 
     int start();
-	void StartActivities();
-	void BeginAction();
+	void StartActivities(int switched);
+	void BeginAction(string files);
 
 private:
     vector < Resources > resources;
@@ -251,7 +251,7 @@ class Admin : public Users {
 		Admin();
 		/* Parameterized constructor
 			*/
-		Admin(string _name, char _pid[7]);
+		Admin(string _name, string _type, char _pid[7]);
 		/* Copy constructor
 			*/
 //		Admin(const Admin & A);
