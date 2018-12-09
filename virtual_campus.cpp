@@ -506,11 +506,10 @@ void VirtualCampus::BeginAction(string files) {
 							cout << infovec.at(i) << " ";
 						}
 						cout << endl;
+						//show all of the objects in this particular class by looking at the string files what type it is and then make objects of this type and use  searchedobject.display()
 					}
 				}
 			}
-			if (searchobj == "all") {
-		//show all of the objects in this particular class else { searchobject.display(); }
 	}
 	else { cout << "Sorry the Virtual Campus was unable to get the data. Please start the program again in order to log in." << endl; }
 }
@@ -1479,24 +1478,64 @@ void Student::Studentactionsc() {
 		cout << "What course do you want to enroll to?" << endl;
 		string seekcourse;
 		cin >> seekcourse;
-		if (/*seekcourse is in the list of objects of courses*/) {
-			if (seekcourse.getdegree == /*object of a student*/.getdegree) {
-				OBJECT OF STUDENT.list_courses.append(seekcourse);
-				//Plus add name to vector of names list_students from particular course
+		fstream data("courses.txt");
+		if (data.is_open()) {
+			data.seekg(0, ios::beg);
+			string line;
+			size_t pos;
+			vector <string> coursevec;
+			while (data >> line) {
+				pos = line.find(seekcourse);
+				if (pos != string::npos) {
+					string wholeline = line;
+					stringstream ss(wholeline);
+					while (ss.good()) {
+						string substr;
+						getline(ss, substr, ',');
+						coursevec.push_back(substr);
+					}
+					Courses courseobj;
+					int lencoursevec = coursevec.size();
+					int len_list_students = (coursevec.size() - 5) / 2;
+					courseobj.setstatus(coursevec.at(0));
+					char id[7];
+					string temp = coursevec.at(1);
+					strcpy(pid, temp.c_str());
+					seminarobj.setid(id[7]);
+					courseobj.setcredits(coursevec.at(2));
+					courseobj.setdegree(coursevec.at(lencoursevec - 1));
+					courseobj.setprofessors(coursevec.at(lencoursevec));
+					for (int i = 3; i < len_list_students + 3; ++i) {
+						courseobj.setlist_students(coursevec.at(i));
+					}
+					for (int i = len_list_students + 3; i < len_list_students + len_list_students + 3; ++i) {
+						courseobj.setlist_marks(coursevec.at(i));
+					}
+					if (courseobj.getdegree == userobj.getdegree) {
+						userobj.list_courses.append(seekcourse);
+						//Plus add name to vector of names list_students from particular course
+					}
+					else { cout << "This course doesn't belong to the degree you are following." << endl; }
+				}
+				else { cout << "This course cannot be found in the course list." << endl; }
 			}
-			else cout << "This course doesn't belong to the degree you are following." << endl;
 		}
-		else cout << "This course cannot be found in the course list." << endl;
 	}
 	if (enrollordrop == 2) {
 		cout << "Which course do you want to drop?" << endl;
 		string dropcourse;
 		cin >> dropcourse;
-		if (/*dropcourse is in the list of ojects of courses*/) {
-			OBJECT OF STUDENT.list_courses.erase(dropcourse);
+		vector <string> list_courses = userobj.getlist_courses();
+		vector <string> templist;
+		for (int i = 0; i < list_courses.size(); ++i) {
+			if (list_courses.at(i) != = dropcourse) {
+				templist.at(i) = list_courses.at(i);
 			//Plus delete name out of vector of names list_students from particular course
+			}
 		}
-		else cout << "This course cannot be found in your list of courses." << endl;
+		for (int i = 0; i < templist.size(); ++i) {
+			courseobj.setlist_courses(templist.at(i));
+		}
 	}
 	else { cout << "This is not a valid input." << endl; }
 }
@@ -1510,31 +1549,70 @@ void Student::Studentactionss() {
 		cout << "What seminar do you want to enroll to?" << endl;
 		string seekseminar;
 		cin >> seekseminar;
-		if (/*seekseminar is in the list of objects of seminars*/) {
-			int max = seekseminar.getmax_seats();
-			vector < semstud > = getlist_students();
-			int num = semstud.getsize();
-			if ( num < max) {
-				OBJECT OF STUDENT.list_sem.append(seekseminar);
-				//Plus add name to vector of names list_students from particular seminar 
+		fstream data("seminars.txt");
+		if (data.is_open()) {
+			data.seekg(0, ios::beg);
+			string line;
+			size_t pos;
+			vector <string> seminarvec;
+			while (data >> line) {
+				pos = line.find(seekseminar);
+				if (pos != string::npos) {
+					string wholeline = line;
+					stringstream ss(wholeline);
+					while (ss.good()) {
+						string substr;
+						getline(ss, substr, ',');
+						seminarvec.push_back(substr);
+					}
+					Seminars seminarobj;
+					int len_seminarvec = seminarvec.size();
+					seminarobj.setstatus(seminarvec.at(0));
+					char id[7];
+					string temp = seminarvec.at(1);
+					strcpy(pid, temp.c_str());
+					seminarobj.setid(id[7]);
+					seminarobj.setcoordinator(seminarvec.at(2));
+					seminarobj.setspeaker(seminarvec.at(3));
+					seminarobj.setdate(seminarvec.at(4));
+					seminarobj.setmax_seats(seminarvec.at(5));
+					for (int i = 6; i < len_seminarvec; ++i) {
+						seminarobj.setlist_students(seminarvec.at(i));
+					}
+					int max = seekseminar.getmax_seats();
+					vector < semstud > = getlist_students();
+					int num = semstud.getsize();
+					if (num < max) {
+						userobj.list_sem.append(seekseminar);
+						//Plus add name to vector of names list_students from particular seminar
+					}
+					else { cout << "This course doesn't belong to the degree you are following." << endl; }
+				}
+				else { cout << "Sorry there are no free spots available anymore." << endl; }
 			}
-			else cout << "Sorry there are no free spots available anymore."
 		}
-		else << cout "This seminar cannot be found." << endl;
 	}
 	if (enrollordrop == 2) {
 		cout << "Which seminar do you want to drop?" << endl;
 		string dropseminar;
 		cin >> dropseminar;
-		if (/*dropseminar is in the list of objects of seminars*/) {
-			OBJECT OF STUDENT.list_sem.erase(dropseminar);
-			//Plus delete name out of vector of names list_students from particular seminar
+		vector <string> list_sem = userobj.getlist_sem();
+		vector <string> templist;
+		for (int i = 0; i < list_sem.size(); ++i) {
+			if (list_sem.at(i) != = dropseminar) {
+				templist.at(i) = list_sem.at(i);
+				//Plus delete name out of vector of names list_students from particular seminar
+			}
+		}
+		for (int i = 0; i < templist.size(); ++i) {
+			courseobj.setlist_courses(templist.at(i));
 		}
 	}
 	else { cout << "This is not a valid input." << endl; }
 }
+		
 
-//Options for students to enroll or drop a project
+//Options for students to enroll or drop projects
 void Student::Studentactionsp() {
 	cout << "What do you want to do? Enroll=1, Drop=2." << endl;
 	int enrollordrop;
@@ -1543,24 +1621,63 @@ void Student::Studentactionsp() {
 		cout << "What project do you want to enroll to?" << endl;
 		string seekproject;
 		cin >> seekproject;
-		if (/*seekproject is in the list of objects of projects*/) {
-			string proj = OBJECT OF STUDENT.getproject();
-			string proj2 = seekproject.gestudnt();
-			if (proj == NULL && proj2 == NULL ) {
-				OBJECT OF STUDENT.setproject(seekproject);
-				//Plus add name to student of particular project
+		fstream data("projects.txt");
+		if (data.is_open()) {
+			data.seekg(0, ios::beg);
+			string line;
+			size_t pos;
+			vector <string> projectvec;
+			while (data >> line) {
+				pos = line.find(seekproject);
+				if (pos != string::npos) {
+					string wholeline = line;
+					stringstream ss(wholeline);
+					while (ss.good()) {
+						string substr;
+						getline(ss, substr, ',');
+						projectvec.push_back(substr);
+					}
+					Project projectobj;
+					int len_projectvec = projectvec.size();
+					projectobj.setstatus(projectvec.at(0));
+					char id[7];
+					string temp = projectvec.at(1);
+					strcpy(pid, temp.c_str());
+					projectobj.setid(id[7]);
+					projectobj.settutor(projectvec.at(2));
+					projectobj.setco_tutor(projectvec.at(3));
+					projectobj.setstudent(projectvec.at(4));
+					projectobj.setdegree(seminarvec.at(5));
+					string proj = userobj.getdegree();
+					string proj2 = projectobj.getdegree();
+
+					if (proj == "not assigned" && proj2 == "not assigned" ) {
+						userobj.setproject(seekseminar);
+						//Plus add name to student of particular project
+					}
+					else { cout << "This project already has a student or you already have a project." << endl; }
+				}
+				else { cout << "Sorry this project cannot be found." << endl; }
 			}
 		}
-		else cout << "This project cannot be found" << endl;
 	}
 	if (enrollordrop == 2) {
-		cout << "Okay, we deleted this project." << endl;
-		OBJECT OF STUDENT.project = NULL;
-		//Plus delete name of student of particular project
+		cout << "Okay, we will delete this project for you." << endl;
+				userobj.setproject("not assigned")
+				//Plus delete name of student of particular project
+			}
+		}
+		for (int i = 0; i < templist.size(); ++i) {
+			courseobj.setlist_courses(templist.at(i));
 		}
 	}
 	else { cout << "This is not a valid input." << endl; }
 }
+
+
+
+
+
 
 
 ////////////////////////////////////
