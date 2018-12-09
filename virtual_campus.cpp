@@ -161,7 +161,7 @@ int VirtualCampus::start() {
 			cout << endl << "Please fill in your password (Use password as default version)" << endl;
 			cin >> loginpassword;
 			size_t pos;
-			while (getline(data, line)) {
+			while (data >> line) {
 				pos = line.find(loginname);
 				if (pos != string::npos) {
 					size_t pos2;
@@ -197,22 +197,22 @@ int VirtualCampus::start() {
 									}
 									temppass += "/n";
 									temp << temppass;
-									rename("temp.txt", "data.txt")
+									rename("temp.txt", "data.txt");
 										temp.close();
 								}
 							}
 
 
 							data.close();
-							return { switched };
 							cout << "Now you start any activity." << endl;
 							VirtualCampus::StartActivities();
+							return { switched };
 						}
 						else {
 							cout << "Okay sure, you can now start any activity." << endl;
 							data.close();
-							return { switched };
 							VirtualCampus::StartActivities();
+							return { switched };
 						}
 					}
 					else {
@@ -222,7 +222,6 @@ int VirtualCampus::start() {
 				}
 				else {
 					cout << "Sorry this name is not in our list" << endl;
-					break;
 				}
 			}
 		}
