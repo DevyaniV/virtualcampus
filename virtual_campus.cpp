@@ -1,5 +1,7 @@
 #include <iostream>
-# include <fstream>
+#include <fstream>
+#include <sstream>
+#include <vector>
 #include "virtual_campus.h"
 
 
@@ -141,7 +143,7 @@ int VirtualCampus::start() {
 
 	int switched;
 	cout << "Welcome to the Virtual Campus of UC3M. Please log in in order to start." << endl;
-	fstream data("login.txt");
+	fstream data("data.txt");
 	if (data.is_open()) {
 		bool login = false;
 		while (login == false) {
@@ -154,8 +156,6 @@ int VirtualCampus::start() {
 			string search1 = "Administrator";
 			string search2 = "Professor";
 			string search3 = "Student";
-
-
 			cout << endl << "Please fill in your name (Use officialadmin as default version)" << endl;
 			cin >> loginname;
 			cout << endl << "Please fill in your password (Use password as default version)" << endl;
@@ -170,70 +170,129 @@ int VirtualCampus::start() {
 						size_t pos3;
 						size_t pos4;
 						size_t pos5;
+						string file;
 						cout << "Welcome, you are logged in." << endl;
-						pos3 = line.find(search1);
-						pos4 = line.find(search2);
-						pos5 = line.find(search3);
-						if (pos3 != string::npos) { cout << "You are identified as an administrator." << endl; switched = 1; }
-						if (pos4 != string::npos) { cout << "You are identified as a professor." << endl; switched = 2; }
-						if (pos5 != string::npos) { cout << "You are identified as a student." << endl; switched = 3; }
-						//					else { cout << "Your identity couldn't be determined, so it is assumed you are a student." << endl; activities_start3 = true; }
-						login = true;
-						cout << "Do you want to change your password? y/n." << endl;
-						char ans;
-						cin >> ans;
-						if (ans == 'y' || ans == 'Y') {
-				
-							
-							fstream temp("temp.txt");
-							if (temp.is_open()) {
-								string temppass;
-								while (data >> temppass) {
-									if (temppass == loginpassword) {
-										cout << endl << "Please give the new password." << endl;
-										string newpassword;
-										cin >> newpassword;
-										temppass = newpassword;
+						while (temp >> line) {
+							pos3 = line.find(search1);
+							pos4 = line.find(search2);
+							pos5 = line.find(search3);
+							if (pos3 != string::npos) { cout << "You are identified as an administrator." << endl; file = "administrators.txt"; switched = 1; }
+							if (pos4 != string::npos) { cout << "You are identified as a professor." << endl; file = "professors.txt"; switched = 2; }
+							if (pos5 != string::npos) { cout << "You are identified as a student." << endl; file = "students.txt"; switched = 3; }
+							//					else { cout << "Your identity couldn't be determined, so it is assumed you are a student." << endl; file = "students.txt"; switched = 3; }
+							login = true;
+							fstream data2(file);
+							vector <string> uservec;
+							if (data.is_open()) {
+								while (data2 >> line) {
+									size_t pos6;
+									pos6 = line.find(loginname);
+									if (pos != string::npos) {
+										string wholeline = line;
+										stringstream ss(wholeline);
+										while (ss.good()) {
+											string substr;
+											getline(ss, substr, ',');
+											uservec.push_back(substr);
+										}
 									}
-									temppass += "/n";
-									temp << temppass;
-									rename("temp.txt", "data.txt");
-										temp.close();
 								}
 							}
 
 
-							data.close();
-							cout << "Now you start any activity." << endl;
-							VirtualCampus::StartActivities();
-							return { switched };
+							if (switched == 1) {
+								Admin userobj;
+								userobj.setname(uservec.at(0));
+								userobj.settype(uservec.at(1));
+								char pid[7];
+								string temp = uservec.at(2);
+								strcpy(pid, temp.c_str());
+								userobj.setpid(pid[7]);
+							}
+							if (switched == 2) {
+								Professor userobj;
+								userobj.setname(uservec.at(0));
+								userobj.settype(uservec.at(1));
+								char pid[7];
+								string temp = uservec.at(2);
+								strcpy(pid, temp.c_str());
+								userobj.setpid(pid[7]);
+							}
+							if (switched == 3) {
+								Student userobj;
+								userobj.setname(uservec.at(0));
+								userobj.settype(uservec.at(1));
+								char id[7];
+								string temp = uservec.at(2);
+								strcpy(id, temp.c_str());
+								userobj.setpid(id[7]);
+								userobj.setdegree(uservec.at(3));
+								int lenuservec = uservec.size();
+								for (int i = 4; i < lenuservec - 1; ++i) {
+									userobj.setlist_courses(uservec.at(i));
+								}
+								//                              for (int i = ; i < ; ++i) {
+								//                               	courseobj.setlist_marks(coursevec.at(i));
+								//                            	}
+								userobj.setproject(uservec.at(lencoursevec));
+							}
+
+
+							cout << "Do you want to change your password? y/n." << endl;
+							char ans;
+							cin >> ans;
+							if (ans == 'y' || ans == 'Y') {
+
+
+								fstream temp("temp.txt");
+								if (temp.is_open()) {
+									string temppass;
+									while (data >> temppass) {
+										if (temppass == loginpassword) {
+											cout << endl << "Please give the new password." << endl;
+											string newpassword;
+											cin >> newpassword;
+											temppass = newpassword;
+										}
+										temppass += "/n";
+										temp << temppass;
+										rename("temp.txt", "data.txt");
+										temp.close();
+									}
+								}
+
+
+								data.close();
+								cout << "Now you start any activity." << endl;
+								VirtualCampus::StartActivities();
+								return { switched, userobj };
+							}
+							else {
+								cout << "Okay sure, you can now start any activity." << endl;
+								data.close();
+								VirtualCampus::StartActivities();
+								return { switched, userobj };
+							}
 						}
-						else {
-							cout << "Okay sure, you can now start any activity." << endl;
-							data.close();
-							VirtualCampus::StartActivities();
-							return { switched };
-						}
-					}
 					else {
 						cout << "Sorry, wrong password" << endl;
 						break;
 					}
+					}
 				}
-				else {
+				if (data.eof()) {
 					cout << "Sorry this name is not in our list" << endl;
 				}
 			}
+
 		}
-	}
 	else { cout << "Sorry the Virtual Campus was unable to get the data. Please start the program again in order to log in." << endl; }
 
-	return { switched };
+	return { switched, userobj };
 }
 
-
 //Give the user the available options he is allowed to do
-void VirtualCampus::StartActivities(switched) {
+void VirtualCampus::StartActivities(int switched) {
 	int choice;
 	int choice2;
 	switch (switched) {
@@ -274,13 +333,13 @@ void VirtualCampus::StartActivities(switched) {
 			cin >> choice2;
 			switch (choice2) {
 			case 1: cout << "Here you can see information of administrators" << endl;
-				VirtualCampus.BeginAction(Admin);
+				VirtualCampus.BeginAction("admins.txt");
 				break;
 			case 2: cout << "Here you can see information of professors" << endl;
-				VirtualCampus.BeginAction(Professor);
+				VirtualCampus.BeginAction("professors.txt");
 				break;
 			case 3: cout << "Here you can see information of students" << endl;
-				VirtualCampus.BeginAction(Student);
+				VirtualCampus.BeginAction("students.txt");
 				break;
 			}
 			break;
@@ -288,13 +347,13 @@ void VirtualCampus::StartActivities(switched) {
 			cin >> choice2;
 			switch (choice2) {
 			case 1: cout << "Here you can see information of a course" << endl;
-				VirtualCampus.BeginAction(Courses);
+				VirtualCampus.BeginAction("courses.txt");
 				break;
 			case 2: cout << "Here you can see information of a project" << endl;
-				VirtualCampus.BeginAction(Project);
+				VirtualCampus.BeginAction("projects.txt");
 				break;
 			case 3: cout << "Here you can see information of a seminar" << endl;
-				VirtualCampus.BeginAction(Seminars);
+				VirtualCampus.BeginAction("seminars.txt");
 				break;
 			}
 			break;
@@ -331,13 +390,13 @@ void VirtualCampus::StartActivities(switched) {
 			cin >> choice2;
 			switch (choice2) {
 			case 1: cout << "Here you can see information of administrators" << endl;
-				VirtualCampus.BeginAction(Admin);
+				VirtualCampus.BeginAction("admins.txt");
 				break;
 			case 2: cout << "Here you can see information of professors" << endl;
-				VirtualCampus.BeginAction(Professor);
+				VirtualCampus.BeginAction("professors.txt");
 				break;
 			case 3: cout << "Here you can see information of students" << endl;
-				VirtualCampus.BeginAction(Student);
+				VirtualCampus.BeginAction("students.txt");
 				break;
 			}
 			break;
@@ -345,13 +404,13 @@ void VirtualCampus::StartActivities(switched) {
 			cin >> choice2;
 			switch (choice2) {
 			case 1: cout << "Here you can see information of a course" << endl;
-				VirtualCampus.BeginAction(Courses);
+				VirtualCampus.BeginAction("courses.txt");
 				break;
 			case 2: cout << "Here you can see information of a project" << endl;
-				VirtualCampus.BeginAction(Project);
+				VirtualCampus.BeginAction("projects.txt");
 				break;
 			case 3: cout << "Here you can see information of a seminar" << endl;
-				VirtualCampus.BeginAction(Seminars);
+				VirtualCampus.BeginAction("seminars.txt");
 				break;
 			}
 			break;
@@ -384,13 +443,13 @@ void VirtualCampus::StartActivities(switched) {
 			cin >> choice2;
 			switch (choice2) {
 			case 1: cout << "Here you can see information of administrators" << endl;
-				VirtualCampus.BeginAction(Admin);
+				VirtualCampus.BeginAction("administrators.txt");
 				break;
 			case 2: cout << "Here you can see information of professors" << endl;
-				VirtualCampus.BeginAction(Professor);
+				VirtualCampus.BeginAction("professors.txt");
 				break;
 			case 3: cout << "Here you can see information of students" << endl;
-				VirtualCampus.BeginAction(Student);
+				VirtualCampus.BeginAction("students.txt");
 				break;
 			}
 			break;
@@ -398,13 +457,13 @@ void VirtualCampus::StartActivities(switched) {
 			cin >> choice2;
 			switch (choice2) {
 			case 1: cout << "Here you can see information of a course" << endl;
-				VirtualCampus.BeginAction(Courses);
+				VirtualCampus.BeginAction("courses.txt");
 				break;
 			case 2: cout << "Here you can see information of a project" << endl;
-				VirtualCampus.BeginAction(Project);
+				VirtualCampus.BeginAction("projects.txt");
 				break;
 			case 3: cout << "Here you can see information of a seminar" << endl;
-				VirtualCampus.BeginAction(Seminars);
+				VirtualCampus.BeginAction("seminars.txt");
 				break;
 			}
 			break;
@@ -418,20 +477,42 @@ void VirtualCampus::StartActivities(switched) {
 
 
 //start displaying the users or resources
-void VirtualCampus::BeginAction(profession) {
-	string profession;
-	cout << "What is the name of the user or resource you are looking for?" << endl;
-	string searchobj;
-	cin >> searchobj;
-	if (searchobj == "all") {
-		//show all of the objects in this particular class
+void VirtualCampus::BeginAction(string files) {
+	fstream data(files);
+	if (data.is_open()) {
+			data.seekg(0, ios::beg);
+			cout << "What is the name of the user or resource you are looking for? Say \"all\" if you want to see everything from a specific type of users or resources." << endl;
+			string searchobj;
+			cin >> searchobj;
+			size_t pos;
+			if (searchobj == "all") {
+					string output;
+					data >> output;
+					cout << output << endl;
+			}
+			vector <string> infovec;
+			while (data >> line) {
+				pos = line.find(searchobj;);
+				if (pos != string::npos) {
+					cout << "Wait a second..." << endl;
+					size_t pos2;
+					string wholeline = line;
+					stringstream ss(wholeline);
+					while (ss.good()) {
+						string substr;
+						getline(ss, substr, ',');
+						infovec.push_back(substr);
+						for (i = 0; i < infovec.size(); ++i) {
+							cout << infovec.at(i) << " ";
+						}
+						cout << endl;
+					}
+				}
+			}
+			if (searchobj == "all") {
+		//show all of the objects in this particular class else { searchobject.display(); }
 	}
-	else { searchobject.display(); }
-
-
-	//int *len = new int[]
-	//object list [len] = {}
-	//object *
+	else { cout << "Sorry the Virtual Campus was unable to get the data. Please start the program again in order to log in." << endl; }
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1103,7 +1184,7 @@ void Admin::deleteu() {
 
 
 void Admin::display() {
-	cout << "Name:" << name << ". And PID: " << pid[7] << "." << endl;
+	cout << "Name:" << name << "Type: " << type << ". And PID: " << pid[7] << "." << endl;
 }
 
 
@@ -1171,22 +1252,86 @@ void Professor::display() {
 }
 
 void Professor::setmarks() {
+	vector <string> coursevec;
 	string courseid;
 	cout << "For which course do you want to add grades?, please give the course id " << endl;
 	cin >> courseid;
-	//look for courseid in courses.txt file
-	Courses course;
-	courseid.getlist_students
-	string courseproff = OBJECT OF COURSE.getprofessors();
-	string coursproff2 = OBJECT OF PROFESSOR.getname();
-	if (courseproff == courseproff) {
+	file = "courses.txt";
+	fstream data(file);
+		if (data.is_open()) {
+			bool continueing = false;
+			while (continueing == false) {
+				data.seekg(0, ios::beg);
+				string searchname;
+				string line;
+				size_t pos;
+				while (data >> line) {
+					pos = line.find(courseid);
+					if (pos != string::npos) {
+						size_t pos2;
+						cout << "The course is found." << endl;
+						string wholeline = line;
+						stringstream ss(wholeline);
+
+						while (ss.good()) {
+							string substr;
+							getline(ss, substr, ',');
+							coursevec.push_back(substr);
+						}
+//						for (int i = 0; i < coursevec.size(); ++i) {
+//							cout << coursevec.at(i) << " " << endl;
+//						}
+					}
+					else { cout << "We could not find this name in the database." << endl; }
+				}
+			}
+			data.close();
+		}
+		else { cout << "Sorry the Virtual Campus was unable to get the data." << endl; }
+	}
+	Courses courseobj;
+	int lencoursevec = coursevec.size();
+	int len_list_students = (coursevec.size() - 5) / 2;
+	courseobj.setstatus(coursevec.at(0));
+	courseobj.setid(coursevec.at(1));
+	courseobj.setcredits(coursevec.at(2));
+	courseobj.setdegree(coursevec.at(lencoursevec - 1));
+	courseobj.setprofessors(coursevec.at(lencoursevec));
+	for (int i = 3; i < len_list_students+3; ++i) {
+		courseobj.setlist_students(coursevec.at(i));
+	}
+	for (int i = len_list_students+3; i < len_list_students+len_list_students+3; ++i) {
+		courseobj.setlist_marks(coursevec.at(i));
+	}
+	vector <string> list_students = courseobj.getlist_students;
+	vector < int > list_marks = courseobj.getlist_marks;
+	string courseproff = courseobj.getprofessors();
+//	string coursproff2 = OBJECT OF PROFESSOR.getname();
+//	if (courseproff == courseproff) {
 		cout << "For which student do you want to set a grade?" << endl;
 		string searchstudent;
 		cin >> searchstudent;
-		for (int i=0;i<)
-	}
-	vector < owncourse > = 
+		for (int i = 0; i < len_list_students; ++i) {
+			if (searchstudent == list_students.at(i)) {
+				int numberofstudent = i
+			}
+		}
+		cout << "What is the grade you want to set?" << endl;
+		string studentgrade;
+		cin >> studentgrade;
+		coursevec.at(3+len_list_students+numberofstudent) = studentgrade;
+		fstream data("courses.txt", ios::app);
+		if (data.is_open()) {
+			for (int i = 0; i < ) {
+				data << coursevec.at(i) << "," << endl;
+			}
+			data << "\n" << endl;
+			cout << "The grade is set." << endl;
+			data.close();
 
+		}
+		else { cout << "Sorry the Virtual Campus was unable to add data. Please start the program again in order to try again." << endl; }
+//	}
 }
 
 
