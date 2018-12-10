@@ -1,5 +1,6 @@
 #include <iostream>
 #include "virtual_campus.h"
+#include <fstream>
 
 
 using namespace std;
@@ -259,7 +260,7 @@ int Seminars::getmax_seats() {
     return max_seats;
 }
 
-vector < Student > Seminars::getlist_students() {
+vector<Student> Seminars::getlist_students() {
     return list_students;
 }
 
@@ -292,12 +293,15 @@ void Seminars::setlist_students(vector<Student> new_list_students) {
 
 /* Default constructor*/
 Seminars::Seminars():Resources(){
-    Professor a,b;
-    //Student s;
-    *coordinator = a;
-    *speaker = b;
+    Professor* a;
+    Professor* b;
+    vector <Student> s;
+    coordinator = a;
+    speaker = b;
     date = "no date";
     max_seats = -1;
+    list_students = s;
+
 }
 
 /* -1 is a dummy number of max_seats */
@@ -307,7 +311,7 @@ Seminars::Seminars():Resources(){
 /* Here _list_students_s is a dynamic array of length "_size" */
 
 
-Seminars::Seminars(string _status, char _id[7], Professor* _coordinator, Professor* _speaker, string _date, int _max_seats, vector < Student > _list_students) : Resources(_status, _id){
+Seminars::Seminars(string _status, char _id[7], Professor* _coordinator, Professor* _speaker, string _date, int _max_seats, vector < Student> _list_students) : Resources(_status, _id){
     coordinator = _coordinator;
     speaker = _speaker;
     date = _date;
@@ -424,8 +428,12 @@ vector<float> Courses::getlist_marks() {
     return list_marks;
 }
 
-Professor* Courses::getprofessors(){
-    return professors;
+Professor* Courses::getprofessor1(){
+    return professor1;
+}
+
+Professor* Courses::getprofessor2(){
+    return professor2;
 }
 
 
@@ -453,31 +461,37 @@ void Courses::setlist_marks(vector<float> new_list_marks) {
 }
 
 
-void Courses::setprofessors(Professor *new_professors){
-    *professors = *new_professors;
-    *(professors + 1) = *(new_professors + 1);
+void Courses::setprofessor1(Professor *new_professor1){
+    professor1 = new_professor1;
 }
+
+
+void Courses::setprofessor2(Professor *new_professor2){
+    professor2 = new_professor2;
+}
+
 
 /* Default constructor*/
 Courses::Courses():Resources(){
     credits = 0;
-    Professor a,b;
-    *professors = a;
-    *(professors + 1) = b;
+    Professor* a;
+    Professor* b;
+    professor1 = a;
+    professor2 = b;
     degree = "not assigned" ;
 
 }
 
 /* Parametrized constructor*/
 
-Courses::Courses(string _status, char _id[7], int _credits, vector < Student > _list_students, vector < float > _list_marks, string _degree, Professor* _professors) : Resources(_status, _id) {
+Courses::Courses(string _status, char _id[7], int _credits, vector < Student > _list_students, vector < float > _list_marks, string _degree, Professor* _professor1, Professor* _professor2) : Resources(_status, _id) {
     credits = _credits;
 
     list_students = _list_students;
     list_marks = _list_marks;
     degree = _degree;
-    *professors = *_professors;
-    *(professors + 1) = *(_professors + 1);
+    professor1 = _professor1;
+    professor2 = _professor2;
 
 }
 
@@ -697,6 +711,890 @@ Admin::~Admin(){
 //}
 
 
+
+void Admin::createu() {
+
+    /*For names and degrees, use underscore for separating or only put first names, no spaces condition*/
+
+    string name_user;
+    char identity_type = '0';
+    cout << endl << "Please fill the name of the new user." << endl;
+    cin >> name_user;
+    cout << endl << "Please press the alphabet corresponding to their identity (a-Administrator, s-Student, p-Professor)" << endl;
+    cin >> identity_type;
+    while (identity_type != 'a' && identity_type != 'A' && identity_type != 's' && identity_type != 'S' && identity_type != 'p' && identity_type != 'P'){
+        cin >> identity_type;
+    }
+
+
+    if(identity_type == 's' || identity_type == 'S') {
+
+
+        fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/students.csv", ios::out | ios::app);
+        if (data.is_open()){
+            //Student newu;
+            Student *newuser = new Student;
+
+            newuser->setname(name_user);
+            cout << "Give the SIN of this person." << endl;
+            char newpid[7];
+            cin >> newpid;
+            newuser->setsin(newpid);
+
+            cout << "Give degree of this student." << endl;
+            string degree;
+            cin >> degree;
+            newuser->setdegree(degree);
+
+            //plus add new object to list of objects
+
+            cout << newuser->getname() << "," << newuser->getsin() << "," << newuser->getdegree() << endl;
+
+            data << newuser->getname() << "," << newuser->getsin() << "," << newuser->getdegree() << "\n" ;
+            data.close();
+            cout << "fin" << endl;
+            delete newuser;
+
+        }
+        else { cout << "Sorry the Virtual Campus was unable to add data. Please start the program again in order to try again." << endl; }
+
+
+
+    }
+
+    if (identity_type == 'a' || identity_type == 'A') {
+        fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/admins.csv", ios::out | ios::app);
+        if (data.is_open()){
+            Admin *newuser = new Admin;
+            newuser->setname(name_user);
+            cout << "Give the PID of this person." << endl;
+            char newpid[7];
+            cin >> newpid;
+            newuser->setpid(newpid);
+            //plus add new object to list of objects
+
+            cout << newuser->getname() << "," << newuser->getpid() << "\n" << endl;
+
+            data << newuser->getname() << "," << newuser->getpid() << "\n" ;
+            data.close();
+            cout << "fin" << endl;
+            delete newuser;
+
+        }
+        else { cout << "Sorry the Virtual Campus was unable to add data. Please start the program again in order to try again." << endl; }
+
+
+
+    }
+
+
+    if (identity_type == 'p' || identity_type == 'P') {
+
+        fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/professors.csv", ios::out | ios::app);
+        if (data.is_open()){
+
+            Professor *newuser = new Professor;
+            newuser->setname(name_user);
+            cout << "Give the PID of this person." << endl;
+            char new2pid[7];
+            cin >> new2pid;
+
+            newuser->setpid(new2pid);
+
+            //plus add new object to list of objects
+            cout << newuser->getname() << "," << newuser->getpid() << "\n" << endl;
+            data << newuser->getname() << "," << newuser->getpid() << "\n" ;
+
+            data.close();
+            delete newuser;
+        }
+        else { cout << "Sorry the Virtual Campus was unable to add data. Please start the program again in order to try again." << endl; }
+
+
+
+    }
+
+
+
+
+
+
+}
+
+
+void Admin::modifyu(){
+
+//    string name_user;
+    char identity_type;
+    char change_type;
+    int line_n;
+//    cout << endl << "Please fill the name of the user to be modified." << endl;
+//    cin >> name_user;
+    cout << endl << "Please press the alphabet corresponding to the identity of the user to be modified (a-Administrator, s-Student, p-Professor)" << endl;
+    cin >> identity_type;
+    while (identity_type != 'a' && identity_type != 'A' && identity_type != 's' && identity_type != 'S' && identity_type != 'p' && identity_type != 'P'){
+        cin >> identity_type;
+    }
+
+    char pid[7];
+
+
+    if(identity_type == 's' || identity_type == 'S') {
+
+
+
+        cout << endl << "Please provide the SIN of the user to be modified." << endl;
+        cin >> pid;
+
+        string name_obj;
+        string id_obj;
+        string deg_obj;
+
+        vector <string> name_ob;
+        vector <string> id_ob;
+        vector <string> degrees;
+        int i = 0;
+
+
+        ifstream Myfile;
+        Myfile.open("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/students.csv");
+
+        while(Myfile.good()){
+
+            getline(Myfile, name_obj, ',');
+
+            bool h = Myfile.good();
+            if(h){
+
+                i++;
+                name_ob.push_back(name_obj);
+                //cout << "new line" << endl;
+
+
+
+                //cout << "Name: " << name_ob[i-1] << " ";
+                getline(Myfile, id_obj, ',');
+                id_ob.push_back(id_obj);
+                //cout << "ID: " << id_ob[i-1] << " " ;
+
+                getline(Myfile, deg_obj, '\n');
+                degrees.push_back(deg_obj);
+                //cout << "Degree: " << degrees[i-1] << endl ;
+
+            }
+
+
+    }
+
+
+int count = 0;
+        for(size_t j = 0; j < id_ob.size(); j++){
+
+                if (id_ob[j].find(pid) != string::npos){
+
+                    cout << "Name: " << name_ob[j] << " ";
+                    cout << "ID: " << id_ob[j] << " ";
+                    cout << "Degree: " << degrees[j] << endl;
+                    line_n = j;
+                    count++;
+                    //cout << "Line number: " << j+1 << endl;
+                }
+
+
+
+
+        }
+
+
+
+        if(count == 0){
+            cout << "Sorry that id number is not registered in the database." << endl;
+            return;
+
+        }
+
+        Student *newuser = new Student;
+
+
+        cout << "Please press : n - for changing name, i - for changing sin, d - for changing degree" << endl;
+
+        cin >> change_type;
+        while (change_type != 'n' && change_type != 'N' && change_type != 'i' && change_type != 'I' && change_type != 'd' && change_type != 'D'){
+            cin >> change_type;
+        }
+
+        if (change_type == 'n' || identity_type == 'N'){
+
+            string newname;
+            cout << "Give the new name for user." << endl;
+            cin >> newname;
+            newuser->setname(newname);
+            name_ob[line_n] = newuser->getsin();
+            cout << name_ob[line_n] << endl;
+
+
+            fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/students.csv", ios::out | ios::trunc);
+            if (data.is_open()){
+                for(size_t j; j < name_ob.size(); j++){
+                    cout << name_ob[j] << "," << id_ob[j] << "," << degrees[j] << endl;
+                    data << name_ob[j] << "," << id_ob[j] << "," << degrees[j] << "\n" ;
+
+                }
+
+
+                data.close();
+            }
+
+
+        }
+
+
+        if (change_type == 'i' || identity_type == 'I'){
+
+            char newsin[7];
+
+            cout << "Give the new SIN for user." << endl;
+            cin >> newsin;
+            newuser->setsin(newsin);
+
+            id_ob[line_n] = newuser->getsin();
+            cout << id_ob[line_n] << endl;
+
+            fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/students.csv", ios::out | ios::trunc);
+            if (data.is_open()){
+
+                for(size_t j = 0; j < name_ob.size(); j++){
+
+                    cout << name_ob[j] << "," << id_ob[j] << "," << degrees[j] << endl;
+                    data << name_ob[j] << "," << id_ob[j] << "," << degrees[j] << "\n" ;
+
+                }
+
+
+                data.close();
+            }
+
+
+        }
+
+
+        if (change_type == 'd' || identity_type == 'D'){
+
+            string newdegree;
+
+            cout << "Give the new degree for user." << endl;
+            cin >> newdegree;
+            newuser->setdegree(newdegree);
+
+            id_ob[line_n] = newuser->getdegree();
+            cout << id_ob[line_n] << endl;
+
+
+            fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/students.csv", ios::out | ios::trunc);
+            if (data.is_open()){
+                for(size_t j; j < name_ob.size(); j++){
+                    cout << name_ob[j] << "," << id_ob[j] << "," << degrees[j] << endl;
+                    data << name_ob[j] << "," << id_ob[j] << "," << degrees[j] << "\n" ;
+
+                }
+
+
+                data.close();
+            }
+
+
+        }
+        delete newuser;
+    }
+
+
+
+
+
+
+    if(identity_type == 'p' || identity_type == 'P') {
+
+
+
+        cout << endl << "Please provide the PID of the user to be modified." << endl;
+        cin >> pid;
+
+        string name_obj;
+        string id_obj;
+
+
+        vector <string> name_ob;
+        vector <string> id_ob;
+
+        int i = 0;
+
+
+        ifstream Myfile;
+        Myfile.open("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/professors.csv");
+
+        while(Myfile.good()){
+
+            getline(Myfile, name_obj, ',');
+
+            bool h = Myfile.good();
+            if(h){
+
+                i++;
+                name_ob.push_back(name_obj);
+                //cout << "new line" << endl;
+
+
+
+                //cout << "Name: " << name_ob[i-1] << " ";
+                getline(Myfile, id_obj, '\n');
+                id_ob.push_back(id_obj);
+                //cout << "ID: " << id_ob[i-1] << " " ;
+
+
+            }
+
+
+    }
+
+
+int count = 0;
+        for(size_t j = 0; j < id_ob.size(); j++){
+
+                if (id_ob[j].find(pid) != string::npos){
+
+                    cout << "Name: " << name_ob[j] << " ";
+                    cout << "ID: " << id_ob[j] << " ";
+                    line_n = j;
+                    count++;
+                    //cout << "Line number: " << j+1 << endl;
+                }
+
+
+
+
+        }
+
+
+
+        if(count == 0){
+            cout << "Sorry that id number is not registered in the database." << endl;
+            return;
+
+        }
+
+        Professor *newuser = new Professor;
+
+
+        cout << "Please press : n - for changing name, i - for changing pid" << endl;
+
+        cin >> change_type;
+        while (change_type != 'n' && change_type != 'N' && change_type != 'i' && change_type != 'I' ){
+            cin >> change_type;
+        }
+
+        if (change_type == 'n' || identity_type == 'N'){
+
+            string newname;
+            cout << "Give the new name for user." << endl;
+            cin >> newname;
+            newuser->setname(newname);
+            name_ob[line_n] = newuser->getname();
+            cout << name_ob[line_n] << endl;
+
+
+            fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/professors.csv", ios::out | ios::trunc);
+            if (data.is_open()){
+                for(size_t j; j < name_ob.size(); j++){
+                    cout << name_ob[j] << "," << id_ob[j] << endl;
+                    data << name_ob[j] << "," << id_ob[j] << "\n" ;
+
+                }
+
+
+                data.close();
+            }
+
+
+        }
+
+
+        if (change_type == 'i' || identity_type == 'I'){
+
+            char newpid[7];
+
+            cout << "Give the new PID for user." << endl;
+            cin >> newpid;
+            newuser->setpid(newpid);
+
+            id_ob[line_n] = newuser->getpid();
+            cout << id_ob[line_n] << endl;
+
+            fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/professors.csv", ios::out | ios::trunc);
+            if (data.is_open()){
+
+                for(size_t j = 0; j < name_ob.size(); j++){
+
+                    cout << name_ob[j] << "," << id_ob[j] << endl;
+                    data << name_ob[j] << "," << id_ob[j] << "\n" ;
+
+                }
+
+
+                data.close();
+            }
+
+
+        }
+
+
+        delete newuser;
+    }
+
+
+
+
+    if(identity_type == 'a' || identity_type == 'A') {
+
+
+
+        cout << endl << "Please provide the PID of the user to be modified." << endl;
+        cin >> pid;
+
+        string name_obj;
+        string id_obj;
+
+
+        vector <string> name_ob;
+        vector <string> id_ob;
+
+        int i = 0;
+
+
+        ifstream Myfile;
+        Myfile.open("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/admins.csv");
+
+        while(Myfile.good()){
+
+            getline(Myfile, name_obj, ',');
+
+            bool h = Myfile.good();
+            if(h){
+
+                i++;
+                name_ob.push_back(name_obj);
+                //cout << "new line" << endl;
+
+
+
+                //cout << "Name: " << name_ob[i-1] << " ";
+                getline(Myfile, id_obj, '\n');
+                id_ob.push_back(id_obj);
+                //cout << "ID: " << id_ob[i-1] << " " ;
+
+
+            }
+
+
+    }
+
+
+int count = 0;
+        for(size_t j = 0; j < id_ob.size(); j++){
+
+                if (id_ob[j].find(pid) != string::npos){
+
+                    cout << "Name: " << name_ob[j] << " ";
+                    cout << "ID: " << id_ob[j] << " ";
+                    line_n = j;
+                    count++;
+                    //cout << "Line number: " << j+1 << endl;
+                }
+
+
+
+
+        }
+
+
+
+        if(count == 0){
+            cout << "Sorry that id number is not registered in the database." << endl;
+            return;
+
+        }
+
+        Admin *newuser = new Admin;
+
+
+        cout << "Please press : n - for changing name, i - for changing pid" << endl;
+
+        cin >> change_type;
+        while (change_type != 'n' && change_type != 'N' && change_type != 'i' && change_type != 'I' ){
+            cin >> change_type;
+        }
+
+        if (change_type == 'n' || identity_type == 'N'){
+
+            string newname;
+            cout << "Give the new name for user." << endl;
+            cin >> newname;
+            newuser->setname(newname);
+            name_ob[line_n] = newuser->getname();
+            cout << name_ob[line_n] << endl;
+
+
+            fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/admins.csv", ios::out | ios::trunc);
+            if (data.is_open()){
+                for(size_t j; j < name_ob.size(); j++){
+                    cout << name_ob[j] << "," << id_ob[j] << endl;
+                    data << name_ob[j] << "," << id_ob[j] << "\n" ;
+
+                }
+
+
+                data.close();
+            }
+
+
+        }
+
+
+        if (change_type == 'i' || identity_type == 'I'){
+
+            char newpid[7];
+
+            cout << "Give the new PID for user." << endl;
+            cin >> newpid;
+            newuser->setpid(newpid);
+
+            id_ob[line_n] = newuser->getpid();
+            cout << id_ob[line_n] << endl;
+
+            fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/admins.csv", ios::out | ios::trunc);
+            if (data.is_open()){
+
+                for(size_t j = 0; j < name_ob.size(); j++){
+
+                    cout << name_ob[j] << "," << id_ob[j] << endl;
+                    data << name_ob[j] << "," << id_ob[j] << "\n" ;
+
+                }
+
+
+                data.close();
+            }
+
+
+        }
+
+
+        delete newuser;
+    }
+
+
+
+
+
+}
+
+
+
+void Admin::deleteu() {
+
+        char identity_type;
+
+        int line_n;
+
+        cout << endl << "Please press the alphabet corresponding to the identity of the user to be modified (a-Administrator, s-Student, p-Professor)" << endl;
+        cin >> identity_type;
+        while (identity_type != 'a' && identity_type != 'A' && identity_type != 's' && identity_type != 'S' && identity_type != 'p' && identity_type != 'P'){
+            cin >> identity_type;
+        }
+
+        char pid[7];
+
+
+        if(identity_type == 's' || identity_type == 'S') {
+
+
+
+            cout << endl << "Please provide the SIN of the user to be deleted." << endl;
+            cin >> pid;
+
+            string name_obj;
+            string id_obj;
+            string deg_obj;
+
+            vector <string> name_ob;
+            vector <string> id_ob;
+            vector <string> degrees;
+            int i = 0;
+
+
+            ifstream Myfile;
+            Myfile.open("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/students.csv");
+
+            while(Myfile.good()){
+
+                getline(Myfile, name_obj, ',');
+
+                bool h = Myfile.good();
+                if(h){
+
+                    i++;
+                    name_ob.push_back(name_obj);
+                    //cout << "new line" << endl;
+
+
+
+                    //cout << "Name: " << name_ob[i-1] << " ";
+                    getline(Myfile, id_obj, ',');
+                    id_ob.push_back(id_obj);
+                    //cout << "ID: " << id_ob[i-1] << " " ;
+
+                    getline(Myfile, deg_obj, '\n');
+                    degrees.push_back(deg_obj);
+                    //cout << "Degree: " << degrees[i-1] << endl ;
+
+                }
+
+
+        }
+
+
+    int count = 0;
+            for(size_t j = 0; j < id_ob.size(); j++){
+
+                    if (id_ob[j].find(pid) != string::npos){
+
+                        cout << "Name: " << name_ob[j] << " ";
+                        cout << "ID: " << id_ob[j] << " ";
+                        cout << "Degree: " << degrees[j] << endl;
+                        line_n = j;
+                        count++;
+                        //cout << "Line number: " << j+1 << endl;
+                    }
+
+
+
+
+            }
+
+
+
+            if(count == 0){
+                cout << "Sorry that id number is not registered in the database." << endl;
+                return;
+
+            }
+
+            for(size_t j = line_n; j < name_ob.size(); j++){
+                name_ob[j] = name_ob[j+1];
+                id_ob[j] = id_ob[j+1];
+                degrees[j] = degrees[j+1];
+
+            }
+
+            fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/students.csv", ios::out | ios::trunc);
+                if (data.is_open()){
+                    for(size_t j; j < name_ob.size(); j++){
+                        cout << name_ob[j] << "," << id_ob[j] << "," << degrees[j] << endl;
+                        data << name_ob[j] << "," << id_ob[j] << "," << degrees[j] << "\n" ;
+
+                    }
+
+
+                    data.close();
+                }
+
+
+            }
+
+
+        if(identity_type == 'p' || identity_type == 'P') {
+
+
+
+            cout << endl << "Please provide the PID of the user to be deleted." << endl;
+            cin >> pid;
+
+            string name_obj;
+            string id_obj;
+
+            vector <string> name_ob;
+            vector <string> id_ob;
+
+            int i = 0;
+
+
+            ifstream Myfile;
+            Myfile.open("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/professors.csv");
+
+            while(Myfile.good()){
+
+                getline(Myfile, name_obj, ',');
+
+                bool h = Myfile.good();
+                if(h){
+
+                    i++;
+                    name_ob.push_back(name_obj);
+                    //cout << "new line" << endl;
+
+
+
+                    //cout << "Name: " << name_ob[i-1] << " ";
+                    getline(Myfile, id_obj, '\n');
+                    id_ob.push_back(id_obj);
+                    //cout << "ID: " << id_ob[i-1] << " " ;
+
+                }
+
+
+        }
+
+
+    int count = 0;
+            for(size_t j = 0; j < id_ob.size(); j++){
+
+                    if (id_ob[j].find(pid) != string::npos){
+
+                        cout << "Name: " << name_ob[j] << " ";
+                        cout << "ID: " << id_ob[j] << " ";
+
+                        line_n = j;
+                        count++;
+                        //cout << "Line number: " << j+1 << endl;
+                    }
+
+
+
+
+            }
+
+
+
+            if(count == 0){
+                cout << "Sorry that id number is not registered in the database." << endl;
+                return;
+
+            }
+
+            for(size_t j = line_n; j < name_ob.size(); j++){
+                name_ob[j] = name_ob[j+1];
+                id_ob[j] = id_ob[j+1];
+
+
+            }
+
+            fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/professors.csv", ios::out | ios::trunc);
+                if (data.is_open()){
+                    for(size_t j; j < name_ob.size(); j++){
+                        cout << name_ob[j] << "," << id_ob[j] << endl;
+                        data << name_ob[j] << "," << id_ob[j] << "\n" ;
+
+                    }
+
+
+                    data.close();
+                }
+
+
+            }
+
+        if(identity_type == 'a' || identity_type == 'A') {
+
+
+
+            cout << endl << "Please provide the PID of the user to be deleted." << endl;
+            cin >> pid;
+
+            string name_obj;
+            string id_obj;
+
+            vector <string> name_ob;
+            vector <string> id_ob;
+
+            int i = 0;
+
+
+            ifstream Myfile;
+            Myfile.open("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/admins.csv");
+
+            while(Myfile.good()){
+
+                getline(Myfile, name_obj, ',');
+
+                bool h = Myfile.good();
+                if(h){
+
+                    i++;
+                    name_ob.push_back(name_obj);
+                    //cout << "new line" << endl;
+
+
+
+                    //cout << "Name: " << name_ob[i-1] << " ";
+                    getline(Myfile, id_obj, '\n');
+                    id_ob.push_back(id_obj);
+                    //cout << "ID: " << id_ob[i-1] << " " ;
+
+                }
+
+
+        }
+
+
+    int count = 0;
+            for(size_t j = 0; j < id_ob.size(); j++){
+
+                    if (id_ob[j].find(pid) != string::npos){
+
+                        cout << "Name: " << name_ob[j] << " ";
+                        cout << "ID: " << id_ob[j] << " ";
+
+                        line_n = j;
+                        count++;
+                        //cout << "Line number: " << j+1 << endl;
+                    }
+
+
+
+
+            }
+
+            if(count == 0){
+                cout << "Sorry that id number is not registered in the database." << endl;
+                return;
+
+            }
+
+            for(size_t j = line_n; j < name_ob.size(); j++){
+                name_ob[j] = name_ob[j+1];
+                id_ob[j] = id_ob[j+1];
+
+
+            }
+
+            fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/admins.csv", ios::out | ios::trunc);
+                if (data.is_open()){
+                    for(size_t j; j < name_ob.size(); j++){
+                        cout << name_ob[j] << "," << id_ob[j] << endl;
+                        data << name_ob[j] << "," << id_ob[j] << "\n" ;
+
+                    }
+
+
+                    data.close();
+                }
+
+
+            }
+
+
+}
+
+
 ////////////////////////////////////
 //
 ////////////////////////////////////
@@ -710,6 +1608,35 @@ void Professor::setpid(char new_pid[7]) {
         pid[i] = new_pid[i];
 
     }
+}
+
+
+vector <Seminars> Professor::getlist_seminars(){
+    return list_seminars;
+}
+
+
+vector <Courses> Professor::getlist_courses(){
+    return list_courses;
+}
+
+
+vector <Project> Professor::getlist_projects(){
+    return list_projects;
+}
+
+
+void Professor::setlist_courses(vector<Courses> new_list_courses){
+    list_courses = new_list_courses;
+}
+
+
+void Professor::setlist_seminars(vector<Seminars> new_list_seminars){
+    list_seminars = new_list_seminars;
+}
+
+void Professor::setlist_projects(vector<Project> new_list_projects){
+    list_projects = new_list_projects;
 }
 
 
@@ -729,15 +1656,23 @@ Professor::Professor():Users(){
 
 /* Parametrized constructor*/
 
-Professor::Professor(string _name, string _type, char _pid[7]) : Users(_name, _type){
+Professor::Professor(string _name, string _type, char _pid[7], vector <Seminars> _list_seminars, vector <Courses> _list_courses, vector <Project> _list_projects) : Users(_name, _type){
     if(_type == "professor"){
         for(int i = 0; i < 7; i++){
             pid[i] = _pid[i];
 
         }
+        list_seminars = _list_seminars;
+        list_courses = _list_courses;
+        list_projects = _list_projects;
 
     }
+
+
+
+
     else cout << "wrong specified type" << endl;
+
 
 }
 
@@ -775,7 +1710,7 @@ vector <Seminars> Student::getlist_sem() {
     return list_sem;
 }
 
-Project Student::getproject() {
+Project *Student::getproject() {
     return project;
 }
 
@@ -811,7 +1746,7 @@ void Student::setlist_sem(vector <Seminars> new_list_sem) {
 
 /* Here new_list_project is a dynamic array of length "new_size_projects" */
 
-void Student::setproject(Project new_project) {
+void Student::setproject(Project *new_project) {
     project = new_project;
 }
 
@@ -823,6 +1758,9 @@ void Student::setdegree(string new_degree){
 /* Default constructor*/
 Student::Student():Users(){
 
+    vector <Courses> listcourses;
+    vector <Seminars> listsem;
+
     sin[0] = '0';
     sin[1] = '0';
     sin[2] = '0';
@@ -831,9 +1769,12 @@ Student::Student():Users(){
     sin[5] = '0';
     sin[6] = '0';
     sin[7] = '\0';
-    Project p;
+    Project* p;
     project = p;
     degree = "not assigned";
+
+    list_courses = listcourses;
+    list_sem = listsem;
 
 
     /* Here it is assumed that the default value of pid is "0000000" */
@@ -842,7 +1783,7 @@ Student::Student():Users(){
 
 /* Parametrized constructor*/
 
-Student::Student(string _name, string _type, char _sin[7], string _degree, vector <Courses> _list_courses, vector <Seminars> _list_sem, Project _project):Users(_name, _type){
+Student::Student(string _name, string _type, char _sin[7], string _degree, vector <Courses> _list_courses, vector <Seminars> _list_sem, Project* _project):Users(_name, _type){
     if(_type == "student"){
         if(isdigit(_sin[0]) && isdigit(_sin[1]) && isdigit(_sin[2]) && isdigit(_sin[3]) && isdigit(_sin[4]) && isdigit(_sin[5]) && isdigit(_sin[6])){
             for(int i = 0; i < 7; i++){
