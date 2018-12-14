@@ -272,6 +272,9 @@ class Admin : public Users {
 		void createu();
 		void modifyu();
 		void deleteu();
+		void creater();
+		void modifyr();
+		void deleter();
 
 	private:
 
@@ -298,6 +301,9 @@ class Professor : public Users{
 		void setpid(char new_pid[7]);
 		void display();
 		void setmarks();
+		void modifyc();
+		void modifys();
+		void modifyp();
 
 
 	private:
