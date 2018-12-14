@@ -5,7 +5,7 @@ using namespace std;
 
 int main()
 {
-    VirtualCampus vc("UC3M");
+    VirtualCampus vc;
     vc.start();
 
     return 0;
