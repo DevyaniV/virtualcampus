@@ -10,8 +10,9 @@ int main()
 
     Admin a;
 
-    //a.createu();
+    a.createu();
     a.modifyu();
+    a.deleteu();
 
 
 

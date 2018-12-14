@@ -671,50 +671,11 @@ Admin::~Admin(){
 }
 
 
-//void Admin::createc(Courses& _course, int _credits, string* _list_students, float* _list_marks, int _size_students, int _size_marks, char new_id[7], string new_status ){
-
-//   _course.setcredits(_credits);
-//   _course.setsize_students(_size_students);
-//   _course.setsize_marks(_size_marks);
-//   _course.setlist_students(_list_students, _size_students);
-//   _course.setlist_marks(_list_marks, _size_marks);
-//   _course.resource->setid(new_id);
-//   _course.resource->setstatus(new_status);
-
-//}
-
-//void Admin::displayc(Courses _course){
-
-//    int credit = _course.getcredits();
-//    string* list_of_students = _course.getlist_students();
-//    float* list_of_marks = _course.getlist_marks();
-//    char id[7];
-//    string status = _course.resource->status ;
-
-//    for(int i = 0 ; i < 7 ; i++){
-//        id[i] = _course.resource->id[i];
-
-//    }
-
-//    cout << "The course ID is " << id << endl;
-//    cout << "The course is" << status << endl;
-//    cout << "This course has " << credit << " number of credits." << endl;
-
-//    cout << "This course has these students along with their marks: " << endl;
-
-//    for(int i = 0 ; i < _course.size_students ; i++){
-//        cout << i+1 << ". " << list_of_students[i] << " with " << list_of_marks[i] << " marks"<< endl;
-
-//    }
-
-
-//}
-
 
 
 void Admin::createu() {
 
-    /*For names and degrees, use underscore for separating or only put first names, no spaces condition*/
+    /*For names and degrees, use underscore for separating or only put first names; no spaces condition*/
 
     string name_user;
     char identity_type = '0';
@@ -732,7 +693,7 @@ void Admin::createu() {
 
         fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/students.csv", ios::out | ios::app);
         if (data.is_open()){
-            //Student newu;
+
             Student *newuser = new Student;
 
             newuser->setname(name_user);
@@ -746,13 +707,13 @@ void Admin::createu() {
             cin >> degree;
             newuser->setdegree(degree);
 
-            //plus add new object to list of objects
 
-            cout << newuser->getname() << "," << newuser->getsin() << "," << newuser->getdegree() << endl;
+
+            cout << newuser->getname() << "," << newuser->getsin() << "," << newuser->getdegree() << " has been added" << endl;
 
             data << newuser->getname() << "," << newuser->getsin() << "," << newuser->getdegree() << "\n" ;
             data.close();
-            cout << "fin" << endl;
+
             delete newuser;
 
         }
@@ -771,13 +732,13 @@ void Admin::createu() {
             char newpid[7];
             cin >> newpid;
             newuser->setpid(newpid);
-            //plus add new object to list of objects
 
-            cout << newuser->getname() << "," << newuser->getpid() << "\n" << endl;
+
+            cout << newuser->getname() << "," << newuser->getpid() << " has been added" << endl;
 
             data << newuser->getname() << "," << newuser->getpid() << "\n" ;
             data.close();
-            cout << "fin" << endl;
+
             delete newuser;
 
         }
@@ -801,8 +762,8 @@ void Admin::createu() {
 
             newuser->setpid(new2pid);
 
-            //plus add new object to list of objects
-            cout << newuser->getname() << "," << newuser->getpid() << "\n" << endl;
+
+            cout << newuser->getname() << "," << newuser->getpid() << " has been added" << endl;
             data << newuser->getname() << "," << newuser->getpid() << "\n" ;
 
             data.close();
@@ -824,12 +785,9 @@ void Admin::createu() {
 
 void Admin::modifyu(){
 
-//    string name_user;
     char identity_type;
     char change_type;
     int line_n;
-//    cout << endl << "Please fill the name of the user to be modified." << endl;
-//    cin >> name_user;
     cout << endl << "Please press the alphabet corresponding to the identity of the user to be modified (a-Administrator, s-Student, p-Professor)" << endl;
     cin >> identity_type;
     while (identity_type != 'a' && identity_type != 'A' && identity_type != 's' && identity_type != 'S' && identity_type != 'p' && identity_type != 'P'){
@@ -868,18 +826,12 @@ void Admin::modifyu(){
 
                 i++;
                 name_ob.push_back(name_obj);
-                //cout << "new line" << endl;
 
-
-
-                //cout << "Name: " << name_ob[i-1] << " ";
                 getline(Myfile, id_obj, ',');
                 id_ob.push_back(id_obj);
-                //cout << "ID: " << id_ob[i-1] << " " ;
 
                 getline(Myfile, deg_obj, '\n');
                 degrees.push_back(deg_obj);
-                //cout << "Degree: " << degrees[i-1] << endl ;
 
             }
 
@@ -892,12 +844,9 @@ int count = 0;
 
                 if (id_ob[j].find(pid) != string::npos){
 
-                    cout << "Name: " << name_ob[j] << " ";
-                    cout << "ID: " << id_ob[j] << " ";
-                    cout << "Degree: " << degrees[j] << endl;
+
                     line_n = j;
                     count++;
-                    //cout << "Line number: " << j+1 << endl;
                 }
 
 
@@ -929,21 +878,7 @@ int count = 0;
             cout << "Give the new name for user." << endl;
             cin >> newname;
             newuser->setname(newname);
-            name_ob[line_n] = newuser->getsin();
-            cout << name_ob[line_n] << endl;
-
-
-            fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/students.csv", ios::out | ios::trunc);
-            if (data.is_open()){
-                for(size_t j; j < name_ob.size(); j++){
-                    cout << name_ob[j] << "," << id_ob[j] << "," << degrees[j] << endl;
-                    data << name_ob[j] << "," << id_ob[j] << "," << degrees[j] << "\n" ;
-
-                }
-
-
-                data.close();
-            }
+            name_ob[line_n] = newuser->getname();
 
 
         }
@@ -958,21 +893,7 @@ int count = 0;
             newuser->setsin(newsin);
 
             id_ob[line_n] = newuser->getsin();
-            cout << id_ob[line_n] << endl;
 
-            fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/students.csv", ios::out | ios::trunc);
-            if (data.is_open()){
-
-                for(size_t j = 0; j < name_ob.size(); j++){
-
-                    cout << name_ob[j] << "," << id_ob[j] << "," << degrees[j] << endl;
-                    data << name_ob[j] << "," << id_ob[j] << "," << degrees[j] << "\n" ;
-
-                }
-
-
-                data.close();
-            }
 
 
         }
@@ -986,24 +907,28 @@ int count = 0;
             cin >> newdegree;
             newuser->setdegree(newdegree);
 
-            id_ob[line_n] = newuser->getdegree();
-            cout << id_ob[line_n] << endl;
-
-
-            fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/students.csv", ios::out | ios::trunc);
-            if (data.is_open()){
-                for(size_t j; j < name_ob.size(); j++){
-                    cout << name_ob[j] << "," << id_ob[j] << "," << degrees[j] << endl;
-                    data << name_ob[j] << "," << id_ob[j] << "," << degrees[j] << "\n" ;
-
-                }
-
-
-                data.close();
-            }
+            degrees[line_n] = newuser->getdegree();
 
 
         }
+
+
+        fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/students.csv", ios::out | ios::trunc);
+        if (data.is_open()){
+
+            for(size_t j = 0; j < name_ob.size(); j++){
+
+
+                data << name_ob[j] << "," << id_ob[j] << "," << degrees[j] << "\n" ;
+
+
+            }
+
+
+            data.close();
+            cout << "user modified." << endl;
+        }
+
         delete newuser;
     }
 
@@ -1041,14 +966,9 @@ int count = 0;
 
                 i++;
                 name_ob.push_back(name_obj);
-                //cout << "new line" << endl;
 
-
-
-                //cout << "Name: " << name_ob[i-1] << " ";
                 getline(Myfile, id_obj, '\n');
                 id_ob.push_back(id_obj);
-                //cout << "ID: " << id_ob[i-1] << " " ;
 
 
             }
@@ -1062,11 +982,8 @@ int count = 0;
 
                 if (id_ob[j].find(pid) != string::npos){
 
-                    cout << "Name: " << name_ob[j] << " ";
-                    cout << "ID: " << id_ob[j] << " ";
                     line_n = j;
                     count++;
-                    //cout << "Line number: " << j+1 << endl;
                 }
 
 
@@ -1099,20 +1016,6 @@ int count = 0;
             cin >> newname;
             newuser->setname(newname);
             name_ob[line_n] = newuser->getname();
-            cout << name_ob[line_n] << endl;
-
-
-            fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/professors.csv", ios::out | ios::trunc);
-            if (data.is_open()){
-                for(size_t j; j < name_ob.size(); j++){
-                    cout << name_ob[j] << "," << id_ob[j] << endl;
-                    data << name_ob[j] << "," << id_ob[j] << "\n" ;
-
-                }
-
-
-                data.close();
-            }
 
 
         }
@@ -1127,23 +1030,27 @@ int count = 0;
             newuser->setpid(newpid);
 
             id_ob[line_n] = newuser->getpid();
-            cout << id_ob[line_n] << endl;
-
-            fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/professors.csv", ios::out | ios::trunc);
-            if (data.is_open()){
-
-                for(size_t j = 0; j < name_ob.size(); j++){
-
-                    cout << name_ob[j] << "," << id_ob[j] << endl;
-                    data << name_ob[j] << "," << id_ob[j] << "\n" ;
-
-                }
 
 
-                data.close();
+
+
+
+        }
+
+
+        fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/professors.csv", ios::out | ios::trunc);
+        if (data.is_open()){
+
+            for(size_t j = 0; j < name_ob.size(); j++){
+
+
+                data << name_ob[j] << "," << id_ob[j] << "\n" ;
+
             }
 
 
+            data.close();
+            cout << "user modified." << endl;
         }
 
 
@@ -1182,14 +1089,9 @@ int count = 0;
 
                 i++;
                 name_ob.push_back(name_obj);
-                //cout << "new line" << endl;
 
-
-
-                //cout << "Name: " << name_ob[i-1] << " ";
                 getline(Myfile, id_obj, '\n');
                 id_ob.push_back(id_obj);
-                //cout << "ID: " << id_ob[i-1] << " " ;
 
 
             }
@@ -1203,11 +1105,9 @@ int count = 0;
 
                 if (id_ob[j].find(pid) != string::npos){
 
-                    cout << "Name: " << name_ob[j] << " ";
-                    cout << "ID: " << id_ob[j] << " ";
+
                     line_n = j;
                     count++;
-                    //cout << "Line number: " << j+1 << endl;
                 }
 
 
@@ -1240,20 +1140,6 @@ int count = 0;
             cin >> newname;
             newuser->setname(newname);
             name_ob[line_n] = newuser->getname();
-            cout << name_ob[line_n] << endl;
-
-
-            fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/admins.csv", ios::out | ios::trunc);
-            if (data.is_open()){
-                for(size_t j; j < name_ob.size(); j++){
-                    cout << name_ob[j] << "," << id_ob[j] << endl;
-                    data << name_ob[j] << "," << id_ob[j] << "\n" ;
-
-                }
-
-
-                data.close();
-            }
 
 
         }
@@ -1268,24 +1154,24 @@ int count = 0;
             newuser->setpid(newpid);
 
             id_ob[line_n] = newuser->getpid();
-            cout << id_ob[line_n] << endl;
-
-            fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/admins.csv", ios::out | ios::trunc);
-            if (data.is_open()){
-
-                for(size_t j = 0; j < name_ob.size(); j++){
-
-                    cout << name_ob[j] << "," << id_ob[j] << endl;
-                    data << name_ob[j] << "," << id_ob[j] << "\n" ;
-
-                }
-
-
-                data.close();
-            }
 
 
         }
+
+
+        fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/admins.csv", ios::out | ios::trunc);
+        if (data.is_open()){
+            for(size_t j = 0; j < name_ob.size(); j++){
+
+                data << name_ob[j] << "," << id_ob[j] << "\n" ;
+
+            }
+
+
+            data.close();
+            cout << "user modified." << endl;
+        }
+
 
 
         delete newuser;
@@ -1305,7 +1191,7 @@ void Admin::deleteu() {
 
         int line_n;
 
-        cout << endl << "Please press the alphabet corresponding to the identity of the user to be modified (a-Administrator, s-Student, p-Professor)" << endl;
+        cout << endl << "Please press the alphabet corresponding to the identity of the user to be deleted (a-Administrator, s-Student, p-Professor)" << endl;
         cin >> identity_type;
         while (identity_type != 'a' && identity_type != 'A' && identity_type != 's' && identity_type != 'S' && identity_type != 'p' && identity_type != 'P'){
             cin >> identity_type;
@@ -1343,18 +1229,14 @@ void Admin::deleteu() {
 
                     i++;
                     name_ob.push_back(name_obj);
-                    //cout << "new line" << endl;
 
-
-
-                    //cout << "Name: " << name_ob[i-1] << " ";
                     getline(Myfile, id_obj, ',');
                     id_ob.push_back(id_obj);
-                    //cout << "ID: " << id_ob[i-1] << " " ;
+
 
                     getline(Myfile, deg_obj, '\n');
                     degrees.push_back(deg_obj);
-                    //cout << "Degree: " << degrees[i-1] << endl ;
+
 
                 }
 
@@ -1367,12 +1249,9 @@ void Admin::deleteu() {
 
                     if (id_ob[j].find(pid) != string::npos){
 
-                        cout << "Name: " << name_ob[j] << " ";
-                        cout << "ID: " << id_ob[j] << " ";
-                        cout << "Degree: " << degrees[j] << endl;
                         line_n = j;
                         count++;
-                        //cout << "Line number: " << j+1 << endl;
+
                     }
 
 
@@ -1388,23 +1267,27 @@ void Admin::deleteu() {
 
             }
 
-            for(size_t j = line_n; j < name_ob.size(); j++){
-                name_ob[j] = name_ob[j+1];
-                id_ob[j] = id_ob[j+1];
-                degrees[j] = degrees[j+1];
 
-            }
+                name_ob.erase(name_ob.begin() + line_n);
+                id_ob.erase(id_ob.begin() + line_n);
+                degrees.erase(degrees.begin() + line_n);
+
+
+
 
             fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/students.csv", ios::out | ios::trunc);
                 if (data.is_open()){
-                    for(size_t j; j < name_ob.size(); j++){
-                        cout << name_ob[j] << "," << id_ob[j] << "," << degrees[j] << endl;
+
+                    for(size_t j = 0 ; j < name_ob.size(); j++){
+
+
                         data << name_ob[j] << "," << id_ob[j] << "," << degrees[j] << "\n" ;
 
                     }
 
 
                     data.close();
+                    cout << "user deleted." << endl;
                 }
 
 
@@ -1439,14 +1322,9 @@ void Admin::deleteu() {
 
                     i++;
                     name_ob.push_back(name_obj);
-                    //cout << "new line" << endl;
 
-
-
-                    //cout << "Name: " << name_ob[i-1] << " ";
                     getline(Myfile, id_obj, '\n');
                     id_ob.push_back(id_obj);
-                    //cout << "ID: " << id_ob[i-1] << " " ;
 
                 }
 
@@ -1459,12 +1337,8 @@ void Admin::deleteu() {
 
                     if (id_ob[j].find(pid) != string::npos){
 
-                        cout << "Name: " << name_ob[j] << " ";
-                        cout << "ID: " << id_ob[j] << " ";
-
                         line_n = j;
                         count++;
-                        //cout << "Line number: " << j+1 << endl;
                     }
 
 
@@ -1480,23 +1354,20 @@ void Admin::deleteu() {
 
             }
 
-            for(size_t j = line_n; j < name_ob.size(); j++){
-                name_ob[j] = name_ob[j+1];
-                id_ob[j] = id_ob[j+1];
-
-
-            }
+            name_ob.erase(name_ob.begin() + line_n);
+            id_ob.erase(id_ob.begin() + line_n);
 
             fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/professors.csv", ios::out | ios::trunc);
                 if (data.is_open()){
-                    for(size_t j; j < name_ob.size(); j++){
-                        cout << name_ob[j] << "," << id_ob[j] << endl;
+                    for(size_t j = 0; j < name_ob.size(); j++){
+
                         data << name_ob[j] << "," << id_ob[j] << "\n" ;
 
                     }
 
 
                     data.close();
+                    cout << "user deleted." << endl;
                 }
 
 
@@ -1530,14 +1401,9 @@ void Admin::deleteu() {
 
                     i++;
                     name_ob.push_back(name_obj);
-                    //cout << "new line" << endl;
 
-
-
-                    //cout << "Name: " << name_ob[i-1] << " ";
                     getline(Myfile, id_obj, '\n');
                     id_ob.push_back(id_obj);
-                    //cout << "ID: " << id_ob[i-1] << " " ;
 
                 }
 
@@ -1550,12 +1416,9 @@ void Admin::deleteu() {
 
                     if (id_ob[j].find(pid) != string::npos){
 
-                        cout << "Name: " << name_ob[j] << " ";
-                        cout << "ID: " << id_ob[j] << " ";
 
                         line_n = j;
                         count++;
-                        //cout << "Line number: " << j+1 << endl;
                     }
 
 
@@ -1569,23 +1432,20 @@ void Admin::deleteu() {
 
             }
 
-            for(size_t j = line_n; j < name_ob.size(); j++){
-                name_ob[j] = name_ob[j+1];
-                id_ob[j] = id_ob[j+1];
-
-
-            }
+            name_ob.erase(name_ob.begin() + line_n);
+            id_ob.erase(id_ob.begin() + line_n);
 
             fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/admins.csv", ios::out | ios::trunc);
                 if (data.is_open()){
-                    for(size_t j; j < name_ob.size(); j++){
-                        cout << name_ob[j] << "," << id_ob[j] << endl;
+                    for(size_t j = 0; j < name_ob.size(); j++){
+
                         data << name_ob[j] << "," << id_ob[j] << "\n" ;
 
                     }
 
 
                     data.close();
+                    cout << "user deleted." << endl;
                 }
 
 
