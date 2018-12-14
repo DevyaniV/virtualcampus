@@ -712,6 +712,9 @@ void Admin::createu() {
             cout << newuser->getname() << "," << newuser->getsin() << "," << newuser->getdegree() << " has been added" << endl;
 
             data << newuser->getname() << "," << newuser->getsin() << "," << newuser->getdegree() << "\n" ;
+            data << "\n";
+            data << "\n";
+            data << "\n";
             data.close();
 
             delete newuser;
@@ -765,6 +768,9 @@ void Admin::createu() {
 
             cout << newuser->getname() << "," << newuser->getpid() << " has been added" << endl;
             data << newuser->getname() << "," << newuser->getpid() << "\n" ;
+            data << "\n";
+            data << "\n";
+            data << "\n";
 
             data.close();
             delete newuser;
@@ -801,39 +807,75 @@ void Admin::modifyu(){
 
 
 
-        cout << endl << "Please provide the SIN of the user to be modified." << endl;
+        cout << "Please provide the SIN of the user to be modified." << endl;
         cin >> pid;
 
         string name_obj;
         string id_obj;
         string deg_obj;
+        string cour;
+        string sem;
+        string pro;
 
         vector <string> name_ob;
         vector <string> id_ob;
         vector <string> degrees;
-        int i = 0;
+        vector <string> courses;
+        vector <string> seminars;
+        vector <string> project;
 
 
-        ifstream Myfile;
+
+        fstream Myfile;
+        int line = -1;
         Myfile.open("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/students.csv");
 
         while(Myfile.good()){
 
-            getline(Myfile, name_obj, ',');
+            line++;
 
-            bool h = Myfile.good();
-            if(h){
+            if(line%4 == 0){
+                getline(Myfile, name_obj, ',');
 
-                i++;
-                name_ob.push_back(name_obj);
+                bool h = Myfile.good();
+                if(h){
 
-                getline(Myfile, id_obj, ',');
-                id_ob.push_back(id_obj);
 
-                getline(Myfile, deg_obj, '\n');
-                degrees.push_back(deg_obj);
+                    name_ob.push_back(name_obj);
+
+                    getline(Myfile, id_obj, ',');
+                    id_ob.push_back(id_obj);
+
+                    getline(Myfile, deg_obj, '\n');
+                    degrees.push_back(deg_obj);
+
+
+                }
+            }
+            if(line%4==1){
+                getline(Myfile, cour, '\n');
+                courses.push_back(cour);
+
 
             }
+            if(line%4==2){
+                getline(Myfile, sem, '\n');
+                seminars.push_back(sem);
+
+            }
+            if(line%4==3){
+                getline(Myfile, pro, '\n');
+                project.push_back(pro);
+
+
+            }
+
+
+
+
+
+
+
 
 
     }
@@ -913,13 +955,18 @@ int count = 0;
         }
 
 
+
+
         fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/students.csv", ios::out | ios::trunc);
         if (data.is_open()){
 
             for(size_t j = 0; j < name_ob.size(); j++){
 
-
                 data << name_ob[j] << "," << id_ob[j] << "," << degrees[j] << "\n" ;
+                data << courses[j] << "\n";
+                data << seminars[j] << "\n";
+                data << project[j] << "\n";
+
 
 
             }
@@ -946,32 +993,58 @@ int count = 0;
 
         string name_obj;
         string id_obj;
+        int line = -1;
+        string cour;
+        string sem;
+        string pro;
 
 
         vector <string> name_ob;
         vector <string> id_ob;
-
-        int i = 0;
+        vector <string> courses;
+        vector <string> seminars;
+        vector <string> project;
 
 
         ifstream Myfile;
         Myfile.open("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/professors.csv");
 
         while(Myfile.good()){
-
-            getline(Myfile, name_obj, ',');
-
-            bool h = Myfile.good();
-            if(h){
-
-                i++;
-                name_ob.push_back(name_obj);
-
-                getline(Myfile, id_obj, '\n');
-                id_ob.push_back(id_obj);
-
+            line++;
+            if(line%4==1){
+                getline(Myfile, cour, '\n');
+                courses.push_back(cour);
 
             }
+            if(line%4==2){
+                getline(Myfile, sem, '\n');
+                seminars.push_back(sem);
+
+            }
+            if(line%4==3){
+                getline(Myfile, pro, '\n');
+                project.push_back(pro);
+
+            }
+
+            if(line%4 == 0){
+                getline(Myfile, name_obj, ',');
+
+                bool h = Myfile.good();
+                if(h){
+
+
+                    name_ob.push_back(name_obj);
+
+                    getline(Myfile, id_obj, '\n');
+                    id_ob.push_back(id_obj);
+
+
+                }
+
+            }
+
+
 
 
     }
@@ -1043,8 +1116,10 @@ int count = 0;
 
             for(size_t j = 0; j < name_ob.size(); j++){
 
-
                 data << name_ob[j] << "," << id_ob[j] << "\n" ;
+                data << courses[j] << "\n";
+                data << seminars[j] << "\n";
+                data << project[j] << "\n";
 
             }
 
@@ -1074,7 +1149,7 @@ int count = 0;
         vector <string> name_ob;
         vector <string> id_ob;
 
-        int i = 0;
+
 
 
         ifstream Myfile;
@@ -1082,25 +1157,28 @@ int count = 0;
 
         while(Myfile.good()){
 
-            getline(Myfile, name_obj, ',');
 
-            bool h = Myfile.good();
-            if(h){
+                getline(Myfile, name_obj, ',');
 
-                i++;
-                name_ob.push_back(name_obj);
+                bool h = Myfile.good();
+                if(h){
 
-                getline(Myfile, id_obj, '\n');
-                id_ob.push_back(id_obj);
 
+                    name_ob.push_back(name_obj);
+
+                    getline(Myfile, id_obj, '\n');
+                    id_ob.push_back(id_obj);
+
+
+                }
 
             }
 
 
-    }
 
 
-int count = 0;
+
+    int count = 0;
         for(size_t j = 0; j < id_ob.size(); j++){
 
                 if (id_ob[j].find(pid) != string::npos){
@@ -1165,6 +1243,7 @@ int count = 0;
 
                 data << name_ob[j] << "," << id_ob[j] << "\n" ;
 
+
             }
 
 
@@ -1214,34 +1293,65 @@ void Admin::deleteu() {
             vector <string> name_ob;
             vector <string> id_ob;
             vector <string> degrees;
-            int i = 0;
+            int line = -1;
+
+            string cour;
+            string sem;
+            string pro;
+
+            vector <string> courses;
+            vector <string> seminars;
+            vector <string> project;
+
 
 
             ifstream Myfile;
             Myfile.open("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/students.csv");
 
             while(Myfile.good()){
+                line++;
 
-                getline(Myfile, name_obj, ',');
+                if(line%4 == 0){
+                    getline(Myfile, name_obj, ',');
 
-                bool h = Myfile.good();
-                if(h){
-
-                    i++;
-                    name_ob.push_back(name_obj);
-
-                    getline(Myfile, id_obj, ',');
-                    id_ob.push_back(id_obj);
+                    bool h = Myfile.good();
+                    if(h){
 
 
-                    getline(Myfile, deg_obj, '\n');
-                    degrees.push_back(deg_obj);
+                        name_ob.push_back(name_obj);
+
+                        getline(Myfile, id_obj, ',');
+                        id_ob.push_back(id_obj);
+
+                        getline(Myfile, deg_obj, '\n');
+                        degrees.push_back(deg_obj);
+
+
+                    }
+                }
+                if(line%4==1){
+                    getline(Myfile, cour, '\n');
+                    courses.push_back(cour);
+
+
+                }
+                if(line%4==2){
+                    getline(Myfile, sem, '\n');
+                    seminars.push_back(sem);
+
+                }
+                if(line%4==3){
+                    getline(Myfile, pro, '\n');
+                    project.push_back(pro);
 
 
                 }
 
+                }
 
-        }
+
+
+
 
 
     int count = 0;
@@ -1271,6 +1381,9 @@ void Admin::deleteu() {
                 name_ob.erase(name_ob.begin() + line_n);
                 id_ob.erase(id_ob.begin() + line_n);
                 degrees.erase(degrees.begin() + line_n);
+                courses.erase(courses.begin() + line_n);
+                seminars.erase(seminars.begin() + line_n );
+                project.erase(project.begin() + line_n);
 
 
 
@@ -1282,6 +1395,9 @@ void Admin::deleteu() {
 
 
                         data << name_ob[j] << "," << id_ob[j] << "," << degrees[j] << "\n" ;
+                        data << courses[j] << "\n";
+                        data << seminars[j] << "\n";
+                        data << project[j] << "\n";
 
                     }
 
@@ -1307,7 +1423,15 @@ void Admin::deleteu() {
             vector <string> name_ob;
             vector <string> id_ob;
 
-            int i = 0;
+            string cour;
+            string sem;
+            string pro;
+
+            vector <string> courses;
+            vector <string> seminars;
+            vector <string> project;
+
+            int line = -1;
 
 
             ifstream Myfile;
@@ -1315,18 +1439,41 @@ void Admin::deleteu() {
 
             while(Myfile.good()){
 
-                getline(Myfile, name_obj, ',');
-
-                bool h = Myfile.good();
-                if(h){
-
-                    i++;
-                    name_ob.push_back(name_obj);
-
-                    getline(Myfile, id_obj, '\n');
-                    id_ob.push_back(id_obj);
+                line++;
+                if(line%4==1){
+                    getline(Myfile, cour, '\n');
+                    courses.push_back(cour);
 
                 }
+                if(line%4==2){
+                    getline(Myfile, sem, '\n');
+                    seminars.push_back(sem);
+
+                }
+                if(line%4==3){
+                    getline(Myfile, pro, '\n');
+                    project.push_back(pro);
+
+                }
+
+                if(line%4 == 0){
+                    getline(Myfile, name_obj, ',');
+
+                    bool h = Myfile.good();
+                    if(h){
+
+
+                        name_ob.push_back(name_obj);
+
+                        getline(Myfile, id_obj, '\n');
+                        id_ob.push_back(id_obj);
+
+
+                    }
+
+                }
+
+
 
 
         }
@@ -1356,12 +1503,18 @@ void Admin::deleteu() {
 
             name_ob.erase(name_ob.begin() + line_n);
             id_ob.erase(id_ob.begin() + line_n);
+            courses.erase(courses.begin() + line_n);
+            seminars.erase(seminars.begin() + line_n );
+            project.erase(project.begin() + line_n);
 
             fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/professors.csv", ios::out | ios::trunc);
                 if (data.is_open()){
                     for(size_t j = 0; j < name_ob.size(); j++){
 
                         data << name_ob[j] << "," << id_ob[j] << "\n" ;
+                        data << courses[j] << "\n";
+                        data << seminars[j] << "\n";
+                        data << project[j] << "\n";
 
                     }
 

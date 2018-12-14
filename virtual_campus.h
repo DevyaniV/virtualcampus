@@ -93,14 +93,6 @@ public:
 
 
 
-//    /* create, modify, delete resources */
-//    void createc(Courses& _course, int _credits, string* _list_students, float* _list_marks, int _size_students, int _size_marks, char new_id[7], string new_status);
-
-//    void creates(string _coordinator, string _speaker, string _date, int _max_seats, string _list_students[]);
-//    void createp(Courses _course, Seminars _seminar, Project _project);
-
-//    void displayc(Courses _course);
-
 private:
 
      char pid[7];
