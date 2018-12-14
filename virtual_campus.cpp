@@ -2,20 +2,12 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <stdio.h>
+#include <cstring>
 #include "virtual_campus.h"
 
 
 using namespace std;
-
-
-//void VirtualCampus::start(){
-
-
-//    //first load info from all files here
-
-
-//    //incase no file : initialize stuff here
-//    Admin a;
 
 
 //    string *array1 = new string[2]{"bas", "devyani"};
@@ -123,8 +115,6 @@ using namespace std;
 
 
 
-//}
-
 
 
 /* Default constructor*/
@@ -172,14 +162,14 @@ int VirtualCampus::start() {
 						size_t pos5;
 						string file;
 						cout << "Welcome, you are logged in." << endl;
-						while (temp >> line) {
+//						while (temp >> line) {
 							pos3 = line.find(search1);
 							pos4 = line.find(search2);
 							pos5 = line.find(search3);
 							if (pos3 != string::npos) { cout << "You are identified as an administrator." << endl; file = "administrators.txt"; switched = 1; }
-							if (pos4 != string::npos) { cout << "You are identified as a professor." << endl; file = "professors.txt"; switched = 2; }
-							if (pos5 != string::npos) { cout << "You are identified as a student." << endl; file = "students.txt"; switched = 3; }
-							//					else { cout << "Your identity couldn't be determined, so it is assumed you are a student." << endl; file = "students.txt"; switched = 3; }
+							else if (pos4 != string::npos) { cout << "You are identified as a professor." << endl; file = "professors.txt"; switched = 2; }
+							else if (pos5 != string::npos) { cout << "You are identified as a student." << endl; file = "students.txt"; switched = 3; }
+							else { cout << "Your identity couldn't be determined, so it is assumed you are a student." << endl; file = "students.txt"; switched = 3; }
 							login = true;
 							fstream data2(file);
 							vector <string> uservec;
@@ -204,28 +194,31 @@ int VirtualCampus::start() {
 								Admin userobj;
 								userobj.setname(uservec.at(0));
 								userobj.settype(uservec.at(1));
-								char pid[7];
 								string temp = uservec.at(2);
+								char * pid = new char[8];
 								strcpy(pid, temp.c_str());
-								userobj.setpid(pid[7]);
+								userobj.setpid(pid);
+								delete[] pid;
 							}
 							if (switched == 2) {
 								Professor userobj;
 								userobj.setname(uservec.at(0));
 								userobj.settype(uservec.at(1));
-								char pid[7];
 								string temp = uservec.at(2);
+								char * pid = new char[8];
 								strcpy(pid, temp.c_str());
-								userobj.setpid(pid[7]);
+								userobj.setpid(pid);
+								delete[] pid;
 							}
 							if (switched == 3) {
 								Student userobj;
 								userobj.setname(uservec.at(0));
 								userobj.settype(uservec.at(1));
-								char id[7];
+								char *id = new char[8];
 								string temp = uservec.at(2);
 								strcpy(id, temp.c_str());
-								userobj.setpid(id[7]);
+								userobj.setpid(id);
+								delete[] id;
 								userobj.setdegree(uservec.at(3));
 								int lenuservec = uservec.size();
 								for (int i = 4; i < lenuservec - 1; ++i) {
@@ -264,215 +257,221 @@ int VirtualCampus::start() {
 
 								data.close();
 								cout << "Now you start any activity." << endl;
-								VirtualCampus::StartActivities();
+								vc.StartActivities();
 								return { switched, userobj };
 							}
 							else {
 								cout << "Okay sure, you can now start any activity." << endl;
 								data.close();
-								VirtualCampus::StartActivities();
+								vc.StartActivities();
 								return { switched, userobj };
 							}
-						}
+//						}
+					}
 					else {
 						cout << "Sorry, wrong password" << endl;
 						break;
 					}
-					}
+
 				}
 				if (data.eof()) {
 					cout << "Sorry this name is not in our list" << endl;
 				}
 			}
-
 		}
+//	}
 	else { cout << "Sorry the Virtual Campus was unable to get the data. Please start the program again in order to log in." << endl; }
 
+	cout << "Okay, you're logged out now and the program will close." << endl;
 	return { switched, userobj };
 }
 
 //Give the user the available options he is allowed to do
 void VirtualCampus::StartActivities(int switched) {
-	int choice;
-	int choice2;
-	switch (switched) {
+	bool continueing = true;
+	while (continueing == true) {
+			int choice;
+			int choice2;
+			switch (switched) {
 
-		// Admin's choices
-	case 1: cout << endl << "What do you want to do ? " << endl << endl << "1. Create, modify or delete users." << endl << "2. Create, modify or delete resources." << endl << "3. Show information of users." << endl << "4. Show information of resources." << endl << "5. Close the program." << endl;
-		cin >> choice;
-		switch (choice) {
-		case 1: cout << endl << "What do you want to do ? " << endl << endl << "1. Create users." << endl << "2. Modify users." << endl << "3. Delete users." << endl;
-			cin >> choice2;
-			switch (choice2) {
-			case 1: cout << "Here you can create users" << endl;
-				Admin::createu();
+				// Admin's choices
+			case 1: cout << endl << "What do you want to do ? " << endl << endl << "1. Create, modify or delete users." << endl << "2. Create, modify or delete resources." << endl << "3. Show information of users." << endl << "4. Show information of resources." << endl << "5. Close the program." << endl;
+				cin >> choice;
+				switch (choice) {
+				case 1: cout << endl << "What do you want to do ? " << endl << endl << "1. Create users." << endl << "2. Modify users." << endl << "3. Delete users." << endl;
+					cin >> choice2;
+					switch (choice2) {
+					case 1: cout << "Here you can create users" << endl;
+						userobj.createu();
+						break;
+					case 2: cout << "Here you can modify users" << endl;
+						userobj.modifyu();
+						break;
+					case 3: cout << "Here you can delete users" << endl;
+						userobj.deleteu();
+						break;
+					}
+					break;
+				case 2: cout << endl << "What do you want to do ? " << endl << endl << "1. Create resources." << endl << "2. Modify resources." << endl << "3. Delete resources." << endl;
+					cin >> choice2;
+					switch (choice2) {
+					case 1: cout << "Here you can create resources" << endl;
+						//initialize function userobj.creater();
+						break;
+					case 2: cout << "Here you can modify resources" << endl;
+						//initialize function userobj.modifyr();
+						break;
+					case 3: cout << "Here you can delete resources" << endl;
+						//initialize function userobj.deleter();
+						break;
+					}
+					break;
+				case 3: cout << endl << "What do you want to do ? " << endl << endl << "1. Show information of an administrator." << endl << "2.Show information of a professor." << endl << "3. Show information of a student." << endl;
+					cin >> choice2;
+					switch (choice2) {
+					case 1: cout << "Here you can see information of administrators" << endl;
+						vc.BeginAction("admins.txt");
+						break;
+					case 2: cout << "Here you can see information of professors" << endl;
+						vc.BeginAction("professors.txt");
+						break;
+					case 3: cout << "Here you can see information of students" << endl;
+						vc.BeginAction("students.txt");
+						break;
+					}
+					break;
+				case 4: cout << endl << "What do you want to do ? " << endl << endl << "1. Show information of a course." << endl << "2.Show information of a project." << endl << "3. Show information of a seminar." << endl;
+					cin >> choice2;
+					switch (choice2) {
+					case 1: cout << "Here you can see information of a course" << endl;
+						vc.BeginAction("courses.txt");
+						break;
+					case 2: cout << "Here you can see information of a project" << endl;
+						vc.BeginAction("projects.txt");
+						break;
+					case 3: cout << "Here you can see information of a seminar" << endl;
+						vc.BeginAction("seminars.txt");
+						break;
+					}
+					break;
+				case 5: cout << endl << "Okay, we will close the program." << endl;
+					continueing = false;
+					break;
+				}
 				break;
-			case 2: cout << "Here you can modify users" << endl;
-				Admin::modifyu();
-				break;
-			case 3: cout << "Here you can delete users" << endl;
-				Admin::deleteu();
-				break;
-			}
-			break;
-		case 2: cout << endl << "What do you want to do ? " << endl << endl << "1. Create resources." << endl << "2. Modify resources." << endl << "3. Delete resources." << endl;
-			cin >> choice2;
-			switch (choice2) {
-			case 1: cout << "Here you can create resources" << endl;
-				//initialize function Admin.creater();
-				break;
-			case 2: cout << "Here you can modify resources" << endl;
-				//initialize function Admin.modifyr();
-				break;
-			case 3: cout << "Here you can delete resources" << endl;
-				//initialize function Admin.deleter();
-				break;
-			}
-			break;
-		case 3: cout << endl << "What do you want to do ? " << endl << endl << "1. Show information of an administrator." << endl << "2.Show information of a professor." << endl << "3. Show information of a student." << endl;
-			cin >> choice2;
-			switch (choice2) {
-			case 1: cout << "Here you can see information of administrators" << endl;
-				VirtualCampus.BeginAction("admins.txt");
-				break;
-			case 2: cout << "Here you can see information of professors" << endl;
-				VirtualCampus.BeginAction("professors.txt");
-				break;
-			case 3: cout << "Here you can see information of students" << endl;
-				VirtualCampus.BeginAction("students.txt");
-				break;
-			}
-			break;
-		case 4: cout << endl << "What do you want to do ? " << endl << endl << "1. Show information of a course." << endl << "2.Show information of a project." << endl << "3. Show information of a seminar." << endl;
-			cin >> choice2;
-			switch (choice2) {
-			case 1: cout << "Here you can see information of a course" << endl;
-				VirtualCampus.BeginAction("courses.txt");
-				break;
-			case 2: cout << "Here you can see information of a project" << endl;
-				VirtualCampus.BeginAction("projects.txt");
-				break;
-			case 3: cout << "Here you can see information of a seminar" << endl;
-				VirtualCampus.BeginAction("seminars.txt");
-				break;
-			}
-			break;
-		case 5: cout << endl << "Okay, we will close the program." << endl;
-			// initialize function
-			break;
-		}
-		break;
-
-
-		//Professor's choices
-	case 2: cout << endl << "What do you want to do ? " << endl << endl << "1. Modify your own resources." << endl << "2. Grade students." << endl << "3. Show information of users." << endl << "4. Show information of resources." << endl << "5. Close the program." << endl;
-		cin >> choice;
-		switch (choice) {
-		case 1: cout << endl << "What do you want to do ? " << endl << endl << "1. Modify courses." << endl << "2. Modify projects." << endl << "3. Modify seminars." << endl;
-			cin >> choice2;
-			switch (choice2) {
-			case 1: cout << "Here you can modify courses" << endl;
-				//initialize function
-				break;
-			case 2: cout << "Here you can modify projects" << endl;
-				//initialize function
-				break;
-			case 3: cout << "Here you can modify seminars" << endl;
-				//initialize function
-				break;
-			}
-			break;
-		case 2: cout << endl << "Here you can set grades. " << endl;
-			Professor.setmarks();
-			break;
-
-		case 3: cout << endl << "What do you want to do ? " << endl << endl << "1. Show information of an administrator." << endl << "2.Show information of a professor." << endl << "3. Show information of a student." << endl;
-			cin >> choice2;
-			switch (choice2) {
-			case 1: cout << "Here you can see information of administrators" << endl;
-				VirtualCampus.BeginAction("admins.txt");
-				break;
-			case 2: cout << "Here you can see information of professors" << endl;
-				VirtualCampus.BeginAction("professors.txt");
-				break;
-			case 3: cout << "Here you can see information of students" << endl;
-				VirtualCampus.BeginAction("students.txt");
-				break;
-			}
-			break;
-		case 4: cout << endl << "What do you want to do ? " << endl << endl << "1. Show information of a course." << endl << "2.Show information of a project." << endl << "3. Show information of a seminar." << endl;
-			cin >> choice2;
-			switch (choice2) {
-			case 1: cout << "Here you can see information of a course" << endl;
-				VirtualCampus.BeginAction("courses.txt");
-				break;
-			case 2: cout << "Here you can see information of a project" << endl;
-				VirtualCampus.BeginAction("projects.txt");
-				break;
-			case 3: cout << "Here you can see information of a seminar" << endl;
-				VirtualCampus.BeginAction("seminars.txt");
-				break;
-			}
-			break;
-		case 5: cout << endl << "Okay, we will close the program." << endl;
-			// initialize function
-			break;
-		}
-		break;
 
 
-		//Student's choices
-	case 3: cout << endl << "What do you want to do ? " << endl << endl << "1. Enroll and drop resources." << endl << "2. Show information of users." << endl << "3. Show information of resources." << endl << "4. Close the program." << endl;
-		cin >> choice;
-		switch (choice) {
-		case 1: cout << endl << "What do you want to do ? " << endl << endl << "1. Enroll or drop a course." << endl << "2. Enroll or drop a seminar." << endl << "3. Enroll or drop a final degree project" << endl;
-			cin >> choice2;
-			switch (choice2) {
-			case 1: cout << "Here you can enroll or drop a course" << endl;
-				Student.Studentactionsc();
+				//Professor's choices
+			case 2: cout << endl << "What do you want to do ? " << endl << endl << "1. Modify your own resources." << endl << "2. Grade students." << endl << "3. Show information of users." << endl << "4. Show information of resources." << endl << "5. Close the program." << endl;
+				cin >> choice;
+				switch (choice) {
+				case 1: cout << endl << "What do you want to do ? " << endl << endl << "1. Modify courses." << endl << "2. Modify projects." << endl << "3. Modify seminars." << endl;
+					cin >> choice2;
+					switch (choice2) {
+					case 1: cout << "Here you can modify courses" << endl;
+						//initialize function
+						break;
+					case 2: cout << "Here you can modify projects" << endl;
+						//initialize function
+						break;
+					case 3: cout << "Here you can modify seminars" << endl;
+						//initialize function
+						break;
+					}
+					break;
+				case 2: cout << endl << "Here you can set grades. " << endl;
+					userobj.setmarks();
+					break;
+
+				case 3: cout << endl << "What do you want to do ? " << endl << endl << "1. Show information of an administrator." << endl << "2.Show information of a professor." << endl << "3. Show information of a student." << endl;
+					cin >> choice2;
+					switch (choice2) {
+					case 1: cout << "Here you can see information of administrators" << endl;
+						vc.BeginAction("admins.txt");
+						break;
+					case 2: cout << "Here you can see information of professors" << endl;
+						vc.BeginAction("professors.txt");
+						break;
+					case 3: cout << "Here you can see information of students" << endl;
+						vc.BeginAction("students.txt");
+						break;
+					}
+					break;
+				case 4: cout << endl << "What do you want to do ? " << endl << endl << "1. Show information of a course." << endl << "2.Show information of a project." << endl << "3. Show information of a seminar." << endl;
+					cin >> choice2;
+					switch (choice2) {
+					case 1: cout << "Here you can see information of a course" << endl;
+						vc.BeginAction("courses.txt");
+						break;
+					case 2: cout << "Here you can see information of a project" << endl;
+						vc.BeginAction("projects.txt");
+						break;
+					case 3: cout << "Here you can see information of a seminar" << endl;
+						vc.BeginAction("seminars.txt");
+						break;
+					}
+					break;
+				case 5: cout << endl << "Okay, we will close the program." << endl;
+					continueing = false;
+					break;
+				}
 				break;
-			case 2: cout << "Here you can enroll or drop a seminar" << endl;
-				Student.Studentactionss();
-				break;
-			case 3: cout << "Here you can enroll or drop a final degree project" << endl;
-				Student.Studentactionsp();
+
+
+				//Student's choices
+			case 3: cout << endl << "What do you want to do ? " << endl << endl << "1. Enroll and drop resources." << endl << "2. Show information of users." << endl << "3. Show information of resources." << endl << "4. Close the program." << endl;
+				cin >> choice;
+				switch (choice) {
+				case 1: cout << endl << "What do you want to do ? " << endl << endl << "1. Enroll or drop a course." << endl << "2. Enroll or drop a seminar." << endl << "3. Enroll or drop a final degree project" << endl;
+					cin >> choice2;
+					switch (choice2) {
+					case 1: cout << "Here you can enroll or drop a course" << endl;
+						userobj.Studentactionsc();
+						break;
+					case 2: cout << "Here you can enroll or drop a seminar" << endl;
+						userobj.Studentactionss();
+						break;
+					case 3: cout << "Here you can enroll or drop a final degree project" << endl;
+						userobj.Studentactionsp();
+						break;
+					}
+					break;
+				case 2: cout << endl << "What do you want to do ? " << endl << endl << "1. Show information of an administrator." << endl << "2.Show information of a professor." << endl << "3. Show information of a student." << endl;
+					cin >> choice2;
+					switch (choice2) {
+					case 1: cout << "Here you can see information of administrators" << endl;
+						vc.BeginAction("administrators.txt");
+						break;
+					case 2: cout << "Here you can see information of professors" << endl;
+						vc.BeginAction("professors.txt");
+						break;
+					case 3: cout << "Here you can see information of students" << endl;
+						vc.BeginAction("students.txt");
+						break;
+					}
+					break;
+				case 3: cout << endl << "What do you want to do ? " << endl << endl << "1. Show information of a course." << endl << "2.Show information of a project." << endl << "3. Show information of a seminar." << endl;
+					cin >> choice2;
+					switch (choice2) {
+					case 1: cout << "Here you can see information of a course" << endl;
+						vc.BeginAction("courses.txt");
+						break;
+					case 2: cout << "Here you can see information of a project" << endl;
+						vc.BeginAction("projects.txt");
+						break;
+					case 3: cout << "Here you can see information of a seminar" << endl;
+						vc.BeginAction("seminars.txt");
+						break;
+					}
+					break;
+				case 4: cout << endl << "Okay, we will close the program." << endl;
+					continueing = false;
+					break;
+				}
 				break;
 			}
-			break;
-		case 2: cout << endl << "What do you want to do ? " << endl << endl << "1. Show information of an administrator." << endl << "2.Show information of a professor." << endl << "3. Show information of a student." << endl;
-			cin >> choice2;
-			switch (choice2) {
-			case 1: cout << "Here you can see information of administrators" << endl;
-				VirtualCampus.BeginAction("administrators.txt");
-				break;
-			case 2: cout << "Here you can see information of professors" << endl;
-				VirtualCampus.BeginAction("professors.txt");
-				break;
-			case 3: cout << "Here you can see information of students" << endl;
-				VirtualCampus.BeginAction("students.txt");
-				break;
-			}
-			break;
-		case 3: cout << endl << "What do you want to do ? " << endl << endl << "1. Show information of a course." << endl << "2.Show information of a project." << endl << "3. Show information of a seminar." << endl;
-			cin >> choice2;
-			switch (choice2) {
-			case 1: cout << "Here you can see information of a course" << endl;
-				VirtualCampus.BeginAction("courses.txt");
-				break;
-			case 2: cout << "Here you can see information of a project" << endl;
-				VirtualCampus.BeginAction("projects.txt");
-				break;
-			case 3: cout << "Here you can see information of a seminar" << endl;
-				VirtualCampus.BeginAction("seminars.txt");
-				break;
-			}
-			break;
-		case 4: cout << endl << "Okay, we will close the program." << endl;
-			// initialize function
-			break;
-		}
-		break;
 	}
+	return;
 }
 
 
@@ -506,7 +505,7 @@ void VirtualCampus::BeginAction(string files) {
 							cout << infovec.at(i) << " ";
 						}
 						cout << endl;
-						//show all of the objects in this particular class by looking at the string files what type it is and then make objects of this type and use  searchedobject.display()
+						// OR show all of the objects in this particular class by looking at the string files what type it is and then make objects of this type and use  searchedobject.display()
 					}
 				}
 			}
@@ -1579,16 +1578,16 @@ void Student::Studentactionss() {
 					for (int i = 6; i < len_seminarvec; ++i) {
 						seminarobj.setlist_students(seminarvec.at(i));
 					}
-					int max = seekseminar.getmax_seats();
-					vector < semstud > = getlist_students();
+					int max = seminarobj.getmax_seats();
+					vector < semstud > = seminarobj.getlist_students();
 					int num = semstud.getsize();
 					if (num < max) {
 						userobj.list_sem.append(seekseminar);
 						//Plus add name to vector of names list_students from particular seminar
 					}
-					else { cout << "This course doesn't belong to the degree you are following." << endl; }
+					else { cout << "Sorry there are no free spots available anymore." << endl; }
 				}
-				else { cout << "Sorry there are no free spots available anymore." << endl; }
+				else { cout << "This seminar cannot be found in the seminar list." << endl; }
 			}
 		}
 	}
@@ -1657,7 +1656,7 @@ void Student::Studentactionsp() {
 					}
 					else { cout << "This project already has a student or you already have a project." << endl; }
 				}
-				else { cout << "Sorry this project cannot be found." << endl; }
+				else { cout << "Sorry this project cannot be found in the project list." << endl; }
 			}
 		}
 	}
