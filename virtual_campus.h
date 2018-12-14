@@ -290,7 +290,7 @@ class Professor : public Users{
 		Professor();
 		/* Parameterized constructor
 			*/
-		Professor(string _name, string _type, char _pid[7]);
+		Professor(string _name, string _type, char _pid[7], vector <Courses> _list_courses, vector <Seminars> _list_sem, Project _project);
 		/* Copy constructor
 			*/
 		Professor(const Professor & Pr);
@@ -298,16 +298,24 @@ class Professor : public Users{
 
 
 		char* getpid();
+		vector <Courses> getlist_courses();
+		vector <Seminars> getlist_sem();
+		Project getproject();
+
 		void setpid(char new_pid[7]);
+		void setlist_courses(vector<Courses> new_list_courses);
+		void setlist_sem(vector<Seminars> new_list_sem);
+		void setproject(Project new_project);
 		void display();
 		void setmarks();
-		void modifyc();
-		void modifys();
-		void modifyp();
+		void profmodifyr();
 
 
 	private:
 		char pid[7];
+		vector <Courses> list_courses;
+		vector <Seminars> list_sem;
+		Project project;
 
 };
 
