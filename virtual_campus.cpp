@@ -2195,11 +2195,36 @@ char* Professor::getpid() {
     return pid;
 }
 
+vector<Courses> Professor::getlist_courses() {
+	return list_courses;
+}
+
+vector <Seminars> Professor::getlist_sem() {
+	return list_sem;
+}
+
+Project Professor::getproject() {
+	return project;
+}
+
 void Professor::setpid(char new_pid[7]) {
     for(int i = 0; i < 7; i++){
         pid[i] = new_pid[i];
-
     }
+}
+
+void Professor::setlist_courses(vector <Courses> new_list_courses) {
+	list_courses = new_list_courses;
+}
+
+
+void Professor::setlist_sem(vector <Seminars> new_list_sem) {
+	list_sem = new_list_sem;
+}
+
+
+void Professor::setproject(Project new_project) {
+	project = new_project;
 }
 
 
@@ -2219,12 +2244,15 @@ Professor::Professor(){
 
 /* Parametrized constructor*/
 
-Professor::Professor(string _name, string _type, char _pid[7]) : Users(_name, _type) {
+Professor::Professor(string _name, string _type, char _pid[7], vector <Courses> _list_courses, vector <Seminars> _list_sem, Project _project) : Users(_name, _type) {
 	if (_type == "professor") {
 		for (int i = 0; i < 7; i++) {
 			pid[i] = _pid[i];
-
 		}
+
+		list_courses = _list_courses;
+		list_sem = _list_sem;
+		project = _project;
 
 	}
 	else cout << "wrong specified type" << endl;
