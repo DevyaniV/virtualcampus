@@ -89,6 +89,9 @@ public:
     void createu();
     void modifyu();
     void deleteu();
+    void creater();
+    void modifyr();
+    void deleter();
 
 
 
@@ -125,6 +128,8 @@ public:
     void setlist_seminars(vector <Seminars> new_list_seminars) ;
     void setlist_courses(vector <Courses> new_list_courses);
     void setlist_projects(vector <Project> new_list_projects);
+
+    void setmarks();
 
 
 private:
@@ -336,8 +341,9 @@ public:
     void setlist_sem(vector<Seminars> new_list_sem);
     void setproject(Project *new_project);
 
+    void enroll(char student_sin[7]);
+    void drop(char student_sin[7]);
 
-    friend class Seminars;
 
 
 
