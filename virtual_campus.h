@@ -14,7 +14,7 @@ class Resources;
 class Users;
 class Student;
 class Professor;
-class Admin;
+
 
 
 class VirtualCampus{
@@ -24,7 +24,7 @@ public:
     VirtualCampus();
     ~VirtualCampus();
 
-//    void start();
+    void start();
 
 private:
     vector < Resources > resources;
@@ -92,6 +92,7 @@ public:
     void creater();
     void modifyr();
     void deleter();
+    void BeginAction(string files);
 
 
 
@@ -124,7 +125,7 @@ public:
 
     void setpid(char new_pid[7]);
 
-    void setmarks();
+    void setmarks(char pid[7]);
     void modifyr(char pid[7]);
 
 
