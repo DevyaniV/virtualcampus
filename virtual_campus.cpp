@@ -425,41 +425,42 @@ void VirtualCampus::StartActivities(int switched) {
 
 //start displaying the users or resources
 void VirtualCampus::BeginAction(string files) {
-	fstream data(files);
+	ifstream data(files);
 	if (data.is_open()) {
+		data.seekg(0, ios::beg);
+		cout << "What is the PID/SIN of the user or ID of the resource you are looking for? Say \"all\" if you want to see everything from a specific type of users or resources." << endl;
+		string searchobj;
+		cin >> searchobj;
+		size_t pos;
+		string line;
+		int linecount = 0;
+		if (searchobj == "all") {
 			data.seekg(0, ios::beg);
-			cout << "What is the PID/SIN of the user or ID of the resource you are looking for? Say \"all\" if you want to see everything from a specific type of users or resources." << endl;
-			string searchobj;
-			cin >> searchobj;
-			size_t pos;
-			if (searchobj == "all") {
-					string output;
-					data >> output;
-					cout << output << endl;
+			while (data >> line) {
+				string output;
+				output = line;
+				linecount += 1;
+				cout << "number " << linecount << ": " << output << endl << endl;
 			}
-			vector <string> infovec;
-			string line;
+		}
+		else {
+			bool found = false;
 			while (data >> line) {
 				pos = line.find(searchobj);
 				if (pos != string::npos) {
-					cout << "Wait a second..." << endl;
-					size_t pos2;
-					string wholeline = line;
-					stringstream ss(wholeline);
-					while (ss.good()) {
-						string substr;
-						getline(ss, substr, ',');
-						infovec.push_back(substr);
-						for (int i = 0; i < infovec.size(); ++i) {
-							cout << infovec.at(i) << " ";
-						}
-						cout << endl;
-						// OR show all of the objects in this particular class by looking at the string files what type it is and then make objects of this type and use  searchedobject.display()
-					}
+					string output;
+					output = line;
+					cout << output << endl;
+					found = true;
+					// OR show all of the objects in this particular class by looking at the string files what type it is and then make objects of this type and use  searchedobject.display()
 				}
 			}
+			if (found == false) { cout << "Sorry, this person or resource cannot be found." << endl; }
+		}
 	}
-	else { cout << "Sorry the Virtual Campus was unable to get the data. Please start the program again in order to log in." << endl; }
+	else { cout << "Sorry the Virtual Campus was unable to get the data. Please try again." << endl; }
+	return 0;
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
