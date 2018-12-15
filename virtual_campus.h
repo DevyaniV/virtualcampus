@@ -111,7 +111,7 @@ public:
     Professor();
     /* Parameterized constructor
         */
-    Professor(string _name, string _type, char _pid[7], vector <Seminars> _list_seminars, vector <Courses> _list_courses, vector <Project> _list_projects);
+    Professor(string _name, string _type, char _pid[7]);
     /* Copy constructor
         */
 //    Professor(const Professor & Pr);
@@ -119,24 +119,18 @@ public:
 
 
     char* getpid();
-    vector <Seminars> getlist_seminars();
-    vector <Courses> getlist_courses();
-    vector <Project> getlist_projects();
+
 
 
     void setpid(char new_pid[7]);
-    void setlist_seminars(vector <Seminars> new_list_seminars) ;
-    void setlist_courses(vector <Courses> new_list_courses);
-    void setlist_projects(vector <Project> new_list_projects);
 
     void setmarks();
+    void modifyr(char pid[7]);
 
 
 private:
     char pid[7];
-    vector <Seminars> list_seminars;
-    vector <Courses> list_courses;
-    vector <Project> list_projects;
+
 
 };
 
@@ -208,7 +202,7 @@ public:
 
     friend class Admin;
     friend class Student;
-    //friend class Professor;
+
 
 
 
