@@ -243,11 +243,15 @@ void VirtualCampus::start(){
 
         if(c == 'a' || c == 'A'){
             currentpr->setmarks(pidp);
+            delete currentpr;
+            return;
         }
 
 
         if(c == 'b' || c == 'B'){
             currentpr->modifyr(pidp);
+            delete currentpr;
+            return;
         }
 
         if(c == 'c' || c == 'C'){
@@ -342,27 +346,39 @@ void VirtualCampus::start(){
 
         if(d == 'a' || d == 'A'){
             currentad->creater();
+            delete currentad;
+            return;
         }
 
 
         if(d == 'b' || d == 'B'){
             currentad->modifyr();
+            delete currentad;
+            return;
         }
 
         if(d == 'c' || d == 'C'){
             currentad->deleter();
+            delete currentad;
+            return;
         }
 
         if(d == 'd' || d == 'D'){
             currentad->createu();
+            delete currentad;
+            return;
         }
 
         if(d == 'e' || d == 'E'){
             currentad->modifyu();
+            delete currentad;
+            return;
         }
 
         if(d == 'f' || d == 'F'){
             currentad->deleteu();
+            delete currentad;
+            return;
         }
 
         if(d == 'g' || d == 'G'){
@@ -383,27 +399,39 @@ void VirtualCampus::start(){
 
             if(e == 'a' || e == 'A'){
                 currentad->BeginAction("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/admins.csv");
+                delete currentad;
+                return;
             }
 
 
             if(e == 'b' || e == 'B'){
                 currentad->BeginAction("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/students.csv");
+                delete currentad;
+                return;
             }
 
             if(e == 'c' || e == 'C'){
                 currentad->BeginAction("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/professors,csv");
+                delete currentad;
+                return;
             }
 
             if(e == 'd' || e == 'D'){
                 currentad->BeginAction("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/courses.csv");
+                delete currentad;
+                return;
             }
 
             if(e == 'e' || e == 'E'){
                 currentad->BeginAction("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/seminars.csv");
+                delete currentad;
+                return;
             }
 
             if(e == 'f' || e == 'F'){
                 currentad->BeginAction("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/project.csv");
+                delete currentad;
+                return;
             }
         }
 
