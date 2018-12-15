@@ -1592,8 +1592,7 @@ void Admin::creater() {
     string status;
     char id[7];
     char identity_type = '0';
-    //cout << endl << "Please fill the status of the new resource." << endl;
-    //cin >> status;
+
     cout << endl << "Please fill the id of the new resource(only 7 characters)." << endl;
     cin >> id;
     cout << endl << "Please press the alphabet corresponding to their identity (c-Course, s-Seminar, p-Project)" << endl;
@@ -2762,27 +2761,27 @@ void Professor::setmarks(){
 
 
                 id_co.push_back(id_c);
-                cout << id_c << endl;
+
 
                 getline(Myfile, status_c, ',');
                 status_co.push_back(status_c);
-                cout << status_c << endl;
+
 
                 getline(Myfile, prof_c1, ',');
                 prof1_co.push_back(prof_c1);
-                cout << prof_c1 << endl;
+
 
                 getline(Myfile, prof_c2, ',');
                 prof2_co.push_back(prof_c2);
-                cout << prof_c2 << endl;
+
 
                 getline(Myfile, cred_c, ',');
                 cred_co.push_back(cred_c);
-                cout << cred_c << endl;
+
 
                 getline(Myfile, deg_c, '\n');
                 deg_co.push_back(deg_c);
-                cout << deg_c << endl;
+
 
 
             }
@@ -2791,7 +2790,7 @@ void Professor::setmarks(){
 
             getline(Myfile, stu, '\n');
             stu_co.push_back(stu);
-            cout << stu << endl;
+
 
 
         }
@@ -2799,7 +2798,7 @@ void Professor::setmarks(){
         if(line%3 == 2){
             getline(Myfile, marks, '\n');
             marks_co.push_back(marks);
-            cout << marks << endl;
+
 
         }
 
@@ -2844,7 +2843,7 @@ void Professor::setmarks(){
         if(ho){
 
             specific_students.push_back(substr);
-            cout << substr << endl;
+
 
         }
     }
@@ -3132,15 +3131,15 @@ void Student::enroll(char student_sin[7]){
 
 
                 name_ob.push_back(name_obj);
-                //cout << name_obj << endl;
+
 
                 getline(Myfile, id_obj, ',');
                 id_ob.push_back(id_obj);
-                //cout << id_obj << endl;
+
 
                 getline(Myfile, deg_obj, '\n');
                 degrees.push_back(deg_obj);
-                //cout << deg_obj << endl;
+
 
 
             }
@@ -3149,21 +3148,21 @@ void Student::enroll(char student_sin[7]){
 
             getline(Myfile, cour, '\n');
             courses.push_back(cour);
-            cout << cour << endl;
+
 
         }
 
         if(line%4==2){
             getline(Myfile, sem, '\n');
             seminars.push_back(sem);
-            cout << sem << endl;
+
 
         }
 
         if(line%4==3){
             getline(Myfile, pro, '\n');
             project.push_back(pro);
-            cout << pro << endl;
+
 
         }
     }
@@ -3291,27 +3290,27 @@ void Student::enroll(char student_sin[7]){
 
 
                     id_co.push_back(id_c);
-                    cout << id_c << endl;
+
 
                     getline(Myfile, status_c, ',');
                     status_co.push_back(status_c);
-                    cout << status_c << endl;
+
 
                     getline(Myfile, prof_c1, ',');
                     prof1_co.push_back(prof_c1);
-                    cout << prof_c1 << endl;
+
 
                     getline(Myfile, prof_c2, ',');
                     prof2_co.push_back(prof_c2);
-                    cout << prof_c2 << endl;
+
 
                     getline(Myfile, cred_c, ',');
                     cred_co.push_back(cred_c);
-                    cout << cred_c << endl;
+
 
                     getline(Myfile, deg_c, '\n');
                     deg_co.push_back(deg_c);
-                    cout << deg_c << endl;
+
 
 
                 }
@@ -3320,7 +3319,7 @@ void Student::enroll(char student_sin[7]){
 
                 getline(Myfile, stu, '\n');
                 stu_co.push_back(stu);
-                cout << stu << endl;
+
 
 
             }
@@ -3328,7 +3327,7 @@ void Student::enroll(char student_sin[7]){
             if(line%3 == 2){
                 getline(Myfile, marks, '\n');
                 marks_co.push_back(marks);
-                cout << marks << endl;
+
 
             }
 
@@ -3378,12 +3377,12 @@ void Student::enroll(char student_sin[7]){
             if(ho){
 
                 specific_students.push_back(substr);
-                cout << substr << endl;
+
 
             }
         }
 
-        cout << student_sin << endl;
+
         specific_students.push_back(student_sin);
 
         string snak;
@@ -3393,7 +3392,6 @@ void Student::enroll(char student_sin[7]){
         }
 
         stu_co[line_c] = snak;
-        cout << stu_co[line_c] << endl;
 
 
 
@@ -3401,9 +3399,9 @@ void Student::enroll(char student_sin[7]){
 
         fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/courses.csv", ios::out | ios::trunc);
         if (data.is_open()){
-            cout << "data" << endl;
+
             for(unsigned int j = 0; j < id_co.size(); j++){
-                cout << "dataq" << endl;
+
                 data << id_co[j] << "," << status_co[j] << "," << prof1_co[j] << "," << prof2_co[j] << "," << cred_co[j] << "," << deg_co[j] << "\n" ;
                 data << stu_co[j] << "\n";
                 data << marks_co[j] << "\n";
@@ -3424,7 +3422,7 @@ void Student::enroll(char student_sin[7]){
         }
 
         courses[line_n] = sna;
-        cout << courses[line_n] << endl;
+
 
         fstream data1("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/students.csv", ios::out | ios::trunc);
         if (data1.is_open()){
@@ -3489,27 +3487,27 @@ void Student::enroll(char student_sin[7]){
 
 
                     id_se.push_back(id_s);
-                    cout << id_s << endl;
+
 
                     getline(Myfile, status_s, ',');
                     status_se.push_back(status_s);
-                    cout << status_s << endl;
+
 
                     getline(Myfile, coord, ',');
                     coord_se.push_back(coord);
-                    cout << coord << endl;
+
 
                     getline(Myfile, speak, ',');
                     speak_se.push_back(speak);
-                    cout << speak << endl;
+
 
                     getline(Myfile, date, ',');
                     date_se.push_back(date);
-                    cout << date << endl;
+
 
                     getline(Myfile, maxs, '\n');
                     maxs_se.push_back(maxs);
-                    cout << maxs << endl;
+
 
 
                 }
@@ -3518,7 +3516,7 @@ void Student::enroll(char student_sin[7]){
 
                 getline(Myfile, stu, '\n');
                 stu_se.push_back(stu);
-                cout << stu << endl;
+
 
 
             }
@@ -3536,7 +3534,7 @@ void Student::enroll(char student_sin[7]){
 
                 line_x = j;
                 count++;
-                cout << line_x << endl;
+
             }
 
 
@@ -3566,13 +3564,12 @@ void Student::enroll(char student_sin[7]){
             if(ho){
 
                 specific_students.push_back(substr);
-                cout << substr << endl;
+
 
             }
         }
 
-        cout << specific_students.size() << endl;
-        cout << maxs[line_x] - '0' << endl;
+
 
         if(specific_students.size() >= maxs[line_x] - '0'){
             cout << "Sorry this seminar has reached its capacity." << endl;
@@ -3580,7 +3577,7 @@ void Student::enroll(char student_sin[7]){
 
         }
 
-        cout << student_sin << endl;
+
         specific_students.push_back(student_sin);
 
         string snak;
@@ -3590,7 +3587,7 @@ void Student::enroll(char student_sin[7]){
         }
 
         stu_se[line_x] = snak;
-        cout << stu_se[line_x] << endl;
+
 
 
 
@@ -3598,9 +3595,9 @@ void Student::enroll(char student_sin[7]){
 
         fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/seminars.csv", ios::out | ios::trunc);
         if (data.is_open()){
-            cout << "data" << endl;
+
             for(unsigned int j = 0; j < id_se.size(); j++){
-                cout << "dataq" << endl;
+
                 data << id_se[j] << "," << status_se[j] << "," << coord_se[j] << "," << speak_se[j] << "," << date_se[j] << "," << maxs_se[j] << "\n" ;
                 data << stu_se[j] << "\n";
 
@@ -3620,7 +3617,7 @@ void Student::enroll(char student_sin[7]){
         }
 
         seminars[line_n] = sna;
-        cout << seminars[line_n] << endl;
+
 
         fstream data1("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/students.csv", ios::out | ios::trunc);
         if (data1.is_open()){
@@ -3693,23 +3690,23 @@ void Student::enroll(char student_sin[7]){
 
 
                     id_pr.push_back(id_p);
-                    cout << id_p << endl;
+
 
                     getline(Myfile, status_p, ',');
                     status_pr.push_back(status_p);
-                    cout << status_p << endl;
+
 
                     getline(Myfile, tut, ',');
                     tut_pr.push_back(tut);
-                    cout << tut << endl;
+
 
                     getline(Myfile, cotut, ',');
                     cotut_pr.push_back(cotut);
-                    cout << cotut << endl;
+
 
                     getline(Myfile, degree_p, '\n');
                     deg_pr.push_back(degree_p);
-                    cout << degree_p << endl;
+
 
 
 
@@ -3720,7 +3717,7 @@ void Student::enroll(char student_sin[7]){
 
                 getline(Myfile, stu, '\n');
                 stu_pr.push_back(stu);
-                cout << stu << endl;
+
 
 
             }
@@ -3738,7 +3735,7 @@ void Student::enroll(char student_sin[7]){
 
                 line_z = j;
                 count++;
-                cout << line_z << endl;
+
             }
 
 
@@ -3765,7 +3762,7 @@ void Student::enroll(char student_sin[7]){
 
         }
 
-        cout << student_sin << endl;
+
         string stri(student_sin);
         stu_pr[line_z] = stri;
 
@@ -3774,9 +3771,9 @@ void Student::enroll(char student_sin[7]){
 
         fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/project.csv", ios::out | ios::trunc);
         if (data.is_open()){
-            cout << "data" << endl;
+
             for(unsigned int j = 0; j < id_pr.size(); j++){
-                cout << "dataq" << endl;
+
                 data << id_pr[j] << "," << status_pr[j] << "," << tut_pr[j] << "," << cotut_pr[j] << "," << deg_pr[j] << "\n" ;
                 data << stu_pr[j] << "\n";
 
@@ -3790,7 +3787,7 @@ void Student::enroll(char student_sin[7]){
 
 
         project[line_n] = r_id;
-        cout << project[line_n] << endl;
+
 
         fstream data1("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/students.csv", ios::out | ios::trunc);
         if (data1.is_open()){
@@ -3863,15 +3860,15 @@ void Student::drop(char student_sin[7]){
 
 
                 name_ob.push_back(name_obj);
-                //cout << name_obj << endl;
+
 
                 getline(Myfile, id_obj, ',');
                 id_ob.push_back(id_obj);
-                //cout << id_obj << endl;
+
 
                 getline(Myfile, deg_obj, '\n');
                 degrees.push_back(deg_obj);
-                //cout << deg_obj << endl;
+
 
 
             }
@@ -3880,21 +3877,21 @@ void Student::drop(char student_sin[7]){
 
             getline(Myfile, cour, '\n');
             courses.push_back(cour);
-            cout << cour << endl;
+
 
         }
 
         if(line%4==2){
             getline(Myfile, sem, '\n');
             seminars.push_back(sem);
-            cout << sem << endl;
+
 
         }
 
         if(line%4==3){
             getline(Myfile, pro, '\n');
             project.push_back(pro);
-            cout << pro << endl;
+
 
         }
     }
@@ -4022,27 +4019,27 @@ void Student::drop(char student_sin[7]){
 
 
                     id_co.push_back(id_c);
-                    cout << id_c << endl;
+
 
                     getline(Myfile, status_c, ',');
                     status_co.push_back(status_c);
-                    cout << status_c << endl;
+
 
                     getline(Myfile, prof_c1, ',');
                     prof1_co.push_back(prof_c1);
-                    cout << prof_c1 << endl;
+
 
                     getline(Myfile, prof_c2, ',');
                     prof2_co.push_back(prof_c2);
-                    cout << prof_c2 << endl;
+
 
                     getline(Myfile, cred_c, ',');
                     cred_co.push_back(cred_c);
-                    cout << cred_c << endl;
+
 
                     getline(Myfile, deg_c, '\n');
                     deg_co.push_back(deg_c);
-                    cout << deg_c << endl;
+
 
 
                 }
@@ -4051,7 +4048,7 @@ void Student::drop(char student_sin[7]){
 
                 getline(Myfile, stu, '\n');
                 stu_co.push_back(stu);
-                cout << stu << endl;
+
 
 
             }
@@ -4059,7 +4056,7 @@ void Student::drop(char student_sin[7]){
             if(line%3 == 2){
                 getline(Myfile, marks, '\n');
                 marks_co.push_back(marks);
-                cout << marks << endl;
+
 
             }
 
@@ -4104,7 +4101,7 @@ void Student::drop(char student_sin[7]){
             if(ho){
 
                 specific_students.push_back(substr);
-                cout << substr << endl;
+
 
             }
         }
@@ -4120,7 +4117,7 @@ void Student::drop(char student_sin[7]){
 
                 line_h = j;
                 count1++;
-                cout << line_h << endl;
+
             }
 
 
@@ -4147,7 +4144,7 @@ void Student::drop(char student_sin[7]){
 
                 line_a = j;
                 count2++;
-                cout << line_a << endl;
+
             }
 
 
@@ -4173,7 +4170,7 @@ void Student::drop(char student_sin[7]){
         }
 
         stu_co[line_c] = snak;
-        cout << stu_co[line_c] << endl;
+
 
 
 
@@ -4181,9 +4178,9 @@ void Student::drop(char student_sin[7]){
 
         fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/courses.csv", ios::out | ios::trunc);
         if (data.is_open()){
-            cout << "data" << endl;
+
             for(unsigned int j = 0; j < id_co.size(); j++){
-                cout << "dataq" << endl;
+
                 data << id_co[j] << "," << status_co[j] << "," << prof1_co[j] << "," << prof2_co[j] << "," << cred_co[j] << "," << deg_co[j] << "\n" ;
                 data << stu_co[j] << "\n";
                 data << marks_co[j] << "\n";
@@ -4204,7 +4201,7 @@ void Student::drop(char student_sin[7]){
         }
 
         courses[line_n] = sna;
-        cout << courses[line_n] << endl;
+
 
         fstream data1("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/students.csv", ios::out | ios::trunc);
         if (data1.is_open()){
@@ -4269,27 +4266,27 @@ void Student::drop(char student_sin[7]){
 
 
                     id_se.push_back(id_s);
-                    cout << id_s << endl;
+
 
                     getline(Myfile, status_s, ',');
                     status_se.push_back(status_s);
-                    cout << status_s << endl;
+
 
                     getline(Myfile, coord, ',');
                     coord_se.push_back(coord);
-                    cout << coord << endl;
+
 
                     getline(Myfile, speak, ',');
                     speak_se.push_back(speak);
-                    cout << speak << endl;
+
 
                     getline(Myfile, date, ',');
                     date_se.push_back(date);
-                    cout << date << endl;
+
 
                     getline(Myfile, maxs, '\n');
                     maxs_se.push_back(maxs);
-                    cout << maxs << endl;
+
 
 
                 }
@@ -4298,7 +4295,7 @@ void Student::drop(char student_sin[7]){
 
                 getline(Myfile, stu, '\n');
                 stu_se.push_back(stu);
-                cout << stu << endl;
+
 
 
             }
@@ -4316,7 +4313,7 @@ void Student::drop(char student_sin[7]){
 
                 line_x = j;
                 count++;
-                cout << line_x << endl;
+
             }
 
 
@@ -4346,7 +4343,6 @@ void Student::drop(char student_sin[7]){
             if(ho){
 
                 specific_students.push_back(substr);
-                cout << substr << endl;
 
             }
         }
@@ -4363,7 +4359,7 @@ void Student::drop(char student_sin[7]){
 
                 line_h = j;
                 count1++;
-                cout << line_h << endl;
+
             }
 
 
@@ -4389,7 +4385,7 @@ void Student::drop(char student_sin[7]){
 
                 line_a = j;
                 count2++;
-                cout << line_a << endl;
+
             }
 
 
@@ -4417,7 +4413,7 @@ void Student::drop(char student_sin[7]){
         }
 
         stu_se[line_x] = snak;
-        cout << stu_se[line_x] << endl;
+
 
 
 
@@ -4425,9 +4421,9 @@ void Student::drop(char student_sin[7]){
 
         fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/seminars.csv", ios::out | ios::trunc);
         if (data.is_open()){
-            cout << "data" << endl;
+
             for(unsigned int j = 0; j < id_se.size(); j++){
-                cout << "dataq" << endl;
+
                 data << id_se[j] << "," << status_se[j] << "," << coord_se[j] << "," << speak_se[j] << "," << date_se[j] << "," << maxs_se[j] << "\n" ;
                 data << stu_se[j] << "\n";
 
@@ -4448,7 +4444,7 @@ void Student::drop(char student_sin[7]){
         }
 
         seminars[line_n] = sna;
-        cout << seminars[line_n] << endl;
+
 
         fstream data1("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/students.csv", ios::out | ios::trunc);
         if (data1.is_open()){
@@ -4521,23 +4517,23 @@ void Student::drop(char student_sin[7]){
 
 
                     id_pr.push_back(id_p);
-                    cout << id_p << endl;
+
 
                     getline(Myfile, status_p, ',');
                     status_pr.push_back(status_p);
-                    cout << status_p << endl;
+
 
                     getline(Myfile, tut, ',');
                     tut_pr.push_back(tut);
-                    cout << tut << endl;
+
 
                     getline(Myfile, cotut, ',');
                     cotut_pr.push_back(cotut);
-                    cout << cotut << endl;
+
 
                     getline(Myfile, degree_p, '\n');
                     deg_pr.push_back(degree_p);
-                    cout << degree_p << endl;
+
 
 
 
@@ -4548,7 +4544,7 @@ void Student::drop(char student_sin[7]){
 
                 getline(Myfile, stu, '\n');
                 stu_pr.push_back(stu);
-                cout << stu << endl;
+
 
 
             }
@@ -4566,7 +4562,7 @@ void Student::drop(char student_sin[7]){
 
                 line_z = j;
                 count++;
-                cout << line_z << endl;
+
             }
 
 
@@ -4598,9 +4594,9 @@ void Student::drop(char student_sin[7]){
 
         fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/project.csv", ios::out | ios::trunc);
         if (data.is_open()){
-            cout << "data" << endl;
+
             for(unsigned int j = 0; j < id_pr.size(); j++){
-                cout << "dataq" << endl;
+
                 data << id_pr[j] << "," << status_pr[j] << "," << tut_pr[j] << "," << cotut_pr[j] << "," << deg_pr[j] << "\n" ;
                 data << stu_pr[j] << "\n";
 
