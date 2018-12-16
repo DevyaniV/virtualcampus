@@ -11,122 +11,438 @@
 using namespace std;
 
 
-//void VirtualCampus::start(){
+void VirtualCampus::start(){
+
+    cout << "Welcome to virtual campus!" << endl;
+    char a;
 
 
-//    //first load info from all files here
+    cout << "Please enter your identity alphabet (S - student, P - professor, A - Admin)" << endl;
+    cin >> a;
+    while (a != 's' && a != 'S' && a != 'p' && a != 'P' && a != 'a' && a != 'A'){
+        cin >> a;
+    }
 
+    if(a == 'S'|a == 's'){
+        char sin[7];
+        cout << "Please enter your SIN" << endl;
+        cin >> sin;
 
-//    //incase no file : initialize stuff here
-//    Admin a;
+/////////////////////////////////student authentication process///////////////////////////////////////
 
+        string name_obj;
+        string id_obj;
+        string deg_obj;
+        int line_n;
 
-//    string *array1 = new string[2]{"bas", "devyani"};
-//    float *array2 = new float[2]{0, 0};
+        string pro;
+        string cour;
+        string sem;
 
-////    Courses english(6, array1, array2, 2, 2 );
+        vector <string> name_ob;
+        vector <string> id_ob;
+        vector <string> degrees;
 
-////    float *array3 = new float[2]{10, 19};
+        vector <string> courses;
 
-
-////    a.createc(english, 2, array1, array3, 2, 2);
-////    a.displayc(english);
-
-//    Courses hindi;
-
-//    //show start up menu
-
-//    char a;
-
-
-//    cout << "Welcome to virtual campus" << endl;
-//    cout << "Please enter your identity alphabet (S - student, P - professor, A - Admin" << endl;
-//    cin >> a;
-
-
-//    while(a=! 'S'| a=! 's'| a=! 'A'| a=! 'a'| a=! 'P'| a=! 'p');
-
-//    if(a == 'S'|a == 's'){
-//        char sin[7];
-//        cout << "Please enter your SIN" << endl;
-//        cin << sin;
-//        //authentication process
-
-//        int b;
-
-//        cout << "Please press the number for the desired task" << endl;
-//        cout << "1. Add course" << endl;
-//        cout << "2. Drop course" << endl;
-//        cout << "3. Add seminar" << endl;
-//        cout << "4. Drop seminar" << endl;
-//        cout << "5. Add final degree project" << endl;
-//        cout << "6. Drop final degree project" << endl;
-//        cin >> b;
-//        while(b=! 1 | b=! 2| b=! 3| b=! 4| b=! 5| b=! 6);
+        vector <string> seminars;
+        vector <string> project;
 
 
 
+        fstream Myfile;
+        int line = -1;
 
-//    }
+        Myfile.open("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/students.csv");
 
+        while(Myfile.good()){
 
-
-//    if(a == 'P'|a == 'p'){
-//        char pic[7];
-//        cout << "Please enter your PIC" << endl;
-//        cin << pic;
-//        //authentication process
-
-//        int b;
-
-//        cout << "Please press the number for the desired task" << endl;
-//        cout << "1. Modify a course" << endl;
-//        cout << "2. Modify a seminar" << endl;
-//        cout << "3. Modify a project" << endl;
-//        cout << "4. Set marks for a course" << endl;
-
-//        cin >> b;
-//        while(b=! 1 | b=! 2| b=! 3| b=! 4);
-
-//    }
+            line++;
 
 
+            if(line%4 == 0){
+                getline(Myfile, name_obj, ',');
 
-//    if(a == 'A'|a == 'a'){
-//        char pic[7];
-//        cout << "Please enter your PIC" << endl;
-//        cin << pic;
-//        //authentication process
+                bool h = Myfile.good();
+                if(h){
 
-//        int b;
 
-//        cout << "Please press the number for the desired task" << endl;
-//        cout << "1. Add course" << endl;
-//        cout << "2. Modify course" << endl;
-//        cout << "3. Delete courser" << endl;
-//        cout << "4. Add seminar" << endl;
-//        cout << "5. Modify seminar" << endl;
-//        cout << "6. Delete seminar" << endl;
-//        cout << "7. Add final degree project" << endl;
-//        cout << "8. Modify final degree project" << endl;
-//        cout << "9. Delete final degree project" << endl;
-//        cout << "10. Add student" << endl;
-//        cout << "11. Modify student" << endl;
-//        cout << "12. Delete student" << endl;
-//        cout << "13. Add professor" << endl;
-//        cout << "14. Modify professor" << endl;
-//        cout << "15. Delete professor" << endl;
-//        cout << "16. Add admin" << endl;
-//        cout << "17. Modify admin" << endl;
-//        cout << "18. Delete admin" << endl;
-//        cin >> b;
-//        while(b=! 1 || b=! 2 || b=! 3 || b=! 4 || b=! 5 || b=! 6 || b=! 7 || b=! 8| b=! 9| b=! 10| b=! 11| b=! 12| b=! 13 | b=! 14| b=! 15| b=! 16| b=! 17| b=! 18);
+                    name_ob.push_back(name_obj);
 
-//    }
+
+                    getline(Myfile, id_obj, ',');
+                    id_ob.push_back(id_obj);
+
+
+                    getline(Myfile, deg_obj, '\n');
+                    degrees.push_back(deg_obj);
 
 
 
-//}
+                }
+            }
+            if(line%4==1){
+
+                getline(Myfile, cour, '\n');
+                courses.push_back(cour);
+
+
+            }
+
+            if(line%4==2){
+                getline(Myfile, sem, '\n');
+                seminars.push_back(sem);
+
+
+            }
+
+            if(line%4==3){
+                getline(Myfile, pro, '\n');
+                project.push_back(pro);
+
+
+            }
+        }
+
+
+
+        int count = 0;
+        for(size_t j = 0; j < id_ob.size(); j++){
+
+            if (id_ob[j].find(sin) != string::npos){
+
+
+                line_n = j;
+                count++;
+            }
+        }
+
+
+        if(count == 0){
+            cout << "Sorry your id number is not registered in the database." << endl;
+            return;
+
+        }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+        Student* currentst = new Student;
+
+        char b;
+
+        cout << "Please press the number for the desired task" << endl;
+        cout << "A - Enroll in a resource" << endl;
+        cout << "B - Drop a resource" << endl;
+        cout << "C - Exit the application" << endl;
+
+        cin >> b;
+        while (b != 'a' && b != 'A' && b != 'b' && b != 'B' && b != 'c' && b != 'C'){
+            cin >> b;
+        }
+
+        if(b == 'a' || b == 'A'){
+            currentst->enroll(sin);
+            delete currentst;
+            return;
+        }
+
+
+        if(b == 'b' || b == 'B'){
+            currentst->drop(sin);
+            delete currentst;
+            return;
+        }
+
+        if(b == 'c' || b == 'C'){
+            cout << "Exiting the application. Byeee" << endl;
+            delete currentst;
+            return;
+        }
+    }
+
+
+    if(a == 'p'|a == 'P'){
+        char pidp[7];
+        cout << "Please enter your PID" << endl;
+        cin >> pidp;
+
+/////////////////////////////////professor authentication process///////////////////////////////////////
+
+        string name_obj;
+        string id_obj;
+
+        vector <string> name_ob;
+        vector <string> id_ob;
+        int line_n;
+
+
+
+        ifstream Myfile;
+        Myfile.open("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/professors.csv");
+
+        while(Myfile.good()){
+
+
+                getline(Myfile, name_obj, ',');
+
+                bool h = Myfile.good();
+                if(h){
+
+
+                    name_ob.push_back(name_obj);
+
+                    getline(Myfile, id_obj, '\n');
+                    id_ob.push_back(id_obj);
+
+
+                }
+
+            }
+
+
+
+
+        int count = 0;
+        for(size_t j = 0; j < id_ob.size(); j++){
+
+            if (id_ob[j].find(pidp) != string::npos){
+
+                line_n = j;
+                count++;
+            }
+
+
+
+
+        }
+
+
+
+        if(count == 0){
+            cout << "Sorry that id number is not registered in the database." << endl;
+            return;
+
+        }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        Professor* currentpr = new Professor;
+        char c;
+
+        cout << "Please press the number for the desired task" << endl;
+        cout << "A - Set students marks" << endl;
+        cout << "B - Modify the resources you are incharge of" << endl;
+        cout << "C - Exit the application" << endl;
+
+        cin >> c;
+        while (c != 'a' && c != 'A' && c != 'b' && c != 'B' && c != 'c' && c != 'C'){
+            cin >> c;
+        }
+
+        if(c == 'a' || c == 'A'){
+            currentpr->setmarks(pidp);
+            delete currentpr;
+            return;
+        }
+
+
+        if(c == 'b' || c == 'B'){
+            currentpr->modifyr(pidp);
+            delete currentpr;
+            return;
+        }
+
+        if(c == 'c' || c == 'C'){
+            cout << "Exiting the application. Byeee" << endl;
+            delete currentpr;
+            return;
+        }
+    }
+
+
+    if(a == 'a'|a == 'A'){
+        char pida[7];
+        cout << "Please enter your PID" << endl;
+        cin >> pida;
+
+/////////////////////////////////admin authentication process///////////////////////////////////////
+
+        string name_obj;
+        string id_obj;
+
+
+        vector <string> name_ob;
+        vector <string> id_ob;
+        int line_n;
+
+
+
+
+        ifstream Myfile;
+        Myfile.open("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/admins.csv");
+
+        while(Myfile.good()){
+
+
+            getline(Myfile, name_obj, ',');
+
+            bool h = Myfile.good();
+            if(h){
+
+
+                name_ob.push_back(name_obj);
+
+                getline(Myfile, id_obj, '\n');
+                id_ob.push_back(id_obj);
+
+
+            }
+
+        }
+
+
+
+
+
+        int count = 0;
+        for(size_t j = 0; j < id_ob.size(); j++){
+
+            if (id_ob[j].find(pida) != string::npos){
+
+
+                line_n = j;
+                count++;
+            }
+        }
+
+        if(count == 0){
+            cout << "Sorry that id number is not registered in the database." << endl;
+            return;
+
+        }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        Admin *currentad = new Admin;
+        char d;
+
+        cout << "Please press the number for the desired task" << endl;
+        cout << "A - Create resources" << endl;
+        cout << "B - Modify resources" << endl;
+        cout << "C - Delete resources" << endl;
+        cout << "D - Create users" << endl;
+        cout << "E - Modify users" << endl;
+        cout << "F - Delete users" << endl;
+        cout << "G - See the virtual campus database" << endl;
+        cout << "H - Exit the application" << endl;
+
+        cin >> d;
+        while (d != 'a' && d != 'A' && d != 'b' && d != 'B' && d != 'c' && d != 'C' && d != 'd' && d != 'D' && d != 'e' && d != 'E' && d != 'f' && d != 'F' && d != 'g' && d != 'G' && d != 'h' && d != 'H'){
+            cin >> d;
+        }
+
+        if(d == 'a' || d == 'A'){
+            currentad->creater();
+            delete currentad;
+            return;
+        }
+
+
+        if(d == 'b' || d == 'B'){
+            currentad->modifyr();
+            delete currentad;
+            return;
+        }
+
+        if(d == 'c' || d == 'C'){
+            currentad->deleter();
+            delete currentad;
+            return;
+        }
+
+        if(d == 'd' || d == 'D'){
+            currentad->createu();
+            delete currentad;
+            return;
+        }
+
+        if(d == 'e' || d == 'E'){
+            currentad->modifyu();
+            delete currentad;
+            return;
+        }
+
+        if(d == 'f' || d == 'F'){
+            currentad->deleteu();
+            delete currentad;
+            return;
+        }
+
+        if(d == 'g' || d == 'G'){
+
+            char e;
+            cout << "Please press the number for the desired task" << endl;
+            cout << "A - Show administrator database" << endl;
+            cout << "B - Show student database" << endl;
+            cout << "C - Show professor database" << endl;
+            cout << "D - Show course database" << endl;
+            cout << "E - Show seminar database" << endl;
+            cout << "F - Show final degree project database" << endl;
+
+            cin >> e;
+            while (e != 'a' && e != 'A' && e != 'b' && e != 'B' && e != 'c' && e != 'C' && e != 'd' && e != 'D' && e != 'e' && e != 'E' && e != 'f' && e != 'F'){
+                cin >> e;
+            }
+
+            if(e == 'a' || e == 'A'){
+                currentad->BeginAction("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/admins.csv");
+                delete currentad;
+                return;
+            }
+
+
+            if(e == 'b' || e == 'B'){
+                currentad->BeginAction("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/students.csv");
+                delete currentad;
+                return;
+            }
+
+            if(e == 'c' || e == 'C'){
+                currentad->BeginAction("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/professors,csv");
+                delete currentad;
+                return;
+            }
+
+            if(e == 'd' || e == 'D'){
+                currentad->BeginAction("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/courses.csv");
+                delete currentad;
+                return;
+            }
+
+            if(e == 'e' || e == 'E'){
+                currentad->BeginAction("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/seminars.csv");
+                delete currentad;
+                return;
+            }
+
+            if(e == 'f' || e == 'F'){
+                currentad->BeginAction("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/project.csv");
+                delete currentad;
+                return;
+            }
+        }
+
+        if(d == 'h' || d == 'H'){
+            cout << "Exiting the application. Byeee" << endl;
+            delete currentad;
+            return;
+        }
+    }
+
+}
 
 
 
@@ -2551,6 +2867,47 @@ void Admin::deleter() {
 }
 
 
+//start displaying the users or resources
+void Admin::BeginAction(string files) {
+    fstream data(files.c_str());
+    if (data.is_open()) {
+        data.seekg(0, ios::beg);
+        cout << "What is the PID/SIN of the user or ID of the resource you are looking for? Say \"all\" if you want to see everything from a specific type of users or resources." << endl;
+        string searchobj;
+        cin >> searchobj;
+        size_t pos;
+        string line;
+        int linecount = 0;
+        if (searchobj == "all") {
+            data.seekg(0, ios::beg);
+            while (data >> line) {
+                string output;
+                output = line;
+                linecount += 1;
+                cout << "number " << linecount << ": " << output << endl << endl;
+            }
+        }
+        else {
+            bool found = false;
+            while (data >> line) {
+                pos = line.find(searchobj);
+                if (pos != string::npos) {
+                    string output;
+                    output = line;
+                    cout << output << endl;
+                    found = true;
+                    // OR show all of the objects in this particular class by looking at the string files what type it is and then make objects of this type and use  searchedobject.display()
+                }
+            }
+            if (found == false) { cout << "Sorry, this person or resource cannot be found." << endl; }
+        }
+    }
+    else { cout << "Sorry the Virtual Campus was unable to get the data. Please try again." << endl; }
+    return ;
+
+}
+
+
 ////////////////////////////////////
 //
 ////////////////////////////////////
@@ -2614,7 +2971,9 @@ Professor::~Professor(){
 }
 
 
-void Professor::setmarks(){
+void Professor::setmarks(char pid[7]){
+
+    string newpidp = pid;
     cout << "Please enter the course ID for which you want to set the marks." << endl;
     char id[7];
     cin >> id;
@@ -2729,6 +3088,11 @@ void Professor::setmarks(){
         cout << "Sorry this course is not registered in the database." << endl;
         return;
 
+    }
+
+    if(prof1_co[line_c] != newpidp && prof2_co[line_c] != newpidp){
+        cout << "Sorry you cannot set marks for this course as you are not the incharge of this course." << endl;
+        return;
     }
 
 
@@ -2945,8 +3309,7 @@ void Professor::modifyr(char pid[7]) {
 
 
         if(professors1_ob[line_n] != newpidp && professors2_ob[line_n] != newpidp){
-            cout << professors1_ob[line_n] << "," << professors2_ob[line_n] << endl;
-            cout << newpidp << endl;
+
             cout << "Sorry you are not the incharge of this course." << endl;
             return;
         }
@@ -5106,7 +5469,20 @@ void Student::drop(char student_sin[7]){
     }
 
 
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
