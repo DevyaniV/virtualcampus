@@ -15,8 +15,6 @@ class Resources;
 class Users;
 class Student;
 class Professor;
-class Admin;
-
 
 
 
@@ -27,7 +25,8 @@ public:
     /* Destructor */
     ~VirtualCampus();
 
-//    void start();
+//Starting function
+    void start();
 
 //Declaring all attributes
 private:
@@ -39,7 +38,6 @@ private:
     vector< Student > students;
     vector< Admin > admins;
     vector< Professor > professors;
-
 };
 
 
@@ -52,24 +50,21 @@ public:
     Users();
     /* Parameterized constructor */
     Users(string _name, string _type);
-    /* Copy constructor */
- // Users(const Users & U);
+    /* Destructor */
     ~Users();
 
+//Get and Set functions
     string getname();
     string gettype();
 
     void setname(string new_name);
     void settype(string new_type);
 
-
 //Declaring all attributes
 private :
     string name;
     string type;
-
 };
-
 
 
 
@@ -80,20 +75,21 @@ public:
     Admin();
     /* Parameterized constructor */
     Admin(string _name, string _type, char _pid[7]);
-    /* Copy constructor */
-  //  Admin(const Admin & A);
+    /* Destructor */
     ~Admin();
 
+//Get and Set functions
     char* getpid();
     void setpid(char new_pid[7]);
 
+//Specific functions
     void createu();
     void modifyu();
     void deleteu();
     void creater();
     void modifyr();
     void deleter();
-
+    void BeginAction(string files);
 
 //Declaring all attributes
 private:
@@ -109,21 +105,24 @@ public:
     Professor();
     /* Parameterized constructor */
     Professor(string _name, string _type, char _pid[7]);
-    /* Copy constructor */
-//  Professor(const Professor & Pr);
+    /* Destructor */
     ~Professor();
 
+   
+//Get and Set functions
     char* getpid();
 
     void setpid(char new_pid[7]);
-    void setmarks();
+  
+//Specific functions
+    void setmarks(char pid[7]);
     void modifyr(char pid[7]);
 
-    
 //Declaring all attributes
 private:
     char pid[7];
 };
+
 
 
 
@@ -135,10 +134,10 @@ public:
     Student();
     /* Parameterized constructor */
     Student(string _name, string _type, char _sin[7], string _degree, vector <Courses> _list_courses, vector <Seminars> _list_sem, Project* _project);
-    /* Copy constructor */
-//    Student(const Student & St);
+    /* Destructor */
     ~Student();
 
+//Get and Set functions    
     char* getsin();
     string getdegree();
     vector <Courses> getlist_courses();
@@ -151,10 +150,10 @@ public:
     void setlist_sem(vector<Seminars> new_list_sem);
     void setproject(Project *new_project);
 
+//Specific functions
     void enroll(char student_sin[7]);
     void drop(char student_sin[7]);
 
-    
 //Declaring all attributes
 private:
     char sin[7];
@@ -163,6 +162,7 @@ private:
     vector <Seminars> list_sem;
     Project* project;
 };
+
 
 
 
@@ -182,6 +182,7 @@ public:
     /*Destructor*/
     ~Resources();
 
+//Get and Set functions
     string getstatus();
     char* getid();
 
@@ -190,13 +191,11 @@ public:
 
     friend class Admin;
 
-    
 //Declaring all attributes
 private:
     string status;
     char id[7];
 };
-
 
 
 
@@ -211,6 +210,7 @@ public:
     /* Destructor */
     ~Seminars();
 
+//Get and Set functions
     Professor *getcoordinator();
     Professor *getspeaker();
     string getdate();
@@ -226,7 +226,6 @@ public:
     friend class Admin;
     friend class Student;
 
-    
 //Declaring all attributes
 private:
     Professor* coordinator;
@@ -240,15 +239,13 @@ private:
 
 
 
-
 class Project : public Resources{
 public:
     /* Default constructor */
     Project();
     /* Parameterized constructor */
     Project(string _status, char _id[7], Professor* _tutor, Professor* _co_tutor, Student* _student, string _degree);
-    /* Copy constructor */
-    //Project(const Project & P);
+    /* Destructor */
     ~Project();
 
     Professor* gettutor();
@@ -264,7 +261,6 @@ public:
    
     friend class Admin;
 
-    
 //Declaring all attributes
 private:
     Professor* tutor;
@@ -276,16 +272,13 @@ private:
 
 
 
-
-
 class Courses : public Resources {
 public:
     /* Default constructor */
     Courses();
     /* Parameterized constructor */
     Courses(string _status, char _id[7], int _credits, vector < Student > _list_students, vector < float > _list_marks, string _degree, Professor* _professor1, Professor* _professor2);
-    /* Copy constructor */
-    //Courses(const Courses & C);
+    /* Destructor */
     ~Courses();
 
     int getcredits();
@@ -293,8 +286,8 @@ public:
     vector < float > getlist_marks();
     Professor* getprofessor1();
     Professor* getprofessor2();
-    string getdegree();   
-
+    string getdegree();
+    
     void setcredits(int new_credits);
     void setlist_students(vector < Student > new_list_students);
     void setlist_marks(vector < float > new_list_marks);
@@ -304,7 +297,6 @@ public:
 
     friend class Admin;
 
-    
 //Declaring all attributes
 private:
     int credits;
@@ -314,6 +306,8 @@ private:
     Professor* professor1;
     Professor* professor2;
 };
+
+
 
 
 #endif // VIRTUAL_CAMPUS_H
