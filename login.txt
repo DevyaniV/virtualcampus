@@ -1,1 +1,7 @@
-officialadmin		password
+Administrator,Sergio,password
+Professor,Albert,password
+Professor,Ramon,password
+Professor,Diego,password
+Student,Julio,password
+Student,Alex,password
+Student,Ruben,password
