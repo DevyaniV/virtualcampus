@@ -53,10 +53,10 @@ void VirtualCampus::start(){
         fstream Myfile;
         int line = -1;
 
-        Myfile.open("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/students.csv");
+        Myfile.open("students.csv");
 
         while(Myfile.good()){
-
+            cout<<"Testing" << endl;
             line++;
 
 
@@ -179,7 +179,7 @@ void VirtualCampus::start(){
 
 
         ifstream Myfile;
-        Myfile.open("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/professors.csv");
+        Myfile.open("professors.csv");
 
         while(Myfile.good()){
 
@@ -281,7 +281,7 @@ void VirtualCampus::start(){
 
 
         ifstream Myfile;
-        Myfile.open("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/admins.csv");
+        Myfile.open("admins.csv");
 
         while(Myfile.good()){
 
@@ -398,38 +398,38 @@ void VirtualCampus::start(){
             }
 
             if(e == 'a' || e == 'A'){
-                currentad->BeginAction("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/admins.csv");
+                currentad->BeginAction("admins.csv");
                 delete currentad;
                 return;
             }
 
 
             if(e == 'b' || e == 'B'){
-                currentad->BeginAction("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/students.csv");
+                currentad->BeginAction("students.csv");
                 delete currentad;
                 return;
             }
 
             if(e == 'c' || e == 'C'){
-                currentad->BeginAction("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/professors,csv");
+                currentad->BeginAction("professors.csv");
                 delete currentad;
                 return;
             }
 
             if(e == 'd' || e == 'D'){
-                currentad->BeginAction("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/courses.csv");
+                currentad->BeginAction("courses.csv");
                 delete currentad;
                 return;
             }
 
             if(e == 'e' || e == 'E'){
-                currentad->BeginAction("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/seminars.csv");
+                currentad->BeginAction("seminars.csv");
                 delete currentad;
                 return;
             }
 
             if(e == 'f' || e == 'F'){
-                currentad->BeginAction("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/project.csv");
+                currentad->BeginAction("project.csv");
                 delete currentad;
                 return;
             }
@@ -984,7 +984,7 @@ void Admin::createu() {
     if(identity_type == 's' || identity_type == 'S') {
 
 
-        fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/students.csv", ios::out | ios::app);
+        fstream data("students.csv", ios::out | ios::app);
         if (data.is_open()){
 
             Student *newuser = new Student;
@@ -1020,7 +1020,7 @@ void Admin::createu() {
     }
 
     if (identity_type == 'a' || identity_type == 'A') {
-        fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/admins.csv", ios::out | ios::app);
+        fstream data("admins.csv", ios::out | ios::app);
         if (data.is_open()){
             Admin *newuser = new Admin;
             newuser->setname(name_user);
@@ -1047,7 +1047,7 @@ void Admin::createu() {
 
     if (identity_type == 'p' || identity_type == 'P') {
 
-        fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/professors.csv", ios::out | ios::app);
+        fstream data("professors.csv", ios::out | ios::app);
         if (data.is_open()){
 
             Professor *newuser = new Professor;
@@ -1119,7 +1119,7 @@ void Admin::modifyu(){
 
         fstream Myfile;
         int line = -1;
-        Myfile.open("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/students.csv");
+        Myfile.open("students.csv");
 
         while(Myfile.good()){
 
@@ -1248,7 +1248,7 @@ void Admin::modifyu(){
 
 
 
-        fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/students.csv", ios::out | ios::trunc);
+        fstream data("students.csv", ios::out | ios::trunc);
         if (data.is_open()){
 
             for(size_t j = 0; j < name_ob.size(); j++){
@@ -1293,7 +1293,7 @@ void Admin::modifyu(){
 
 
         ifstream Myfile;
-        Myfile.open("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/professors.csv");
+        Myfile.open("professors.csv");
 
         while(Myfile.good()){
 
@@ -1378,7 +1378,7 @@ void Admin::modifyu(){
         }
 
 
-        fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/professors.csv", ios::out | ios::trunc);
+        fstream data("professors.csv", ios::out | ios::trunc);
         if (data.is_open()){
 
             for(size_t j = 0; j < name_ob.size(); j++){
@@ -1417,7 +1417,7 @@ void Admin::modifyu(){
 
 
         ifstream Myfile;
-        Myfile.open("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/admins.csv");
+        Myfile.open("admins.csv");
 
         while(Myfile.good()){
 
@@ -1501,7 +1501,7 @@ void Admin::modifyu(){
         }
 
 
-        fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/admins.csv", ios::out | ios::trunc);
+        fstream data("admins.csv", ios::out | ios::trunc);
         if (data.is_open()){
             for(size_t j = 0; j < name_ob.size(); j++){
 
@@ -1570,7 +1570,7 @@ void Admin::deleteu() {
 
 
         ifstream Myfile;
-        Myfile.open("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/students.csv");
+        Myfile.open("students.csv");
 
         while(Myfile.good()){
             line++;
@@ -1652,7 +1652,7 @@ void Admin::deleteu() {
 
 
 
-        fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/students.csv", ios::out | ios::trunc);
+        fstream data("students.csv", ios::out | ios::trunc);
         if (data.is_open()){
 
             for(size_t j = 0 ; j < name_ob.size(); j++){
@@ -1691,7 +1691,7 @@ void Admin::deleteu() {
 
 
         ifstream Myfile;
-        Myfile.open("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/professors.csv");
+        Myfile.open("professors.csv");
 
         while(Myfile.good()){
 
@@ -1738,7 +1738,7 @@ void Admin::deleteu() {
         id_ob.erase(id_ob.begin() + line_n);
 
 
-        fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/professors.csv", ios::out | ios::trunc);
+        fstream data("professors.csv", ios::out | ios::trunc);
         if (data.is_open()){
             for(size_t j = 0; j < name_ob.size(); j++){
 
@@ -1771,7 +1771,7 @@ void Admin::deleteu() {
 
 
         ifstream Myfile;
-        Myfile.open("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/admins.csv");
+        Myfile.open("admins.csv");
 
         while(Myfile.good()){
 
@@ -1816,7 +1816,7 @@ void Admin::deleteu() {
         name_ob.erase(name_ob.begin() + line_n);
         id_ob.erase(id_ob.begin() + line_n);
 
-        fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/admins.csv", ios::out | ios::trunc);
+        fstream data("admins.csv", ios::out | ios::trunc);
         if (data.is_open()){
             for(size_t j = 0; j < name_ob.size(); j++){
 
@@ -1854,7 +1854,7 @@ void Admin::creater() {
 
 
     if (identity_type == 'c' || identity_type == 'c') {
-        fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/courses.csv", ios::out | ios::app);
+        fstream data("courses.csv", ios::out | ios::app);
         if (data.is_open()) {
 
             Courses *newcourse = new Courses;
@@ -1901,7 +1901,7 @@ void Admin::creater() {
     }
 
     if (identity_type == 's' || identity_type == 'S') {
-        fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/seminars.csv", ios::out | ios::app);
+        fstream data("seminars.csv", ios::out | ios::app);
         if (data.is_open()) {
             Seminars *newseminar = new Seminars;
 
@@ -1948,7 +1948,7 @@ void Admin::creater() {
 
     if (identity_type == 'p' || identity_type == 'P') {
 
-        fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/project.csv", ios::out | ios::app);
+        fstream data("project.csv", ios::out | ios::app);
         if (data.is_open()) {
 
             Project *newproject = new Project;
@@ -2031,7 +2031,7 @@ void Admin::modifyr() {
 
         fstream Myfile;
         int line = -1;
-        Myfile.open("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/courses.csv");
+        Myfile.open("courses.csv");
 
         while (Myfile.good()) {
 
@@ -2183,7 +2183,7 @@ void Admin::modifyr() {
 
 
 
-        fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/courses.csv", ios::out | ios::trunc);
+        fstream data("courses.csv", ios::out | ios::trunc);
         if (data.is_open()) {
 
             for (size_t j = 0; j < id_ob.size(); j++) {
@@ -2225,7 +2225,7 @@ void Admin::modifyr() {
 
 
         ifstream Myfile;
-        Myfile.open("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/seminars.csv");
+        Myfile.open("seminars.csv");
 
         while (Myfile.good()) {
             line++;
@@ -2362,7 +2362,7 @@ void Admin::modifyr() {
 
 
 
-        fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/seminars.csv", ios::out | ios::trunc);
+        fstream data("seminars.csv", ios::out | ios::trunc);
         if (data.is_open()) {
 
             for (size_t j = 0; j < id_ob.size(); j++) {
@@ -2407,7 +2407,7 @@ void Admin::modifyr() {
 
 
         ifstream Myfile;
-        Myfile.open("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/project.csv");
+        Myfile.open("project.csv");
 
         while (Myfile.good()) {
             line++;
@@ -2522,7 +2522,7 @@ void Admin::modifyr() {
         }
 
 
-        fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/project.csv", ios::out | ios::trunc);
+        fstream data("project.csv", ios::out | ios::trunc);
         if (data.is_open()) {
             for (size_t j = 0; j < id_ob.size(); j++) {
                 data << id_ob[j] << "," << status_ob[j] << "," << tutor_ob[j] << "," << cotutor_ob[j] << "," << degree_ob[j] << "\n";
@@ -2582,7 +2582,7 @@ void Admin::deleter() {
 
         ifstream Myfile;
 
-        Myfile.open("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/courses.csv");
+        Myfile.open("courses.csv");
 
         while (Myfile.good()) {
 
@@ -2656,7 +2656,7 @@ void Admin::deleter() {
         students.erase(students.begin() + line_n);
         marks.erase(marks.begin() + line_n);
 
-        fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/courses.csv", ios::out | ios::trunc);
+        fstream data("courses.csv", ios::out | ios::trunc);
         if (data.is_open()) {
 
             for (size_t j = 0; j < id_ob.size(); j++) {
@@ -2699,7 +2699,7 @@ void Admin::deleter() {
         int line = -1;
 
         ifstream Myfile;
-        Myfile.open("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/seminars.csv");
+        Myfile.open("seminars.csv");
 
         while (Myfile.good()) {
             line++;
@@ -2757,7 +2757,7 @@ void Admin::deleter() {
         max.erase(max.begin() + line_n);
         students.erase(students.begin() + line_n);
 
-        fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/seminars.csv", ios::out | ios::trunc);
+        fstream data("seminars.csv", ios::out | ios::trunc);
         if (data.is_open()) {
 
             for (size_t j = 0; j < id_ob.size(); j++) {
@@ -2799,7 +2799,7 @@ void Admin::deleter() {
         int line = -1;
 
         ifstream Myfile;
-        Myfile.open("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/project.csv");
+        Myfile.open("project.csv");
 
         while (Myfile.good()) {
             line++;
@@ -2853,7 +2853,7 @@ void Admin::deleter() {
         degree_ob.erase(degree_ob.begin() + line_n);
         student_ob.erase(student_ob.begin() + line_n);
 
-        fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/project.csv", ios::out | ios::trunc);
+        fstream data("project.csv", ios::out | ios::trunc);
         if (data.is_open()) {
             for (size_t j = 0; j < id_ob.size(); j++) {
                 data << id_ob[j] << "," << status_ob[j] << "," << tutor_ob[j] << "," << cotutor_ob[j] << "," << degree_ob[j] << "\n";
@@ -2884,20 +2884,19 @@ void Admin::BeginAction(string files) {
                 string output;
                 output = line;
                 linecount += 1;
-                cout << "number " << linecount << ": " << output << endl << endl;
+                cout << output  << endl;
             }
         }
         else {
             bool found = false;
             while (data >> line) {
                 pos = line.find(searchobj);
-                if (pos != string::npos) {
-                    string output;
-                    output = line;
-                    cout << output << endl;
-                    found = true;
-                    // OR show all of the objects in this particular class by looking at the string files what type it is and then make objects of this type and use  searchedobject.display()
-                }
+                    if (pos != string::npos) {
+                        string output;
+                        output = line;
+                        cout << output << endl;
+                        found = true;
+                    }
             }
             if (found == false) { cout << "Sorry, this person or resource cannot be found." << endl; }
         }
@@ -3007,7 +3006,7 @@ void Professor::setmarks(char pid[7]){
     fstream Myfile;
     int line = -1;
 
-    Myfile.open("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/courses.csv");
+    Myfile.open("courses.csv");
 
     while(Myfile.good()){
 
@@ -3179,7 +3178,7 @@ void Professor::setmarks(char pid[7]){
 
 
 
-    fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/courses.csv", ios::out | ios::trunc);
+    fstream data("courses.csv", ios::out | ios::trunc);
     if (data.is_open()){
 
         for(unsigned int j = 0; j < id_co.size(); j++){
@@ -3242,7 +3241,7 @@ void Professor::modifyr(char pid[7]) {
 
         fstream Myfile;
         int line = -1;
-        Myfile.open("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/courses.csv");
+        Myfile.open("courses.csv");
 
         while (Myfile.good()) {
 
@@ -3403,7 +3402,7 @@ void Professor::modifyr(char pid[7]) {
 
 
 
-        fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/courses.csv", ios::out | ios::trunc);
+        fstream data("courses.csv", ios::out | ios::trunc);
         if (data.is_open()) {
 
             for (size_t j = 0; j < id_ob.size(); j++) {
@@ -3445,7 +3444,7 @@ void Professor::modifyr(char pid[7]) {
 
 
         ifstream Myfile;
-        Myfile.open("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/seminars.csv");
+        Myfile.open("seminars.csv");
 
         while (Myfile.good()) {
             line++;
@@ -3589,7 +3588,7 @@ void Professor::modifyr(char pid[7]) {
 
 
 
-        fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/seminars.csv", ios::out | ios::trunc);
+        fstream data("seminars.csv", ios::out | ios::trunc);
         if (data.is_open()) {
 
             for (size_t j = 0; j < id_ob.size(); j++) {
@@ -3634,7 +3633,7 @@ void Professor::modifyr(char pid[7]) {
 
 
         ifstream Myfile;
-        Myfile.open("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/project.csv");
+        Myfile.open("project.csv");
 
         while (Myfile.good()) {
             line++;
@@ -3757,7 +3756,7 @@ void Professor::modifyr(char pid[7]) {
         }
 
 
-        fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/project.csv", ios::out | ios::trunc);
+        fstream data("project.csv", ios::out | ios::trunc);
         if (data.is_open()) {
             for (size_t j = 0; j < id_ob.size(); j++) {
                 data << id_ob[j] << "," << status_ob[j] << "," << tutor_ob[j] << "," << cotutor_ob[j] << "," << degree_ob[j] << "\n";
@@ -3955,7 +3954,7 @@ void Student::enroll(char student_sin[7]){
     fstream Myfile;
     int line = -1;
 
-    Myfile.open("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/students.csv");
+    Myfile.open("students.csv");
 
     while(Myfile.good()){
 
@@ -4114,7 +4113,7 @@ void Student::enroll(char student_sin[7]){
         fstream Myfile;
         int line = -1;
 
-        Myfile.open("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/courses.csv");
+        Myfile.open("courses.csv");
 
         while(Myfile.good()){
 
@@ -4236,7 +4235,7 @@ void Student::enroll(char student_sin[7]){
 
 
 
-        fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/courses.csv", ios::out | ios::trunc);
+        fstream data("courses.csv", ios::out | ios::trunc);
         if (data.is_open()){
 
             for(unsigned int j = 0; j < id_co.size(); j++){
@@ -4263,7 +4262,7 @@ void Student::enroll(char student_sin[7]){
         courses[line_n] = sna;
 
 
-        fstream data1("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/students.csv", ios::out | ios::trunc);
+        fstream data1("students.csv", ios::out | ios::trunc);
         if (data1.is_open()){
 
             for(size_t j = 0; j < name_ob.size(); j++){
@@ -4311,7 +4310,7 @@ void Student::enroll(char student_sin[7]){
         fstream Myfile;
         int line = -1;
 
-        Myfile.open("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/seminars.csv");
+        Myfile.open("seminars.csv");
 
         while(Myfile.good()){
 
@@ -4388,7 +4387,7 @@ void Student::enroll(char student_sin[7]){
             return;
 
         }
-        
+
 
 
 
@@ -4432,7 +4431,7 @@ void Student::enroll(char student_sin[7]){
 
 
 
-        fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/seminars.csv", ios::out | ios::trunc);
+        fstream data("seminars.csv", ios::out | ios::trunc);
         if (data.is_open()){
 
             for(unsigned int j = 0; j < id_se.size(); j++){
@@ -4458,7 +4457,7 @@ void Student::enroll(char student_sin[7]){
         seminars[line_n] = sna;
 
 
-        fstream data1("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/students.csv", ios::out | ios::trunc);
+        fstream data1("students.csv", ios::out | ios::trunc);
         if (data1.is_open()){
 
             for(size_t j = 0; j < name_ob.size(); j++){
@@ -4514,7 +4513,7 @@ void Student::enroll(char student_sin[7]){
         fstream Myfile;
         int line = -1;
 
-        Myfile.open("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/project.csv");
+        Myfile.open("project.csv");
 
         while(Myfile.good()){
 
@@ -4608,7 +4607,7 @@ void Student::enroll(char student_sin[7]){
 
 
 
-        fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/project.csv", ios::out | ios::trunc);
+        fstream data("project.csv", ios::out | ios::trunc);
         if (data.is_open()){
 
             for(unsigned int j = 0; j < id_pr.size(); j++){
@@ -4628,7 +4627,7 @@ void Student::enroll(char student_sin[7]){
         project[line_n] = r_id;
 
 
-        fstream data1("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/students.csv", ios::out | ios::trunc);
+        fstream data1("students.csv", ios::out | ios::trunc);
         if (data1.is_open()){
 
             for(size_t j = 0; j < name_ob.size(); j++){
@@ -4684,7 +4683,7 @@ void Student::drop(char student_sin[7]){
     fstream Myfile;
     int line = -1;
 
-    Myfile.open("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/students.csv");
+    Myfile.open("students.csv");
 
     while(Myfile.good()){
 
@@ -4843,7 +4842,7 @@ void Student::drop(char student_sin[7]){
         fstream Myfile;
         int line = -1;
 
-        Myfile.open("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/courses.csv");
+        Myfile.open("courses.csv");
 
         while(Myfile.good()){
 
@@ -5015,7 +5014,7 @@ void Student::drop(char student_sin[7]){
 
 
 
-        fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/courses.csv", ios::out | ios::trunc);
+        fstream data("courses.csv", ios::out | ios::trunc);
         if (data.is_open()){
 
             for(unsigned int j = 0; j < id_co.size(); j++){
@@ -5042,7 +5041,7 @@ void Student::drop(char student_sin[7]){
         courses[line_n] = sna;
 
 
-        fstream data1("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/students.csv", ios::out | ios::trunc);
+        fstream data1("students.csv", ios::out | ios::trunc);
         if (data1.is_open()){
 
             for(size_t j = 0; j < name_ob.size(); j++){
@@ -5090,7 +5089,7 @@ void Student::drop(char student_sin[7]){
         fstream Myfile;
         int line = -1;
 
-        Myfile.open("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/seminars.csv");
+        Myfile.open("seminars.csv");
 
         while(Myfile.good()){
 
@@ -5258,7 +5257,7 @@ void Student::drop(char student_sin[7]){
 
 
 
-        fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/seminars.csv", ios::out | ios::trunc);
+        fstream data("seminars.csv", ios::out | ios::trunc);
         if (data.is_open()){
 
             for(unsigned int j = 0; j < id_se.size(); j++){
@@ -5285,7 +5284,7 @@ void Student::drop(char student_sin[7]){
         seminars[line_n] = sna;
 
 
-        fstream data1("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/students.csv", ios::out | ios::trunc);
+        fstream data1("students.csv", ios::out | ios::trunc);
         if (data1.is_open()){
 
             for(size_t j = 0; j < name_ob.size(); j++){
@@ -5341,7 +5340,7 @@ void Student::drop(char student_sin[7]){
         fstream Myfile;
         int line = -1;
 
-        Myfile.open("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/project.csv");
+        Myfile.open("project.csv");
 
         while(Myfile.good()){
 
@@ -5431,7 +5430,7 @@ void Student::drop(char student_sin[7]){
 
 
 
-        fstream data("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/project.csv", ios::out | ios::trunc);
+        fstream data("project.csv", ios::out | ios::trunc);
         if (data.is_open()){
 
             for(unsigned int j = 0; j < id_pr.size(); j++){
@@ -5448,7 +5447,7 @@ void Student::drop(char student_sin[7]){
 
 
 
-        fstream data1("/home/aurora/Desktop/Computing systems I/Project/Proj_comp/students.csv", ios::out | ios::trunc);
+        fstream data1("students.csv", ios::out | ios::trunc);
         if (data1.is_open()){
 
             for(size_t j = 0; j < name_ob.size(); j++){
@@ -5468,21 +5467,7 @@ void Student::drop(char student_sin[7]){
         }
     }
 
-
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 
