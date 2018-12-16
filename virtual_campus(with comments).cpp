@@ -10,26 +10,110 @@
 
 using namespace std;
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///                     CLASS VIRTUALCAMPUS FUNCTIONS
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+//Starting the application
 void VirtualCampus::start(){
 
-    cout << "Welcome to virtual campus!" << endl;
-    char a;
+        char a = 's';
+        fstream data("login.txt");
+        if (data.is_open()) {
+            cout << "Welcome to the Virtual Campus of UC3M. Please log in in order to start." << endl;
+            bool login = false;
+            //The application keeps asking the login credentials untill the right ones are entered
+            while (login == false) {
+                data.seekg(0, ios::beg);
+                string loginname;
+                string loginpassword;
+                string foundname;
+                string line;
+                //Giving the login credentials
+                cout << endl << "Please fill in your login name." << endl;
+                cin >> loginname;
+                cout << endl << "Please fill in your password (Use password as default version)" << endl;
+                cin >> loginpassword;
+                size_t pos;
+                while (data >> line) {
+                    //Look if both the name is in the list and if the password is correct
+                    pos = line.find(loginname);
+                    if (pos != string::npos) {
+                        size_t pos2;
+                        pos2 = line.find(loginpassword);
+                        if (pos2 != string::npos) {
+                            size_t pos3;
+                            size_t pos4;
+                            size_t pos5;
+                            cout << "Welcome, you are logged in." << endl;
+                                //Giving a value to each user stating what kind of user they are
+                                pos3 = line.find("Administrator");
+                                pos4 = line.find("Professor");
+                                pos5 = line.find("Student");
+                                if (pos3 != string::npos) { cout << "You are identified as an administrator." << endl; a = 'a'; }
+                                if (pos4 != string::npos) { cout << "You are identified as a professor." << endl; a = 'p'; }
+                                if (pos5 != string::npos) { cout << "You are identified as a student." << endl; a = 's'; }
+                                if (pos3 == string::npos && pos4 == string::npos && pos5 == string::npos) { cout << "Your identity couldn't be determined, so it is assumed you are a student." << endl; a = 's'; }
+                                login = true;
+                                //Giving the user the possibility to change their password
+                                cout << "Do you want to change your password? y/n." << endl;
+                                char ans;
+                                cin >> ans;
+                                if (ans == 'y' || ans == 'Y') {
+                                    fstream temp("temp.txt");
+                                    if (temp.is_open()) {
+                                        string temppass;
+                                        data.seekg(0, ios::beg);
+                                        while (data >> temppass) {
+                                            size_t pos7 = temppass.find(loginpassword);
+                                            size_t len = loginpassword.length();
+                                            if (pos7 != string::npos) {
+                                                cout << endl << "Please give the new password." << endl;
+                                                string newpassword;
+                                                cin >> newpassword;
+                                                temppass.replace(pos7, len, newpassword);
+                                            }
+                                            temppass += "/n";
+                                            rename("temp.txt", "data.txt");
+                                            temp.close();
+                                        }
+                                        cout << "Your new password is set." << endl;
+                                    }
+                                    else { cout << "Currently you cannot change your password." << endl; }
+                                    data.close();
+                                    cout << "Now you can start any activity." << endl;
+
+                                }
+                                else {
+                                    cout << "Okay sure, you can now start any activity." << endl;
+                                    data.close();
+
+                                }
+                        }
+                        else {
+                            cout << "Sorry, wrong password" << endl;
+                            break;
+                        }
+                    }
+                    if(data.eof()-1 && pos==string::npos) {
+                        cout << "Sorry this name is not in our list" << endl;
+                        break;
+                    }
+                }
+            }
+        }
+        else { cout << "Sorry the Virtual Campus was unable to get the data. Please start the program again in order to log in." << endl; }
 
 
-    cout << "Please enter your identity alphabet (S - student, P - professor, A - Admin)" << endl;
-    cin >> a;
-    while (a != 's' && a != 'S' && a != 'p' && a != 'P' && a != 'a' && a != 'A'){
-        cin >> a;
-    }
-
+/////////////////////////////////student authentication process///////////////////////////////////////
     if(a == 'S'|a == 's'){
         char sin[7];
         cout << "Please enter your SIN" << endl;
         cin >> sin;
 
-/////////////////////////////////student authentication process///////////////////////////////////////
 
+//initializing strings and vectors with all the information
         string name_obj;
         string id_obj;
         string deg_obj;
@@ -56,10 +140,14 @@ void VirtualCampus::start(){
         Myfile.open("students.csv");
 
         while(Myfile.good()){
-            cout<<"Testing" << endl;
             line++;
 
-
+/*All the information from the files is taken and stored in their specific vector. The structure in the file for students is the following:
+Line1: Name, id, degree
+Line2: list of Courses
+Line3: list of Seminars
+Line 4: Project
+*/
             if(line%4 == 0){
                 getline(Myfile, name_obj, ',');
 
@@ -105,7 +193,7 @@ void VirtualCampus::start(){
         }
 
 
-
+//The position of the user specific information in the vectors is stored in variable line_n
         int count = 0;
         for(size_t j = 0; j < id_ob.size(); j++){
 
@@ -117,7 +205,7 @@ void VirtualCampus::start(){
             }
         }
 
-
+//If the given SIN cannot be found in the students.csv file, the following text is provided.
         if(count == 0){
             cout << "Sorry your id number is not registered in the database." << endl;
             return;
@@ -126,11 +214,11 @@ void VirtualCampus::start(){
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
+//A new dynamic memory allocated object from the class Student is created
         Student* currentst = new Student;
 
         char b;
-
+//The student specific activities are listened
         cout << "Please press the number for the desired task" << endl;
         cout << "A - Enroll in a resource" << endl;
         cout << "B - Drop a resource" << endl;
@@ -141,6 +229,7 @@ void VirtualCampus::start(){
             cin >> b;
         }
 
+//The specific function is called and after which the object is deleted        
         if(b == 'a' || b == 'A'){
             currentst->enroll(sin);
             delete currentst;
@@ -161,14 +250,14 @@ void VirtualCampus::start(){
         }
     }
 
-
+/////////////////////////////////professor authentication process///////////////////////////////////////
     if(a == 'p'|a == 'P'){
         char pidp[7];
         cout << "Please enter your PID" << endl;
         cin >> pidp;
 
-/////////////////////////////////professor authentication process///////////////////////////////////////
 
+//initializing strings and vectors with all the information
         string name_obj;
         string id_obj;
 
@@ -183,26 +272,29 @@ void VirtualCampus::start(){
 
         while(Myfile.good()){
 
-
+/*All the information from the files is taken and stored in their specific vector. The structure in the file for professors is the following:
+Line1: Name, id
+Line2: list of Courses
+Line3: list of Seminars
+Line 4: Project
+*/
+//Here only the information of the first line is stored
+            
                 getline(Myfile, name_obj, ',');
 
                 bool h = Myfile.good();
                 if(h){
-
 
                     name_ob.push_back(name_obj);
 
                     getline(Myfile, id_obj, '\n');
                     id_ob.push_back(id_obj);
 
-
                 }
-
             }
 
 
-
-
+//The position of the user specific information in the vectors is stored in variable line_n
         int count = 0;
         for(size_t j = 0; j < id_ob.size(); j++){
 
@@ -212,13 +304,9 @@ void VirtualCampus::start(){
                 count++;
             }
 
-
-
-
         }
 
-
-
+//If the given PID cannot be found in the professors.csv file, the following text is provided.
         if(count == 0){
             cout << "Sorry that id number is not registered in the database." << endl;
             return;
@@ -227,10 +315,11 @@ void VirtualCampus::start(){
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+//A new dynamic memory allocated object from the class Professor is created
         Professor* currentpr = new Professor;
         char c;
-
+        
+//The professor specific activities are listened
         cout << "Please press the number for the desired task" << endl;
         cout << "A - Set students marks" << endl;
         cout << "B - Modify the resources you are incharge of" << endl;
@@ -240,7 +329,7 @@ void VirtualCampus::start(){
         while (c != 'a' && c != 'A' && c != 'b' && c != 'B' && c != 'c' && c != 'C'){
             cin >> c;
         }
-
+//The specific function is called and after which the object is deleted  
         if(c == 'a' || c == 'A'){
             currentpr->setmarks(pidp);
             delete currentpr;
@@ -261,17 +350,15 @@ void VirtualCampus::start(){
         }
     }
 
-
+/////////////////////////////////admin authentication process///////////////////////////////////////
     if(a == 'a'|a == 'A'){
         char pida[7];
         cout << "Please enter your PID" << endl;
         cin >> pida;
 
-/////////////////////////////////admin authentication process///////////////////////////////////////
-
+//initializing strings and vectors with all the information
         string name_obj;
         string id_obj;
-
 
         vector <string> name_ob;
         vector <string> id_ob;
@@ -279,33 +366,29 @@ void VirtualCampus::start(){
 
 
 
-
         ifstream Myfile;
         Myfile.open("admins.csv");
 
         while(Myfile.good()){
-
+/*All the information from the files is taken and stored in their specific vector. The structure in the file for professors is the following:
+Line1: Name, id
+*/
 
             getline(Myfile, name_obj, ',');
 
             bool h = Myfile.good();
             if(h){
 
-
                 name_ob.push_back(name_obj);
 
                 getline(Myfile, id_obj, '\n');
                 id_ob.push_back(id_obj);
 
-
             }
-
         }
 
 
-
-
-
+//The position of the user specific information in the vectors is stored in variable line_n
         int count = 0;
         for(size_t j = 0; j < id_ob.size(); j++){
 
@@ -316,7 +399,8 @@ void VirtualCampus::start(){
                 count++;
             }
         }
-
+        
+//If the given PID cannot be found in the administrators.csv file, the following text is provided.
         if(count == 0){
             cout << "Sorry that id number is not registered in the database." << endl;
             return;
@@ -325,10 +409,11 @@ void VirtualCampus::start(){
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+//A new dynamic memory allocated object from the class Admin is created
+        
         Admin *currentad = new Admin;
         char d;
-
+//The administrator specific activities are listened
         cout << "Please press the number for the desired task" << endl;
         cout << "A - Create resources" << endl;
         cout << "B - Modify resources" << endl;
@@ -343,7 +428,7 @@ void VirtualCampus::start(){
         while (d != 'a' && d != 'A' && d != 'b' && d != 'B' && d != 'c' && d != 'C' && d != 'd' && d != 'D' && d != 'e' && d != 'E' && d != 'f' && d != 'F' && d != 'g' && d != 'G' && d != 'h' && d != 'H'){
             cin >> d;
         }
-
+//The specific functions for creatign, modifying and deleting resources are called and after which the object is deleted  
         if(d == 'a' || d == 'A'){
             currentad->creater();
             delete currentad;
@@ -362,7 +447,7 @@ void VirtualCampus::start(){
             delete currentad;
             return;
         }
-
+//The specific functions for creating, modifying and deleting users are called and after which the object is deleted  
         if(d == 'd' || d == 'D'){
             currentad->createu();
             delete currentad;
@@ -380,7 +465,7 @@ void VirtualCampus::start(){
             delete currentad;
             return;
         }
-
+//The specific function for showing resources and users is called and after which the object is deleted  
         if(d == 'g' || d == 'G'){
 
             char e;
@@ -396,7 +481,7 @@ void VirtualCampus::start(){
             while (e != 'a' && e != 'A' && e != 'b' && e != 'B' && e != 'c' && e != 'C' && e != 'd' && e != 'D' && e != 'e' && e != 'E' && e != 'f' && e != 'F'){
                 cin >> e;
             }
-
+//The function is called with its specific file to open
             if(e == 'a' || e == 'A'){
                 currentad->BeginAction("admins.csv");
                 delete currentad;
@@ -434,7 +519,7 @@ void VirtualCampus::start(){
                 return;
             }
         }
-
+//The function for exiting the application is called and the object is deleted
         if(d == 'h' || d == 'H'){
             cout << "Exiting the application. Byeee" << endl;
             delete currentad;
@@ -448,22 +533,20 @@ void VirtualCampus::start(){
 
 /* Default constructor*/
 VirtualCampus::VirtualCampus(){
-
 }
 
 
 /* Destructor */
-
 VirtualCampus::~VirtualCampus(){
 }
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///
+///                     CLASS RESOURCES FUNCTIONS
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-
+//All get and set functions are constructed
 string Resources::getstatus() {
     return status;
 }
@@ -474,6 +557,7 @@ char* Resources::getid() {
 }
 
 void Resources::setstatus(string new_status) {
+//The given string must match either one of three statusen in order to be valid
     if(new_status == "created" || new_status == "in_progress" || new_status == "completed"){
         status = new_status;
 
@@ -485,7 +569,7 @@ void Resources::setstatus(string new_status) {
 }
 void Resources::setid(char new_id[7]) {
 
-
+//The given format must be three letters followed by four digits as given in the problem statement
     if(isalpha(new_id[0]) && isalpha(new_id[1]) && isalpha(new_id[2]) && isdigit(new_id[3]) && isdigit(new_id[4]) && isdigit(new_id[5]) && isdigit(new_id[6])){
         for(int i = 0; i < 7; i++){
             id[i] = new_id[i];
@@ -518,6 +602,7 @@ Resources::Resources(){
 /* Parametrized constructor*/
 
 Resources::Resources(string _status, char _id[7]){
+ //The given string must match either one of three statusen in order to be valid  
     if(_status == "created" || "in progress" || "completed"){
         status = _status;
 
@@ -526,15 +611,13 @@ Resources::Resources(string _status, char _id[7]){
         cout << "wrong format for status" << endl;
     }
 
-
+//The given format must be three letters followed by four digits as given in the problem statement
     if(isalpha(_id[0]) && isalpha(_id[1]) && isalpha(_id[2]) && isdigit(_id[3]) && isdigit(_id[4]) && isdigit(_id[5]) && isdigit(_id[6])){
 
         for(int i = 0; i < 7; i++){
             id[i] = _id[i];
-
         }
     }
-
 
     else{
         cout << "wrong format for id" << endl;
@@ -542,15 +625,7 @@ Resources::Resources(string _status, char _id[7]){
 
 }
 
-///* Copy constructor*/
 
-//Resources::Resources(const Resources & R){
-//    status = R.status;
-//    for(int i = 0; i < 7; i++){
-//        id[i] = R.id[i];
-
-//    }
-//}
 
 /* Destructor */
 
@@ -559,15 +634,14 @@ Resources::~Resources(){
 
 
 
-////////////////////////////////////
-//
-////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///                     CLASS SEMINARS FUNCTIONS
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
+//All get and set functions are constructed
 Professor* Seminars::getcoordinator() {
     return coordinator;
 }
-
 
 Professor *Seminars::getspeaker() {
     return speaker;
@@ -622,15 +696,11 @@ Seminars::Seminars():Resources(){
     date = "no date";
     max_seats = -1;
     list_students = s;
-
 }
-
 /* -1 is a dummy number of max_seats */
 
+
 /* Parametrized constructor*/
-
-/* Here _list_students_s is a dynamic array of length "_size" */
-
 
 Seminars::Seminars(string _status, char _id[7], Professor* _coordinator, Professor* _speaker, string _date, int _max_seats, vector < Student> _list_students) : Resources(_status, _id){
     coordinator = _coordinator;
@@ -638,33 +708,21 @@ Seminars::Seminars(string _status, char _id[7], Professor* _coordinator, Profess
     date = _date;
     max_seats = _max_seats;
     list_students = _list_students;
-
 }
 
-/* Copy constructor*/
-
-//Seminars::Seminars(const Seminars & S){
-//    coordinator = S.coordinator;
-//    speaker = S.speaker;
-//    date = S.date;
-//    max_seats = S.max_seats;
-//    size = S.size;
-//    list_students_s = new string[size];
-//    list_students_s = S.list_students_s;
-//}
 
 /* Destructor */
 
 Seminars::~Seminars(){
-
 }
 
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///                     CLASS PROJECT FUNCTIONS
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////
-//
-////////////////////////////////////
 
+//All get and set functions are constructed
 Professor *Project::gettutor() {
     return tutor;
 }
@@ -722,13 +780,6 @@ Project::Project(string _status, char _id[7], Professor* _tutor, Professor* _co_
     degree = _degree;
 }
 
-/* Copy constructor*/
-
-//Project::Project(const Project & P){
-//    tutor = P.tutor;
-//    co_tutor_presence = P.co_tutor_presence;
-//    co_tutor = P.co_tutor;
-//}
 
 /* Destructor */
 
@@ -736,11 +787,12 @@ Project::~Project(){
 }
 
 
-////////////////////////////////////
-//
-////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///                     CLASS COURSES FUNCTIONS
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+//All get and set functions are constructed
 int Courses::getcredits() {
     return credits;
 }
@@ -771,18 +823,12 @@ void Courses::setcredits(int new_credits) {
     credits = new_credits;
 }
 
-/* Here new_list_students is a dynamic array of length "new_size_students" */
-
 void Courses::setlist_students(vector<Student> new_list_students) {
     list_students = new_list_students;
-
 }
-
-/* Here new_list_marks is a dynamic array of length "new_size_marks" */
 
 void Courses::setlist_marks(vector<float> new_list_marks) {
     list_marks = new_list_marks;
-
 }
 
 
@@ -821,39 +867,19 @@ Courses::Courses(string _status, char _id[7], int _credits, vector < Student > _
     degree = _degree;
     professor1 = _professor1;
     professor2 = _professor2;
-
 }
 
-/* Copy constructor*/
-
-//Courses::Courses(const Courses & C){
-//    credits = C.credits;
-//    size_students = C.size_students;
-//    list_students = new string[size_students];
-//    list_students = C.list_students;
-//    size_marks = C.size_marks;
-//    list_marks = new float[size_marks];
-//    list_marks = C.list_marks;
-//    for(int i = 0; i < 7; i++){
-//        resource->id[i] = C.resource->id[i];
-
-//    }
-
-//    resource->status = C.resource->status;
-
-//}
 
 /* Destructor */
 
 Courses::~Courses(){
-
 }
 
-////////////////////////////////////
-//
-////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///                     CLASS USERS FUNCTIONS
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
+//All get and set functions are constructed
 string Users::getname() {
     return name;
 }
@@ -889,32 +915,26 @@ Users::Users(string _name, string _type){
     type = _type;
 }
 
-/* Copy constructor*/
-
-//Users::Users(const Users & U){
-//    name = U.name;
-//}
 
 /* Destructor */
 
 Users::~Users(){
 }
 
-////////////////////////////////////
-//
-////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///                     CLASS ADMIN FUNCTIONS
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-
-
+//All get and set functions are constructed
 char* Admin::getpid() {
     return pid;
 }
 
 void Admin::setpid(char new_pid[7]) {
+//The given format must match the format of 7 characters as stated in the problem statement  
     for(int i = 0; i < 7; i++){
         pid[i] = new_pid[i];
-
     }
 }
 
@@ -929,8 +949,6 @@ Admin::Admin(): Users(){
     pid[5] = 'a';
     pid[6] = 'a';
     pid[7] = '\0';
-
-
     /* Here it is assumed that the default value of pid is "aaaaaaa" */
 }
 
@@ -941,22 +959,12 @@ Admin::Admin(string _name, string _type, char _pid[7]):Users(_name, _type){
     if(_type == "admin"){
         for(int i = 0; i < 7; i++){
             pid[i] = _pid[i];
-
         }
-
     }
 
     else cout << "wrong type specified" <<  endl;
 }
 
-/* Copy constructor*/
-
-//Admin::Admin(const Admin & A){
-//    for(int i = 0; i < 7; i++){
-//        pid[i] = A.pid[i];
-
-//    }
-//}
 
 /* Destructor */
 
@@ -965,11 +973,15 @@ Admin::~Admin(){
 
 
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///                     CREATE/MODIFY AND DELETE USERS FUNCTIONS
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Admin::createu() {
 
     /*For names and degrees, use underscore for separating or only put first names; no spaces condition*/
 
+//The name and identity of the new user is asked
     string name_user;
     char identity_type = '0';
     cout << endl << "Please fill the name of the new user." << endl;
@@ -980,15 +992,17 @@ void Admin::createu() {
         cin >> identity_type;
     }
 
-
+//Here a new student is created
     if(identity_type == 's' || identity_type == 'S') {
 
 
         fstream data("students.csv", ios::out | ios::app);
         if (data.is_open()){
-
+//A new dynamically allocated object of class Student is created
+            
             Student *newuser = new Student;
 
+//Information of the student is added            
             newuser->setname(name_user);
             cout << "Give the SIN of this person." << endl;
             char newpid[7];
@@ -1003,7 +1017,7 @@ void Admin::createu() {
 
 
             cout << newuser->getname() << "," << newuser->getsin() << "," << newuser->getdegree() << " has been added" << endl;
-
+//The information is added to the file
             data << newuser->getname() << "," << newuser->getsin() << "," << newuser->getdegree() << "\n" ;
             data << "\n";
             data << "\n";
@@ -1018,11 +1032,15 @@ void Admin::createu() {
 
 
     }
-
+//Here a new administrator is created
     if (identity_type == 'a' || identity_type == 'A') {
         fstream data("admins.csv", ios::out | ios::app);
         if (data.is_open()){
+     
+//A new dynamically allocated object of class Admin is created           
             Admin *newuser = new Admin;
+           
+//Information of the administrator is added               
             newuser->setname(name_user);
             cout << "Give the PID of this person." << endl;
             char newpid[7];
@@ -1031,7 +1049,7 @@ void Admin::createu() {
 
 
             cout << newuser->getname() << "," << newuser->getpid() << " has been added" << endl;
-
+//The information is added to the file
             data << newuser->getname() << "," << newuser->getpid() << "\n" ;
             data.close();
 
@@ -1044,13 +1062,17 @@ void Admin::createu() {
 
     }
 
-
+//Here a new professor is created
     if (identity_type == 'p' || identity_type == 'P') {
 
         fstream data("professors.csv", ios::out | ios::app);
         if (data.is_open()){
 
+
+//A new dynamically allocated object of class Professor is created              
             Professor *newuser = new Professor;
+            
+//Information of the professor is added      
             newuser->setname(name_user);
             cout << "Give the PID of this person." << endl;
             char new2pid[7];
@@ -1060,6 +1082,7 @@ void Admin::createu() {
 
 
             cout << newuser->getname() << "," << newuser->getpid() << " has been added" << endl;
+//The information is added to the file            
             data << newuser->getname() << "," << newuser->getpid() << "\n" ;
 
 
@@ -1068,20 +1091,14 @@ void Admin::createu() {
         }
         else { cout << "Sorry the Virtual Campus was unable to add data. Please start the program again in order to try again." << endl; }
 
-
-
     }
-
-
-
-
-
 
 }
 
-
+//Here information of a user will be modified
 void Admin::modifyu(){
 
+//The name and identity of the user is asked   
     char identity_type;
     char change_type;
     int line_n;
@@ -1093,11 +1110,11 @@ void Admin::modifyu(){
 
     char pid[7];
 
-
+//Here a student is modified
     if(identity_type == 's' || identity_type == 'S') {
 
 
-
+//initializing strings and vectors with all the information
         cout << "Please provide the SIN of the user to be modified." << endl;
         cin >> pid;
 
@@ -1124,7 +1141,7 @@ void Admin::modifyu(){
         while(Myfile.good()){
 
             line++;
-
+//All the information from the files is taken and stored in their specific vector, with the aforementioned structure in the file 
             if(line%4 == 0){
                 getline(Myfile, name_obj, ',');
 
@@ -1158,20 +1175,12 @@ void Admin::modifyu(){
                 getline(Myfile, pro, '\n');
                 project.push_back(pro);
 
-
             }
-
-
-
-
-
-
-
 
 
         }
 
-
+//The position of the user specific information in the vectors is stored in variable line_n
         int count = 0;
         for(size_t j = 0; j < id_ob.size(); j++){
 
@@ -1183,28 +1192,26 @@ void Admin::modifyu(){
             }
 
 
-
-
         }
 
 
-
+//If the given SIN cannot be found in the students.csv file, the following text is provided.
         if(count == 0){
             cout << "Sorry that id number is not registered in the database." << endl;
             return;
 
         }
-
+//A new dynamic memory allocated object from the class Student is created
         Student *newuser = new Student;
 
-
+//Different attributes of the object can be changed
         cout << "Please press : n - for changing name, i - for changing sin, d - for changing degree" << endl;
 
         cin >> change_type;
         while (change_type != 'n' && change_type != 'N' && change_type != 'i' && change_type != 'I' && change_type != 'd' && change_type != 'D'){
             cin >> change_type;
         }
-
+//Changing the attribute by asking the new value, setting the value in the object and adding it to the specific in the vector
         if (change_type == 'n' || identity_type == 'N'){
 
             string newname;
@@ -1247,7 +1254,7 @@ void Admin::modifyu(){
 
 
 
-
+//Writing all the updated information back to the file
         fstream data("students.csv", ios::out | ios::trunc);
         if (data.is_open()){
 
@@ -1274,11 +1281,11 @@ void Admin::modifyu(){
 
 
 
-
+//Information of professors is modified here
     if(identity_type == 'p' || identity_type == 'P') {
 
 
-
+//initializing strings and vectors with all the information
         cout << endl << "Please provide the PID of the user to be modified." << endl;
         cin >> pid;
 
@@ -1297,7 +1304,7 @@ void Admin::modifyu(){
 
         while(Myfile.good()){
 
-
+//All the information from the files is taken and stored in their specific vector, with the aforementioned structure in the file 
                 getline(Myfile, name_obj, ',');
 
                 bool h = Myfile.good();
@@ -1309,14 +1316,11 @@ void Admin::modifyu(){
                     getline(Myfile, id_obj, '\n');
                     id_ob.push_back(id_obj);
 
-
                 }
-
             }
 
 
-
-
+//The position of the user specific information in the vectors is stored in variable line_n
         int count = 0;
         for(size_t j = 0; j < id_ob.size(); j++){
 
@@ -1326,29 +1330,26 @@ void Admin::modifyu(){
                 count++;
             }
 
-
-
-
         }
 
 
-
+//If the given PID cannot be found in the students.csv file, the following text is provided.
         if(count == 0){
             cout << "Sorry that id number is not registered in the database." << endl;
             return;
 
         }
-
+//A new dynamic memory allocated object from the class Professor is created
         Professor *newuser = new Professor;
 
-
+//Different attributes of the object can be changed
         cout << "Please press : n - for changing name, i - for changing pid" << endl;
 
         cin >> change_type;
         while (change_type != 'n' && change_type != 'N' && change_type != 'i' && change_type != 'I' ){
             cin >> change_type;
         }
-
+//Changing the attribute by asking the new value, setting the value in the object and adding it to the specific in the vector
         if (change_type == 'n' || identity_type == 'N'){
 
             string newname;
@@ -1371,13 +1372,10 @@ void Admin::modifyu(){
 
             id_ob[line_n] = newuser->getpid();
 
-
-
-
-
         }
 
 
+//Writing all the updated information back to the file
         fstream data("professors.csv", ios::out | ios::trunc);
         if (data.is_open()){
 
@@ -1386,7 +1384,6 @@ void Admin::modifyu(){
                 data << name_ob[j] << "," << id_ob[j] << "\n" ;
 
             }
-
 
             data.close();
             cout << "user modified." << endl;
@@ -1398,11 +1395,11 @@ void Admin::modifyu(){
 
 
 
-
+//Information of administrators is modified here
     if(identity_type == 'a' || identity_type == 'A') {
 
 
-
+//initializing strings and vectors with all the information
         cout << endl << "Please provide the PID of the user to be modified." << endl;
         cin >> pid;
 
@@ -1421,12 +1418,11 @@ void Admin::modifyu(){
 
         while(Myfile.good()){
 
-
+//All the information from the files is taken and stored in their specific vector, with the aforementioned structure in the file 
             getline(Myfile, name_obj, ',');
 
             bool h = Myfile.good();
             if(h){
-
 
                 name_ob.push_back(name_obj);
 
@@ -1437,11 +1433,8 @@ void Admin::modifyu(){
             }
 
         }
-
-
-
-
-
+        
+//The position of the user specific information in the vectors is stored in variable line_n
         int count = 0;
         for(size_t j = 0; j < id_ob.size(); j++){
 
@@ -1452,29 +1445,25 @@ void Admin::modifyu(){
                 count++;
             }
 
-
-
-
         }
 
-
-
+//If the given PID cannot be found in the students.csv file, the following text is provided.
         if(count == 0){
             cout << "Sorry that id number is not registered in the database." << endl;
             return;
 
         }
-
+//A new dynamic memory allocated object from the class Admin is created
         Admin *newuser = new Admin;
 
-
+//Different attributes of the object can be changed
         cout << "Please press : n - for changing name, i - for changing pid" << endl;
 
         cin >> change_type;
         while (change_type != 'n' && change_type != 'N' && change_type != 'i' && change_type != 'I' ){
             cin >> change_type;
         }
-
+//Changing the attribute by asking the new value, setting the value in the object and adding it to the specific in the vector
         if (change_type == 'n' || identity_type == 'N'){
 
             string newname;
@@ -1500,7 +1489,7 @@ void Admin::modifyu(){
 
         }
 
-
+//Writing all the updated information back to the file
         fstream data("admins.csv", ios::out | ios::trunc);
         if (data.is_open()){
             for(size_t j = 0; j < name_ob.size(); j++){
@@ -1520,20 +1509,16 @@ void Admin::modifyu(){
         delete newuser;
     }
 
-
-
-
-
 }
 
-
+//Here users can be deleted
 
 void Admin::deleteu() {
 
     char identity_type;
 
     int line_n;
-
+//Here the identity of the to be deleted user is asked
     cout << endl << "Please press the alphabet corresponding to the identity of the user to be deleted (a-Administrator, s-Student, p-Professor)" << endl;
     cin >> identity_type;
     while (identity_type != 'a' && identity_type != 'A' && identity_type != 's' && identity_type != 'S' && identity_type != 'p' && identity_type != 'P'){
@@ -1542,11 +1527,11 @@ void Admin::deleteu() {
 
     char pid[7];
 
-
+//Information of students is deleted here
     if(identity_type == 's' || identity_type == 'S') {
 
 
-
+//initializing strings and vectors with all the information
         cout << endl << "Please provide the SIN of the user to be deleted." << endl;
         cin >> pid;
 
@@ -1574,7 +1559,8 @@ void Admin::deleteu() {
 
         while(Myfile.good()){
             line++;
-
+//All the information from the files is taken and stored in their specific vector, with the aforementioned structure in the file 
+            
             if(line%4 == 0){
                 getline(Myfile, name_obj, ',');
 
@@ -1608,15 +1594,12 @@ void Admin::deleteu() {
                 getline(Myfile, pro, '\n');
                 project.push_back(pro);
 
-
             }
 
         }
 
 
-
-
-
+//The position of the user specific information in the vectors is stored in variable line_n
 
         int count = 0;
         for(size_t j = 0; j < id_ob.size(); j++){
@@ -1628,20 +1611,17 @@ void Admin::deleteu() {
 
             }
 
-
-
-
         }
 
 
-
+//If the given SIN cannot be found in the students.csv file, the following text is provided.
         if(count == 0){
             cout << "Sorry that id number is not registered in the database." << endl;
             return;
 
         }
 
-
+//The information of the user specific line in the vectors is deleted
         name_ob.erase(name_ob.begin() + line_n);
         id_ob.erase(id_ob.begin() + line_n);
         degrees.erase(degrees.begin() + line_n);
@@ -1651,7 +1631,7 @@ void Admin::deleteu() {
 
 
 
-
+//Writing all the updated information back to the file
         fstream data("students.csv", ios::out | ios::trunc);
         if (data.is_open()){
 
@@ -1673,11 +1653,11 @@ void Admin::deleteu() {
 
     }
 
-
+//Information of professors is deleted here
     if(identity_type == 'p' || identity_type == 'P') {
 
 
-
+//initializing strings and vectors with all the information
         cout << endl << "Please provide the PID of the user to be deleted." << endl;
         cin >> pid;
 
@@ -1700,7 +1680,7 @@ void Admin::deleteu() {
             bool h = Myfile.good();
             if(h){
 
-
+//All the information from the files is taken and stored in their specific vector, with the aforementioned structure in the file 
                 name_ob.push_back(name_obj);
 
                 getline(Myfile, id_obj, '\n');
@@ -1708,10 +1688,9 @@ void Admin::deleteu() {
 
             }
 
-
         }
 
-
+//The position of the user specific information in the vectors is stored in variable line_n
         int count = 0;
         for(size_t j = 0; j < id_ob.size(); j++){
 
@@ -1721,43 +1700,38 @@ void Admin::deleteu() {
                 count++;
             }
 
-
-
-
         }
 
 
-
+//If the given PID cannot be found in the students.csv file, the following text is provided
         if(count == 0){
             cout << "Sorry that id number is not registered in the database." << endl;
             return;
 
         }
-
+//The information of the user specific line in the vectors is deleted
+        
         name_ob.erase(name_ob.begin() + line_n);
         id_ob.erase(id_ob.begin() + line_n);
 
-
+//Writing all the updated information back to the file
         fstream data("professors.csv", ios::out | ios::trunc);
         if (data.is_open()){
             for(size_t j = 0; j < name_ob.size(); j++){
 
                 data << name_ob[j] << "," << id_ob[j] << "\n" ;
-
             }
-
 
             data.close();
             cout << "user deleted." << endl;
         }
-
-
     }
-
+    
+    
+//Information of administrators is deleted here
     if(identity_type == 'a' || identity_type == 'A') {
 
-
-
+//initializing strings and vectors with all the information
         cout << endl << "Please provide the PID of the user to be deleted." << endl;
         cin >> pid;
 
@@ -1779,7 +1753,8 @@ void Admin::deleteu() {
 
             bool h = Myfile.good();
             if(h){
-
+//All the information from the files is taken and stored in their specific vector, with the aforementioned structure in the file 
+                
                 i++;
                 name_ob.push_back(name_obj);
 
@@ -1788,10 +1763,9 @@ void Admin::deleteu() {
 
             }
 
-
         }
 
-
+//The position of the user specific information in the vectors is stored in variable line_n
         int count = 0;
         for(size_t j = 0; j < id_ob.size(); j++){
 
@@ -1803,19 +1777,20 @@ void Admin::deleteu() {
             }
 
 
-
-
         }
-
+        
+//If the given PID cannot be found in the students.csv file, the following text is provided
         if(count == 0){
             cout << "Sorry that id number is not registered in the database." << endl;
             return;
 
         }
-
+//The information of the user specific line in the vectors is deleted
+        
         name_ob.erase(name_ob.begin() + line_n);
         id_ob.erase(id_ob.begin() + line_n);
-
+//Writing all the updated information back to the file
+        
         fstream data("admins.csv", ios::out | ios::trunc);
         if (data.is_open()){
             for(size_t j = 0; j < name_ob.size(); j++){
@@ -1836,14 +1811,20 @@ void Admin::deleteu() {
 }
 
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///                     CREATE/MODIFY AND DELETE RESOURCES FUNCTIONS
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 /*For names and degrees, use underscore for separating or only put first names; no spaces condition*/
+
+//Here resources are created
 void Admin::creater() {
     string status;
     char id[7];
     char identity_type = '0';
 
+//Here the id is asked which should be in the same format of only 7 characters as stated in the problem statement
     cout << endl << "Please fill the id of the new resource(only 7 characters)." << endl;
     cin >> id;
     cout << endl << "Please press the alphabet corresponding to their identity (c-Course, s-Seminar, p-Project)" << endl;
@@ -1852,14 +1833,15 @@ void Admin::creater() {
         cin >> identity_type;
     }
 
-
+//Here a new course is created
     if (identity_type == 'c' || identity_type == 'c') {
         fstream data("courses.csv", ios::out | ios::app);
         if (data.is_open()) {
-
+//A new dynamically allocated object of class Courses is created
+            
             Courses *newcourse = new Courses;
 
-
+//Information of the course is added  
             newcourse->setid(id);
 
             cout << "Give the PID of the first professor of this course." << endl;
@@ -1888,6 +1870,7 @@ void Admin::creater() {
 
             cout << newcourse->getid() << "," << "created" << "," << newcourse->getprofessor1()->getpid() << "," << newcourse->getprofessor2()->getpid() << "," << newcourse->getcredits() << "," << newcourse->getdegree() << " has been added" << endl;
 
+ //The information is added to the file    
             data << newcourse->getid() << "," << "created" << "," << newcourse->getprofessor1()->getpid() << "," << newcourse->getprofessor2()->getpid() << ","  << newcourse->getcredits() <<  ","  << newcourse->getdegree() << "\n";
             data << "\n";
             data << "\n";
@@ -1900,11 +1883,15 @@ void Admin::creater() {
         else { cout << "Sorry the Virtual Campus was unable to add data. Please start the program again in order to try again." << endl; }
     }
 
+//Here a new seminar is created   
     if (identity_type == 's' || identity_type == 'S') {
         fstream data("seminars.csv", ios::out | ios::app);
         if (data.is_open()) {
-            Seminars *newseminar = new Seminars;
 
+//A new dynamically allocated object of class Seminars is created      
+            Seminars *newseminar = new Seminars;
+            
+//Information of the seminar is added  
             newseminar->setid(id);
 
             cout << "Give the PID of the coordinator of this seminar." << endl;
@@ -1933,6 +1920,7 @@ void Admin::creater() {
 
             cout << newseminar->getid() << "," << "created" << "," << newseminar->getcoordinator()->getpid() << "," << newseminar->getspeaker()->getpid() << "," << newseminar->getdate() << "," << newseminar->getmax_seats() << " has been added" << endl;
 
+//The information is added to the file            
             data << newseminar->getid() << "," << "created" << "," << newseminar->getcoordinator()->getpid() << "," << newseminar->getspeaker()->getpid() << "," << newseminar->getdate() << "," << newseminar->getmax_seats() << "\n";
             data << "\n";
             data.close();
@@ -1945,14 +1933,16 @@ void Admin::creater() {
         else { cout << "Sorry the Virtual Campus was unable to add data. Please start the program again in order to try again." << endl; }
     }
 
-
+//Here a new project is created
     if (identity_type == 'p' || identity_type == 'P') {
 
         fstream data("project.csv", ios::out | ios::app);
         if (data.is_open()) {
-
+            
+//A new dynamically allocated object of class Project is created
             Project *newproject = new Project;
 
+//Information of the project is added              
             newproject->setid(id);
 
             cout << "Give the tutor of this project." << endl;
@@ -1976,6 +1966,7 @@ void Admin::creater() {
 
             cout << newproject->getid() << "," << "created" << "," << newproject->gettutor()->getpid() << "," << newproject->getco_tutor()->getpid() << ","  << newproject->getdegree() << " has been added" << endl;
 
+//The information is added to the file            
             data << newproject->getid() << "," << "created" << "," << newproject->gettutor()->getpid() << "," << newproject->getco_tutor()->getpid() << "," << newproject->getdegree() << "\n";
             data << "\n";
             data.close();
@@ -1988,9 +1979,10 @@ void Admin::creater() {
     }
 }
 
-
+//Here resources are modified
 void Admin::modifyr() {
 
+//The identity of the resource to be modified resource is asked
     char identity_type;
     char change_type;
     int line_n;
@@ -2002,11 +1994,11 @@ void Admin::modifyr() {
 
     char id[7];
 
-
+//Information of courses is modified here
     if (identity_type == 'c' || identity_type == 'C') {
 
 
-
+//initializing strings and vectors with all the information
         cout << "Please provide the ID of the resource to be modified." << endl;
         cin >> id;
 
@@ -2036,7 +2028,8 @@ void Admin::modifyr() {
         while (Myfile.good()) {
 
             line++;
-
+//All the information from the files is taken and stored in their specific vector, with the aforementioned structure in the file 
+            
             if (line % 3 == 0) {
                 getline(Myfile, id_obj, ',');
 
@@ -2078,7 +2071,7 @@ void Admin::modifyr() {
 
         }
 
-
+//The position of the user specific information in the vectors is stored in variable line_n
         int count = 0;
         for (size_t j = 0; j < id_ob.size(); j++) {
 
@@ -2090,22 +2083,25 @@ void Admin::modifyr() {
         }
 
 
-
+//If the given ID cannot be found in the courses.csv file, the following text is provided.
         if (count == 0) {
             cout << "Sorry that id number is not registered in the database." << endl;
             return;
         }
 
+//A new dynamic memory allocated object from the class Courses is created
+
         Courses *newcourse = new Courses;
 
-
+//Different attributes of the object can be changed
         cout << "Please press : s - for changing status, i - for changing id, p - for changing the first professor, k - for changing the second professor, c - for changing the number of credits or d - for changing the degree." << endl;
 
         cin >> change_type;
         while (change_type != 's' && change_type != 'S' && change_type != 'i' && change_type != 'I' && change_type != 'p' && change_type != 'P'&& change_type != 'k' && change_type != 'K' && change_type != 'c' && change_type != 'C' && change_type != 'd' && change_type != 'D') {
             cin >> change_type;
         }
-
+//Changing the attribute by asking the new value, setting the value in the object and adding it to the specific in the vector
+        
         if (change_type == 's' || identity_type == 'S') {
 
             string newstatus;
@@ -2177,12 +2173,10 @@ void Admin::modifyr() {
 
             degrees[line_n] = newcourse->getdegree();
 
-
         }
 
-
-
-
+//Writing all the updated information back to the file
+        
         fstream data("courses.csv", ios::out | ios::trunc);
         if (data.is_open()) {
 
@@ -2200,9 +2194,10 @@ void Admin::modifyr() {
     }
 
 
-
+//Information of seminars is modified here
     if (identity_type == 's' || identity_type == 'S') {
-
+        
+//initializing strings and vectors with all the information
         cout << endl << "Please provide the ID of the seminar to be modified." << endl;
         cin >> id;
 
@@ -2226,7 +2221,8 @@ void Admin::modifyr() {
 
         ifstream Myfile;
         Myfile.open("seminars.csv");
-
+//All the information from the files is taken and stored in their specific vector, with the aforementioned structure in the file 
+        
         while (Myfile.good()) {
             line++;
             if (line % 2 == 1) {
@@ -2260,7 +2256,7 @@ void Admin::modifyr() {
             }
         }
 
-
+//The position of the user specific information in the vectors is stored in variable line_n
         int count = 0;
         for (size_t j = 0; j < id_ob.size(); j++) {
 
@@ -2271,22 +2267,24 @@ void Admin::modifyr() {
             }
         }
 
-
+//If the given ID cannot be found in the seminars.csv file, the following text is provided.
         if (count == 0) {
             cout << "Sorry that id number is not registered in the database." << endl;
             return;
         }
 
+//A new dynamic memory allocated object from the class Student is created        
         Seminars *newseminar = new Seminars;
 
-
+//Different attributes of the object can be changed
         cout << "Please press : s - for changing status, i - for changing id, c - for changing coordinator, p - for changing speaker, d - for changing the date or m - for changing the maximum number of seats." << endl;
 
         cin >> change_type;
         while (change_type != 's' && change_type != 'S' && change_type != 'i' && change_type != 'I' && change_type != 'c' && change_type != 'C' && change_type != 'p' && change_type != 'P' && change_type != 'd' && change_type != 'D' && change_type != 'm' && change_type != 'M') {
             cin >> change_type;
         }
-
+//Changing the attribute by asking the new value, setting the value in the object and adding it to the specific in the vector
+        
         if (change_type == 's' || identity_type == 'S') {
 
             string newstatus;
@@ -2359,9 +2357,7 @@ void Admin::modifyr() {
         }
 
 
-
-
-
+//Writing all the updated information back to the file
         fstream data("seminars.csv", ios::out | ios::trunc);
         if (data.is_open()) {
 
@@ -2381,11 +2377,11 @@ void Admin::modifyr() {
 
 
 
-
+//Information of projects is modified here
     if (identity_type == 'p' || identity_type == 'P') {
 
 
-
+//initializing strings and vectors with all the information
         cout << endl << "Please provide the ID of the project to be modified." << endl;
         cin >> id;
 
@@ -2408,7 +2404,8 @@ void Admin::modifyr() {
 
         ifstream Myfile;
         Myfile.open("project.csv");
-
+//All the information from the files is taken and stored in their specific vector, with the aforementioned structure in the file 
+        
         while (Myfile.good()) {
             line++;
             if (line % 2 == 1) {
@@ -2439,7 +2436,7 @@ void Admin::modifyr() {
             }
         }
 
-
+//The position of the user specific information in the vectors is stored in variable line_n
         int count = 0;
         for (size_t j = 0; j < id_ob.size(); j++) {
 
@@ -2449,22 +2446,23 @@ void Admin::modifyr() {
             }
         }
 
+//If the given ID cannot be found in the project.csv file, the following text is provided.        
         if (count == 0) {
             cout << "Sorry that id number is not registered in the database." << endl;
             return;
 
         }
-
+//A new dynamic memory allocated object from the class Project is created
         Project *newproject = new Project;
 
-
+//Different attributes of the object can be changed
         cout << "Please press : s - for changing status, i - for changing id, t - for changing tutor, c - for changing co-tutor or d - for changing degree." << endl;
 
         cin >> change_type;
         while (change_type != 's' && change_type != 'S' && change_type != 'i' && change_type != 'I' && change_type != 't' && change_type != 'T' && change_type != 'c' && change_type != 'C' && change_type != 'd' && change_type != 'D') {
             cin >> change_type;
         }
-
+//Changing the attribute by asking the new value, setting the value in the object and adding it to the specific in the vector
         if (change_type == 's' || identity_type == 'S') {
 
             string newstatus;
@@ -2521,7 +2519,7 @@ void Admin::modifyr() {
             degree_ob[line_n] = newproject->getdegree();
         }
 
-
+//Writing all the updated information back to the file
         fstream data("project.csv", ios::out | ios::trunc);
         if (data.is_open()) {
             for (size_t j = 0; j < id_ob.size(); j++) {
@@ -2537,11 +2535,12 @@ void Admin::modifyr() {
 }
 
 
-
+//Here resources can be deleted
 void Admin::deleter() {
 
     char identity_type;
-
+    
+//The ID of the resource to be deleted is asked here
     int line_n;
     cout << endl << "Please press the alphabet corresponding to the identity of the resource to be deleted (c-Course, s-Seminar, p-Project)" << endl;
     cin >> identity_type;
@@ -2551,11 +2550,11 @@ void Admin::deleter() {
 
     char id[7];
 
-
+//Information of courses is deleted here
     if (identity_type == 'c' || identity_type == 'C') {
 
 
-
+//initializing strings and vectors with all the information
         cout << "Please provide the ID of the resource to be modified." << endl;
         cin >> id;
 
@@ -2587,7 +2586,8 @@ void Admin::deleter() {
         while (Myfile.good()) {
 
             line++;
-
+//All the information from the files is taken and stored in their specific vector, with the aforementioned structure in the file 
+            
             if (line % 3 == 0) {
                 getline(Myfile, id_obj, ',');
 
@@ -2629,7 +2629,7 @@ void Admin::deleter() {
 
         }
 
-
+//The position of the user specific information in the vectors is stored in variable line_n
         int count = 0;
         for (size_t j = 0; j < id_ob.size(); j++) {
 
@@ -2641,12 +2641,12 @@ void Admin::deleter() {
         }
 
 
-
+//If the given ID cannot be found in the courses.csv file, the following text is provided
         if (count == 0) {
             cout << "Sorry that id number is not registered in the database." << endl;
             return;
         }
-
+//The information of the user specific line in the vectors is deleted
         status_ob.erase(status_ob.begin() + line_n);
         id_ob.erase(id_ob.begin() + line_n);
         professors1_ob.erase(professors1_ob.begin() + line_n);
@@ -2656,6 +2656,8 @@ void Admin::deleter() {
         students.erase(students.begin() + line_n);
         marks.erase(marks.begin() + line_n);
 
+
+//Writing all the updated information back to the file
         fstream data("courses.csv", ios::out | ios::trunc);
         if (data.is_open()) {
 
@@ -2673,9 +2675,10 @@ void Admin::deleter() {
     }
 
 
-
+//Information of seminars is deleted here
     if (identity_type == 's' || identity_type == 'S') {
 
+//initializing strings and vectors with all the information
         cout << endl << "Please provide the ID of the seminar to be deleted." << endl;
         cin >> id;
 
@@ -2700,7 +2703,8 @@ void Admin::deleter() {
 
         ifstream Myfile;
         Myfile.open("seminars.csv");
-
+//All the information from the files is taken and stored in their specific vector, with the aforementioned structure in the file 
+        
         while (Myfile.good()) {
             line++;
             if (line % 2 == 1) {
@@ -2734,7 +2738,7 @@ void Admin::deleter() {
             }
         }
 
-
+//The position of the user specific information in the vectors is stored in variable line_n
         int count = 0;
         for (size_t j = 0; j < id_ob.size(); j++) {
             if (id_ob[j].find(id) != string::npos) {
@@ -2743,12 +2747,13 @@ void Admin::deleter() {
             }
         }
 
-
+//If the given ID cannot be found in the seminars.csv file, the following text is provided
         if (count == 0) {
             cout << "Sorry that id number is not registered in the database." << endl;
             return;
         }
-
+        
+//The information of the user specific line in the vectors is deleted
         status_ob.erase(status_ob.begin() + line_n);
         id_ob.erase(id_ob.begin() + line_n);
         coordinators.erase(coordinators.begin() + line_n);
@@ -2757,6 +2762,7 @@ void Admin::deleter() {
         max.erase(max.begin() + line_n);
         students.erase(students.begin() + line_n);
 
+//Writing all the updated information back to the file        
         fstream data("seminars.csv", ios::out | ios::trunc);
         if (data.is_open()) {
 
@@ -2771,12 +2777,11 @@ void Admin::deleter() {
     }
 
 
-
+//Information of projects is deleted here
 
     if (identity_type == 'p' || identity_type == 'P') {
 
-
-
+//initializing strings and vectors with all the information
         cout << endl << "Please provide the ID of the project to be deleted." << endl;
         cin >> id;
 
@@ -2800,7 +2805,9 @@ void Admin::deleter() {
 
         ifstream Myfile;
         Myfile.open("project.csv");
-
+        
+//All the information from the files is taken and stored in their specific vector, with the aforementioned structure in the file 
+        
         while (Myfile.good()) {
             line++;
             if (line % 2 == 1) {
@@ -2830,7 +2837,8 @@ void Admin::deleter() {
                 }
             }
         }
-
+        
+//The position of the user specific information in the vectors is stored in variable line_n
         int count = 0;
         for (size_t j = 0; j < id_ob.size(); j++) {
 
@@ -2839,13 +2847,15 @@ void Admin::deleter() {
                 count++;
             }
         }
-
+        
+//If the given ID cannot be found in the project.csv file, the following text is provided
         if (count == 0) {
             cout << "Sorry that id number is not registered in the database." << endl;
             return;
 
         }
-
+        
+//The information of the user specific line in the vectors is deleted
         status_ob.erase(status_ob.begin() + line_n);
         id_ob.erase(id_ob.begin() + line_n);
         tutor_ob.erase(tutor_ob.begin() + line_n);
@@ -2853,6 +2863,7 @@ void Admin::deleter() {
         degree_ob.erase(degree_ob.begin() + line_n);
         student_ob.erase(student_ob.begin() + line_n);
 
+//Writing all the updated information back to the file
         fstream data("project.csv", ios::out | ios::trunc);
         if (data.is_open()) {
             for (size_t j = 0; j < id_ob.size(); j++) {
@@ -2878,6 +2889,8 @@ void Admin::BeginAction(string files) {
         size_t pos;
         string line;
         int linecount = 0;
+ 
+//if "all" is typed, the whole file will be shown      
         if (searchobj == "all") {
             data.seekg(0, ios::beg);
             while (data >> line) {
@@ -2887,6 +2900,7 @@ void Admin::BeginAction(string files) {
                 cout << output  << endl;
             }
         }
+//Else only the user or resource specific line will be shown
         else {
             bool found = false;
             while (data >> line) {
@@ -2907,10 +2921,11 @@ void Admin::BeginAction(string files) {
 }
 
 
-////////////////////////////////////
-//
-////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///                     Professor functions
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//Here the get and set functions are constructed
 char* Professor::getpid() {
     return pid;
 }
@@ -2921,7 +2936,6 @@ void Professor::setpid(char new_pid[7]) {
 
     }
 }
-
 
 /* Default constructor*/
 Professor::Professor():Users(){
@@ -2948,26 +2962,20 @@ Professor::Professor(string _name, string _type, char _pid[7]) : Users(_name, _t
     }
 
 
-
-
     else cout << "wrong specified type" << endl;
-
 
 }
 
-/* Copy constructor*/
-
-//Professor::Professor(const Professor & Pr){
-//    for(int i = 0; i < 7; i++){
-//        pid[i] = Pr.pid[i];
-
-//    }
-//}
 
 /* Destructor */
 
 Professor::~Professor(){
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///                     SET MARKS FUNCTION
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 
 void Professor::setmarks(char pid[7]){
@@ -2977,7 +2985,7 @@ void Professor::setmarks(char pid[7]){
     char id[7];
     cin >> id;
 
-
+//initializing strings and vectors with all the information
 
     string id_c;
     string status_c;
@@ -3012,7 +3020,8 @@ void Professor::setmarks(char pid[7]){
 
         line++;
 
-
+//All the information from the files is taken and stored in their specific vector, with the aforementioned structure in the file 
+        
         if(line%3 == 0){
             getline(Myfile, id_c, ',');
 
@@ -3064,7 +3073,7 @@ void Professor::setmarks(char pid[7]){
 
     }
 
-
+//The position of the user specific information in the vectors is stored in variable line_n
     int count = 0;
     for(size_t j = 0; j < id_co.size(); j++){
 
@@ -3082,7 +3091,7 @@ void Professor::setmarks(char pid[7]){
     }
 
 
-
+//If the given ID cannot be found in the courses.csv file, the following text is provided.
     if(count == 0){
         cout << "Sorry this course is not registered in the database." << endl;
         return;
@@ -3095,7 +3104,7 @@ void Professor::setmarks(char pid[7]){
     }
 
 
-
+//Here the line with all the students is seperated in an array of students
 
     string line_st = stu_co[line_c];
     stringstream stud(line_st);
@@ -3119,7 +3128,7 @@ void Professor::setmarks(char pid[7]){
         specific_marks.push_back(-1);
     }
 
-
+//Here a student's ID is asked and compared with the array of students
     cout << "Please enter the student ID for which you want to set the marks." << endl;
     char sin[7];
     cin >> sin;
@@ -3147,7 +3156,8 @@ void Professor::setmarks(char pid[7]){
         return;
 
     }
-
+    
+  //Here the marks are set
     int markss;
     cout << "Please enter the marks for this student from 0 to 10." << endl;
     cin >> markss;
@@ -3176,6 +3186,7 @@ void Professor::setmarks(char pid[7]){
 
 
 
+//Writing all the updated information back to the file
 
 
     fstream data("courses.csv", ios::out | ios::trunc);
@@ -3198,6 +3209,11 @@ void Professor::setmarks(char pid[7]){
 }
 
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///                     CREATE/MODIFY AND DELETE RESOURCE FUNCTIONS FOR PROFESSORS
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//Structure is the same as the modifyr function however now is checked if the professor that wants to modify something is in charge of the resource
 void Professor::modifyr(char pid[7]) {
 
     char identity_type;
@@ -3773,17 +3789,11 @@ void Professor::modifyr(char pid[7]) {
 
 
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///                     CLASS STUDENT FUNCTIONS
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-
-
-
-
-
-////////////////////////////////////
-//
-////////////////////////////////////
-
+//Here the get and set functions are constructed
 char *Student::getsin() {
     return sin;
 }
@@ -3813,25 +3823,16 @@ void Student::setsin(char new_sin[7]) {
 
     }
     else cout << "wrong sin format" <<  endl;
-
 }
-
-
-/* Here new_list_courses is a dynamic array of length "new_size_courses" */
 
 
 void Student::setlist_courses(vector <Courses> new_list_courses) {
-
     list_courses = new_list_courses;
 }
 
-/* Here new_list_sem is a dynamic array of length "new_size_sems" */
-
 
 void Student::setlist_sem(vector <Seminars> new_list_sem) {
-
     list_sem = new_list_sem;
-
 }
 
 /* Here new_list_project is a dynamic array of length "new_size_projects" */
@@ -3865,8 +3866,6 @@ Student::Student():Users(){
 
     list_courses = listcourses;
     list_sem = listsem;
-
-
     /* Here it is assumed that the default value of pid is "0000000" */
 
 }
@@ -3892,45 +3891,22 @@ Student::Student(string _name, string _type, char _sin[7], string _degree, vecto
     }
     else cout << "wrong specified type" << endl;
 
-
-
-
 }
 
-/* Copy constructor*/
-
-//Student::Student(const Student & S){
-
-//    for(int i = 0; i < 7; i++){
-//        sin[i] = S.sin[i];
-
-//    }
-
-//    size_courses = S.size_courses;
-//    list_courses = new string[size_courses];
-//    list_courses = S.list_courses;
-//    size_sems = S.size_sems;
-//    list_sem = new string[size_sems];
-//    list_sem = S.list_sem;
-//    size_projects = S.size_projects;
-//    list_project = new string[size_projects];
-//    list_project = S.list_project;
-
-//}
 
 /* Destructor */
-
 Student::~Student(){
-
 }
 
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///                     STUDENT ENROLL FUNCTION
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void Student::enroll(char student_sin[7]){
 
-
-    ////////////////////////////Read the student data and make an object////////////////
-
+    
+//initializing strings and vectors with all the information
     string name_obj;
     string id_obj;
     string deg_obj;
@@ -3960,7 +3936,8 @@ void Student::enroll(char student_sin[7]){
 
         line++;
 
-
+//All the information from the files is taken and stored in their specific vector, with the aforementioned structure in the file 
+        
         if(line%4 == 0){
             getline(Myfile, name_obj, ',');
 
@@ -4006,7 +3983,7 @@ void Student::enroll(char student_sin[7]){
     }
 
 
-
+//The position of the user specific information in the vectors is stored in variable line_n
     int count = 0;
     for(size_t j = 0; j < id_ob.size(); j++){
 
@@ -4022,7 +3999,7 @@ void Student::enroll(char student_sin[7]){
 
     }
 
-
+//If the given SIN cannot be found in the students.csv file, the following text is provided.
 
     if(count == 0){
         cout << "Sorry your id number is not registered in the database." << endl;
@@ -4062,10 +4039,6 @@ void Student::enroll(char student_sin[7]){
     }
 
 
-
-
-
-
     /////////////////////////////////////////////////////////////////////////////////////////////////
 
     //////////////////////////////////Read the course/project/seminar file which needs to be enrolled////////////////
@@ -4084,9 +4057,11 @@ void Student::enroll(char student_sin[7]){
     cout << "Please provide the ID for the resource." << endl;
     cin >> r_id;
 
-
+//Courses are enrolled here
     if(type == 'c' || type == 'C'){
 
+        
+   //initializing strings and vectors with all the information
         string id_c;
         string status_c;
         string prof_c1;
@@ -4119,7 +4094,8 @@ void Student::enroll(char student_sin[7]){
 
             line++;
 
-
+//All the information from the files is taken and stored in their specific vector, with the aforementioned structure in the file 
+            
             if(line%3 == 0){
                 getline(Myfile, id_c, ',');
 
@@ -4172,7 +4148,7 @@ void Student::enroll(char student_sin[7]){
         }
 
 
-
+//The position of the user specific information in the vectors is stored in variable line_c
         int count = 0;
         for(size_t j = 0; j < id_co.size(); j++){
 
@@ -4190,7 +4166,7 @@ void Student::enroll(char student_sin[7]){
         }
 
 
-
+//If the given ID cannot be found in the students.csv file, the following text is provided.
         if(count == 0){
             cout << "Sorry this course is not registered in the database." << endl;
             return;
@@ -4202,7 +4178,7 @@ void Student::enroll(char student_sin[7]){
             return;
         }
 
-
+//Here the line with all the students is seperated in an array of students
 
         string line_st = stu_co[line_c];
         stringstream stud(line_st);
@@ -4220,7 +4196,7 @@ void Student::enroll(char student_sin[7]){
             }
         }
 
-
+//Here the student is added to the list of students of the course
         specific_students.push_back(student_sin);
 
         string snak;
@@ -4232,8 +4208,7 @@ void Student::enroll(char student_sin[7]){
         stu_co[line_c] = snak;
 
 
-
-
+//Writing all the updated information back to the file
 
         fstream data("courses.csv", ios::out | ios::trunc);
         if (data.is_open()){
@@ -4261,7 +4236,8 @@ void Student::enroll(char student_sin[7]){
 
         courses[line_n] = sna;
 
-
+//Writing all the updated information back to the file
+        
         fstream data1("students.csv", ios::out | ios::trunc);
         if (data1.is_open()){
 
@@ -4283,8 +4259,11 @@ void Student::enroll(char student_sin[7]){
 
     }
 
+    
+//Seminars are enrolled here
     if(type == 's' || type == 'S'){
 
+//initializing strings and vectors with all the information
         string id_s;
         string status_s;
         string coord;
@@ -4315,7 +4294,8 @@ void Student::enroll(char student_sin[7]){
         while(Myfile.good()){
 
             line++;
-
+            
+//All the information from the files is taken and stored in their specific vector, with the aforementioned structure in the file 
 
             if(line%2 == 0){
                 getline(Myfile, id_s, ',');
@@ -4346,8 +4326,6 @@ void Student::enroll(char student_sin[7]){
                     getline(Myfile, maxs, '\n');
                     maxs_se.push_back(maxs);
 
-
-
                 }
             }
             if(line%2 == 1){
@@ -4355,41 +4333,32 @@ void Student::enroll(char student_sin[7]){
                 getline(Myfile, stu, '\n');
                 stu_se.push_back(stu);
 
-
-
             }
-
 
         }
 
-
+//The position of the user specific information in the vectors is stored in variable line_x
 
         int count = 0;
         for(size_t j = 0; j < id_se.size(); j++){
 
             if (id_se[j].find(r_id) != string::npos){
-
-
                 line_x = j;
                 count++;
 
             }
 
-
-
-
         }
 
-
-
+        
         if(count == 0){
             cout << "Sorry this seminar is not registered in the database." << endl;
-            return;
+               return;
 
         }
+        
 
-
-
+//Here the line with all the students is seperated in an array of students
 
         string line_st = stu_se[line_x];
         stringstream stud(line_st);
@@ -4408,7 +4377,7 @@ void Student::enroll(char student_sin[7]){
         }
 
 
-
+//Here is checked if the maximum size is reached or not
         if(specific_students.size() >= maxs[line_x] - '0'){
             cout << "Sorry this seminar has reached its capacity." << endl;
             return;
@@ -4427,9 +4396,7 @@ void Student::enroll(char student_sin[7]){
         stu_se[line_x] = snak;
 
 
-
-
-
+//Writing all the updated information back to the file
 
         fstream data("seminars.csv", ios::out | ios::trunc);
         if (data.is_open()){
@@ -4456,7 +4423,8 @@ void Student::enroll(char student_sin[7]){
 
         seminars[line_n] = sna;
 
-
+//Writing all the updated information back to the file
+        
         fstream data1("students.csv", ios::out | ios::trunc);
         if (data1.is_open()){
 
@@ -4467,10 +4435,7 @@ void Student::enroll(char student_sin[7]){
                 data1 << seminars[j] << "\n";
                 data1 << project[j] << "\n";
 
-
-
             }
-
 
             data1.close();
             cout << "Seminar added to the student file." << endl;
@@ -4478,17 +4443,18 @@ void Student::enroll(char student_sin[7]){
     }
 
 
-
+//Projects are enrolled here
     if(type == 'p' || type == 'P'){
 
 
-
+//Here is checked if a student already enrolled a project or not
         if(project[line_n].size() != 0){
             cout << "You cannot enroll in this project as you have already registered for one project." << endl;
             return;
 
         }
 
+//initializing strings and vectors with all the information
         string id_p;
         string status_p;
         string tut;
@@ -4519,7 +4485,8 @@ void Student::enroll(char student_sin[7]){
 
             line++;
 
-
+//All the information from the files is taken and stored in their specific vector, with the aforementioned structure in the file 
+            
             if(line%2 == 0){
                 getline(Myfile, id_p, ',');
 
@@ -4545,44 +4512,32 @@ void Student::enroll(char student_sin[7]){
                     getline(Myfile, degree_p, '\n');
                     deg_pr.push_back(degree_p);
 
-
-
-
-
                 }
             }
             if(line%2 == 1){
 
                 getline(Myfile, stu, '\n');
                 stu_pr.push_back(stu);
-
-
-
             }
-
 
         }
 
-
+//The position of the user specific information in the vectors is stored in variable line_z
 
         int count = 0;
         for(size_t j = 0; j < id_pr.size(); j++){
 
             if (id_pr[j].find(r_id) != string::npos){
 
-
                 line_z = j;
                 count++;
 
             }
 
-
-
-
         }
 
 
-
+//Here conditions are checked if a student can enroll to this project
         if(count == 0){
             cout << "Sorry this project is not registered in the database." << endl;
             return;
@@ -4605,7 +4560,7 @@ void Student::enroll(char student_sin[7]){
         stu_pr[line_z] = stri;
 
 
-
+//Writing all the updated information back to the file
 
         fstream data("project.csv", ios::out | ios::trunc);
         if (data.is_open()){
@@ -4626,7 +4581,7 @@ void Student::enroll(char student_sin[7]){
 
         project[line_n] = r_id;
 
-
+//Writing all the updated information back to the file
         fstream data1("students.csv", ios::out | ios::trunc);
         if (data1.is_open()){
 
@@ -4648,11 +4603,12 @@ void Student::enroll(char student_sin[7]){
     }
 
 
-
-
 }
 
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///                     STUDENT DROP FUNCTIONS
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 void Student::drop(char student_sin[7]){
@@ -4660,6 +4616,8 @@ void Student::drop(char student_sin[7]){
 
     ////////////////////////////Read the student data and make an object////////////////
 
+//initializing strings and vectors with all the information
+    
     string name_obj;
     string id_obj;
     string deg_obj;
@@ -4689,7 +4647,8 @@ void Student::drop(char student_sin[7]){
 
         line++;
 
-
+//All the information from the files is taken and stored in their specific vector, with the aforementioned structure in the file 
+        
         if(line%4 == 0){
             getline(Myfile, name_obj, ',');
 
@@ -4734,32 +4693,29 @@ void Student::drop(char student_sin[7]){
         }
     }
 
-
+//The position of the user specific information in the vectors is stored in variable line_n
 
     int count = 0;
     for(size_t j = 0; j < id_ob.size(); j++){
 
         if (id_ob[j].find(student_sin) != string::npos){
 
-
             line_n = j;
             count++;
         }
 
 
-
-
     }
 
 
-
+//If the given ID cannot be found in the students.csv file, the following text is provided.
     if(count == 0){
         cout << "Sorry your id number is not registered in the database." << endl;
         return;
 
     }
 
-
+//Here the line with all the courses is seperated in an array of students
     string line_t = courses[line_n];
     stringstream ss(line_t);
     while (ss.good()) {
@@ -4775,6 +4731,7 @@ void Student::drop(char student_sin[7]){
         }
     }
 
+ //Here the line with all the seminars is seperated in an array of seminars   
     string line_s = seminars[line_n];
     stringstream st(line_s);
     while (st.good()) {
@@ -4792,14 +4749,11 @@ void Student::drop(char student_sin[7]){
 
 
 
-
-
-
     /////////////////////////////////////////////////////////////////////////////////////////////////
 
     //////////////////////////////////Read the course/project/seminar file which needs to be dropped////////////////
 
-
+//Here the identity of the resource to be dropped is asked
     char type;
     char r_id[7];
     cout << "What category of resources you want to drop? (Press P - Final Degree Project, C - Courses, S - Seminars)" << endl;
@@ -4814,8 +4768,11 @@ void Student::drop(char student_sin[7]){
     cin >> r_id;
 
 
+//Courses are dropped here
     if(type == 'c' || type == 'C'){
 
+
+//initializing strings and vectors with all the information        
         string id_c;
         string status_c;
         string prof_c1;
@@ -4848,7 +4805,8 @@ void Student::drop(char student_sin[7]){
 
             line++;
 
-
+//All the information from the files is taken and stored in their specific vector, with the aforementioned structure in the file 
+            
             if(line%3 == 0){
                 getline(Myfile, id_c, ',');
 
@@ -4901,33 +4859,28 @@ void Student::drop(char student_sin[7]){
         }
 
 
-
+//The position of the user specific information in the vectors is stored in variable line_c
         int count = 0;
         for(size_t j = 0; j < id_co.size(); j++){
 
             if (id_co[j].find(r_id) != string::npos){
-
 
                 line_c = j;
                 count++;
 
             }
 
-
-
-
         }
 
 
-
+//If the given ID cannot be found in the courses.csv file, the following text is provided.
         if(count == 0){
             cout << "Sorry this course is not registered in the database." << endl;
             return;
-
         }
 
 
-
+//Here the line with all the students is seperated in an array of students
         string line_st = stu_co[line_c];
         stringstream stud(line_st);
         while (stud.good()) {
@@ -4940,26 +4893,21 @@ void Student::drop(char student_sin[7]){
 
                 specific_students.push_back(substr);
 
-
             }
         }
 
 
-
+//The position of the user specific information in the vectors is stored in variable line_c
         int count1 = 0;
         int line_h;
         for(size_t j = 0; j < specific_students.size(); j++){
 
             if (specific_students[j].find(student_sin) != string::npos){
 
-
                 line_h = j;
                 count1++;
 
             }
-
-
-
 
         }
 
@@ -4970,8 +4918,7 @@ void Student::drop(char student_sin[7]){
 
         }
 
-
-
+//The position of the course specific information in the vectors is stored in variable line_a
         int count2 = 0;
         int line_a;
         for(size_t j = 0; j < specific_courses.size(); j++){
@@ -4979,14 +4926,10 @@ void Student::drop(char student_sin[7]){
 
             if (specific_courses[j].find(r_id) != string::npos){
 
-
                 line_a = j;
                 count2++;
 
             }
-
-
-
 
         }
 
@@ -5010,9 +4953,7 @@ void Student::drop(char student_sin[7]){
         stu_co[line_c] = snak;
 
 
-
-
-
+//Writing all the updated information back to the file
 
         fstream data("courses.csv", ios::out | ios::trunc);
         if (data.is_open()){
@@ -5024,7 +4965,6 @@ void Student::drop(char student_sin[7]){
                 data << marks_co[j] << "\n";
 
             }
-
 
             data.close();
             cout << "Student deleted from the course file." << endl;
@@ -5040,7 +4980,7 @@ void Student::drop(char student_sin[7]){
 
         courses[line_n] = sna;
 
-
+//Writing all the updated information back to the file
         fstream data1("students.csv", ios::out | ios::trunc);
         if (data1.is_open()){
 
@@ -5051,8 +4991,6 @@ void Student::drop(char student_sin[7]){
                 data1 << seminars[j] << "\n";
                 data1 << project[j] << "\n";
 
-
-
             }
 
 
@@ -5061,9 +4999,12 @@ void Student::drop(char student_sin[7]){
         }
 
     }
-
+    
+   
+//Seminars are dropped here
     if(type == 's' || type == 'S'){
 
+//initializing strings and vectors with all the information
         string id_s;
         string status_s;
         string coord;
@@ -5095,6 +5036,7 @@ void Student::drop(char student_sin[7]){
 
             line++;
 
+//All the information from the files is taken and stored in their specific vector, with the aforementioned structure in the file 
 
             if(line%2 == 0){
                 getline(Myfile, id_s, ',');
@@ -5142,23 +5084,18 @@ void Student::drop(char student_sin[7]){
         }
 
 
-
+//The position of the user specific information in the vectors is stored in variable line_x
         int count = 0;
         for(size_t j = 0; j < id_se.size(); j++){
 
             if (id_se[j].find(r_id) != string::npos){
-
 
                 line_x = j;
                 count++;
 
             }
 
-
-
-
         }
-
 
 
         if(count == 0){
@@ -5168,7 +5105,7 @@ void Student::drop(char student_sin[7]){
         }
 
 
-
+//Here the line with all the students is seperated in an array of students
 
         string line_st = stu_se[line_x];
         stringstream stud(line_st);
@@ -5187,7 +5124,7 @@ void Student::drop(char student_sin[7]){
 
 
 
-
+//The position of the user specific information in the vectors is stored in variable line_h
         int count1 = 0;
         int line_h;
         for(size_t j = 0; j < specific_students.size(); j++){
@@ -5200,9 +5137,6 @@ void Student::drop(char student_sin[7]){
 
             }
 
-
-
-
         }
 
 
@@ -5212,7 +5146,7 @@ void Student::drop(char student_sin[7]){
 
         }
 
-
+  //The position of the seminar specific information in the vectors is stored in variable line_a
 
         int count2 = 0;
         int line_a;
@@ -5220,14 +5154,10 @@ void Student::drop(char student_sin[7]){
 
             if (specific_seminars[j].find(r_id) != string::npos){
 
-
                 line_a = j;
                 count2++;
 
             }
-
-
-
 
         }
 
@@ -5239,7 +5169,7 @@ void Student::drop(char student_sin[7]){
         }
 
 
-
+//Here the student is deleted from the list of students from the seminar
         specific_students.erase(specific_students.begin() + line_h);
 
 
@@ -5253,9 +5183,7 @@ void Student::drop(char student_sin[7]){
         stu_se[line_x] = snak;
 
 
-
-
-
+//Writing all the updated information back to the file
 
         fstream data("seminars.csv", ios::out | ios::trunc);
         if (data.is_open()){
@@ -5272,7 +5200,7 @@ void Student::drop(char student_sin[7]){
             cout << "student removed from the seminar file." << endl;
         }
 
-
+//Here the seminar is deleted from the list of seminars from the student
         specific_seminars.erase(specific_seminars.begin() + line_a);
 
         string sna;
@@ -5283,7 +5211,8 @@ void Student::drop(char student_sin[7]){
 
         seminars[line_n] = sna;
 
-
+//Writing all the updated information back to the file
+        
         fstream data1("students.csv", ios::out | ios::trunc);
         if (data1.is_open()){
 
@@ -5294,17 +5223,14 @@ void Student::drop(char student_sin[7]){
                 data1 << seminars[j] << "\n";
                 data1 << project[j] << "\n";
 
-
-
             }
-
 
             data1.close();
             cout << "Seminar removed from the student file." << endl;
         }
     }
 
-
+//Projects are dropped here
 
     if(type == 'p' || type == 'P'){
 
@@ -5315,7 +5241,8 @@ void Student::drop(char student_sin[7]){
             return;
 
         }
-
+//initializing strings and vectors with all the information
+        
         string id_p;
         string status_p;
         string tut;
@@ -5346,7 +5273,8 @@ void Student::drop(char student_sin[7]){
 
             line++;
 
-
+//All the information from the files is taken and stored in their specific vector, with the aforementioned structure in the file 
+            
             if(line%2 == 0){
                 getline(Myfile, id_p, ',');
 
@@ -5390,7 +5318,7 @@ void Student::drop(char student_sin[7]){
 
         }
 
-
+//The position of the project specific information in the vectors is stored in variable line_z
 
         int count = 0;
         for(size_t j = 0; j < id_pr.size(); j++){
@@ -5403,13 +5331,10 @@ void Student::drop(char student_sin[7]){
 
             }
 
-
-
-
         }
 
 
-
+//Here conditions are checked before dropping a project
         if(count == 0){
             cout << "Sorry this project is not registered in the database." << endl;
             return;
@@ -5427,7 +5352,7 @@ void Student::drop(char student_sin[7]){
         stu_pr[line_z] = "";
         project[line_n] = "";
 
-
+//Writing all the updated information back to the file
 
 
         fstream data("project.csv", ios::out | ios::trunc);
@@ -5446,7 +5371,7 @@ void Student::drop(char student_sin[7]){
         }
 
 
-
+//Writing all the updated information back to the file
         fstream data1("students.csv", ios::out | ios::trunc);
         if (data1.is_open()){
 
@@ -5457,20 +5382,18 @@ void Student::drop(char student_sin[7]){
                 data1 << seminars[j] << "\n";
                 data1 << project[j] << "\n";
 
-
-
             }
-
 
             data1.close();
             cout << "Project removed from the student file." << endl;
         }
     }
 
+
+
 }
 
 
-
 ////////////////////////////////////
-//
+//          END OF FILE 
 ////////////////////////////////////
